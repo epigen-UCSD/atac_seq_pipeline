@@ -1,0 +1,431 @@
+#!/usr/bin/env bds
+#vim: syntax=java
+
+include "graphviz.bds"
+include "filetable.bds"
+include "log_parser.bds"
+include "ENCODE_accession.bds"
+
+
+help == report settings
+url_base 	:= "" 		help URL base for output directory.
+viz_genome_coord:= "" 		help WashU genome browser genome coordinate (e.g. chr7:27117661-27153380).
+
+_padding_left	:= 20
+_report_file  	:= ""
+_report_header 	:= ""
+
+init_report()
+
+
+void init_report() {
+	url_base = get_conf_val( url_base, 	["url_base"] )
+	viz_genome_coord = get_conf_val( viz_genome_coord, 	["viz_genome_coord"] )
+
+	prefix := (title=="") ? "" : (title+"_")
+	_report_file = "$out_dir/$prefix"+"report.html"
+	_report_header = "$script_dir/html/rpt_header.html"
+
+	if ( !is_cmd_line_arg_empty() ) {
+		mkdir(rpt_aux_dir)
+		sys cp --remove-destination $script_dir/html/jquery.treetable.* $rpt_aux_dir    # move report js/css files to rpt_aux_dir
+	}
+
+	print("\n\n== report settings\n")
+	print( "URL root for output directory\t: $url_base\n" )
+	print( "Genome coord. for browser tracks\t: $viz_genome_coord\n" )
+
+}
+
+void report( string body ) { // HTML report
+
+	wait
+	
+	html := _report_header.read()
+	html += body
+	html += "<br></body></html>"
+
+	_report_file.write( html )
+}
+
+string html_title() {
+	string html, title_
+	if (title) title_ = "<b>Title: $title</b>"
+	else title_ = "<b>No title</b>(use -title [TITLE])"
+	time := get_stdout("date")
+	html += "<div id='title'>$title_<br><p>"
+	html += "Report generated at $time <br>"
+	html += "</p></div>"
+	return html
+}
+
+string html_conf_file_info() {
+
+	string html
+	if ( c ) { // if configuration file exists
+		lines := c.read().split("\n")
+		html += "<div id='conf_file_info'><b>Configuration file</b><br><p>"
+		html += "File path: "+c.path()+"<br>"
+		html += "Contents: <br>"
+		for( int i=0; i<lines.size(); i++) {
+			html += lines[i] +"<br>"
+		}
+		html += "</p></div>"
+	}
+	return html
+}
+
+string html_cmd_line_args() {
+	string html
+	cmd_line := rm_str_at_end( args.join(" "), "$" )
+	if ( cmd_line ) {
+		html += "<div id='cmd_line_args'><b>Command line arguments</b><br><p>"
+		html += cmd_line
+		html += "</p></div>"
+	}
+	return html
+}
+
+// filepath, node label, group, filetable hierachy
+void add_file_to_report( string file, string label, string group, string hrchy ) {
+	add_file_to_graph( file, label, group )
+	add_file_to_table( [file], [hrchy] )
+}
+
+// qc_type must exist in qc_types = ["flagstat","dup","flagstat_filt","pbc","xcor","idr","ataqc"]
+// if horz, groups show up on the first row. otherwise on the first column
+// if horz
+//        | item1  | item2  | ...
+// -------+--------+--------+-------
+// group1 | val    | val    + ...
+// group2 | val    | val    + ...
+// ...
+// else
+//       | group1 | group2 | ...
+// ------+--------+--------+-------
+// item1 | val    | val    + ...
+// item2 | val    | val    + ...
+// ...
+
+// input is single file
+string html_table_multiple_logs( string table_name, bool horz, string qc_type, string log ) {
+	// key->group, val->log
+	string[] groups, logs
+	groups.add("null")
+	logs.add( log )
+	return html_table_multiple_logs( table_name, horz, qc_type, groups, logs )
+}
+
+// input is map of files
+string html_table_multiple_logs( string table_name, bool horz, string qc_type, string{} map ) {
+	// key->group, val->log
+	string[] groups, logs
+	for ( string key : map.keys() ) {
+		groups.add(key)
+		logs.add( map{key} )
+	}
+	return html_table_multiple_logs( table_name, horz, qc_type, groups, logs )
+}
+
+// input is two arrays (group, log)
+string html_table_multiple_logs( string table_name, bool horz, string qc_type, string[] groups, string[] logs ) {
+	if ( logs.size() == 0 ) return ""
+	html := "<div id='table_"+table_name.replace(" ","-")+"'>" + \
+		"<b>$table_name</b>\n<table border='1' style='margin-right:15px;margin-bottom:15px'>\n"
+	header := get_log_header( qc_type )
+	if ( !header.size() ) header = get_header_multi_col_txt( logs[0] ) // for ataqc
+
+	// split keys and descriptions
+	string[] keys
+	string[] descs
+	for ( int j=0; j<header.size(); j++ ) {
+		key_and_desc := split_by_first_chr( header[j], ":" )
+		keys.add(key_and_desc[0])
+		descs.add( key_and_desc.size()>1 ? key_and_desc[1] : key_and_desc[0])
+	}
+
+	// write table header
+	if ( horz ) {
+		html += "<tr>"
+		if (logs.size()>1) html += "<th>&nbsp</th>"
+		html += "<th nowrap align=left>"+descs.join("</th><th nowrap align=left>")+"</th></tr>\n"
+		for ( int i=0; i<logs.size(); i++ ) {
+			log := logs[i]
+			map := parse_log( qc_type, log )
+			html += "<tr>"
+			if (logs.size()>1) html += "<td>"+html_link( log, groups[i] )+"</td>"
+			for ( int j=0; j<header.size() ;j++ ) {				
+				if ( map.hasKey(keys[j]) ) html += "<td>"+map{keys[j]}+"</td>"
+				else html += "<td>&nbsp</td>"
+			}
+			html += "</tr>\n"
+		}
+	}
+	else {
+		string groups_joined
+		for ( int i=0; i<logs.size(); i++ ) {
+			groups_joined += "<th nowrap align=left>" +  html_link( logs[i], groups[i] ) + "</th>"			
+		}
+		if (logs.size()>1) html += "<tr><th nowrap align=left>&nbsp</th>"+groups_joined+"</tr>\n"
+		// if (logs.size()>1) html += "<tr><th nowrap align=left>&nbsp</th><th nowrap align=left>"+\
+		// 	groups.join("</th><th nowrap align=left>")+"</th></tr>\n"
+		for ( int j=0; j<header.size() ;j++ ) {
+			html += "<tr><th nowrap align=left>"+descs[j]+"</th>"
+			for ( int i=0; i<logs.size(); i++ ) {
+				log := logs[i]
+				map := parse_log( qc_type, log )
+				if ( map.hasKey(keys[j]) ) html += "<td>"+map{keys[j]}+"</td>"
+				else html += "<td>&nbsp</td>"
+			}
+			html += "</tr>\n"
+		}
+	}
+
+	// add to ENCODE QC summary JSON
+	for ( int i=0; i<logs.size(); i++ ) {
+		log := logs[i]
+		map := parse_log( qc_type, log )
+		string[] vals
+		for ( int j=0; j<header.size() ;j++ ) {
+			if ( map.hasKey(keys[j]) ) vals.add(map{keys[j]})
+			else vals.add("")
+		}
+		// add to ENCODE QC summary table
+		_summary_qc.add( map_to_json_str( \
+				{ "info"=>groups[i],"qc_type"=>qc_type,\
+				"header"=>array_to_str(keys,"\\t"),\
+				"contents"=>array_to_str(vals,"\\t") } ) ) 
+	}
+
+	html += "</table>"
+	html += "</div>"
+	return html
+}
+
+string html_help_pbc() {
+	return "<div id='help-pbc'><p>" + "NRF (non redundant fraction) <br>" + \
+			"PBC1 (PCR Bottleneck coefficient 1) <br>" + \
+			"PBC2 (PCR Bottleneck coefficient 2) <br>" + \
+			"PBC1 is the primary measure. Provisionally <br>" + \
+			"<ul>" + \
+			"<li>0-0.5 is severe bottlenecking</li>" + \
+			"<li>0.5-0.8 is moderate bottlenecking </li>" + \
+			"<li>0.8-0.9 is mild bottlenecking </li>" + \
+			"<li>0.9-1.0 is no bottlenecking </li>" + \
+			"</ul>" + \
+			"</p></div>"
+}
+
+string html_help_xcor( string subsample_xcor, bool has_SE, bool has_PE ) {
+	ret := "<div id='help-xcor'><p>"
+	if ( has_SE && has_PE ) {
+		ret += "NOTE1: For SE datasets, reads from replicates are subsampled to a max of $subsample_xcor <br>"
+		ret += "NOTE2: For PE datasets, one end of each read-pair is randomly selected and the reads are then randomly subsampled to a max of $subsample_xcor <br>"
+	}
+	else if ( has_SE ) {
+		ret += "NOTE: Reads from replicates are subsampled to a max of $subsample_xcor <br>"
+	}
+	else if ( has_PE ) {
+		ret += "NOTE: One end of each read-pair is randomly selected and the reads are then randomly subsampled to a max of $subsample_xcor <br>"
+	}
+	ret +=	"<ul>" + \
+  		"<li>Normalized strand cross-correlation coefficient (NSC) = col9 in outFile </li>" + \
+		"<li>Relative strand cross-correlation coefficient (RSC) = col10 in outFile </li>" + \
+		"<li>Estimated fragment length = col3 in outFile, take the top value </li>" + \
+		"</ul></p><br>"
+	return ret
+}
+
+string html_help_idr( real idr_thresh ) {
+	return "<div id='help-idr'><p>" + \
+		"<ul>" + \
+		"<li>N1: Replicate 1 self-consistent IDR $idr_thresh peaks (comparing two pseudoreplicates generated by subsampling Rep1 reads) </li>" + \
+		"<li>N2: Replicate 2 self-consistent IDR $idr_thresh peaks (comparing two pseudoreplicates generated by subsampling Rep2 reads) </li>" + \
+		"<li>Nt: True Replicate consistent IDR $idr_thresh peaks (comparing true replicates Rep1 vs Rep2 ) </li>" + \
+		"<li>Np: Pooled-pseudoreplicate consistent IDR $idr_thresh peaks (comparing two pseudoreplicates generated by subsampling pooled reads from Rep1 and Rep2 ) </li>" + \
+		"<li>Self-consistency Ratio: max(N1,N2) / min (N1,N2) </li>" + \
+		"<li>Rescue Ratio: max(Np,Nt) / min (Np,Nt) </li>" + \
+		"<li>Reproducibility Test: If Self-consistency Ratio >2 AND Rescue Ratio > 2, then 'Fail' else 'Pass' </li>" + \
+		"</ul></p><br>"
+}
+
+string html_help_idr_FRiP() {
+	return "<div id='help-idr-FRiP'><p>" + \
+		"<ul>" + \
+		"<li>ppr: IDR peaks comparing pooled pseudo replicates </li>" + \
+		"<li>rep1-pr: IDR peaks comparing pseudoreplicates from replicate 1 </li>" + \
+		"<li>rep2-pr: IDR peaks comparing pseudoreplicates from replicate 2 </li>" + \
+		"<li>repi-repj: IDR peaks comparing true replicates (rep i vs. rep j) </li>" +  \
+		"</ul></p><br>"
+}
+
+string html_help_num_peaks() {
+	return "<div id='help-num-peaks'><p>" + \
+		"<ul>" + \
+		"<li>ppr1: Raw peaks called on the first pooled pseudoreplicates </li>" + \
+		"<li>ppr2: Raw peaks called on the second pooled pseudoreplicates </li>" + \
+		"<li>repi: Raw peaks called on true replicate i </li>" + \
+		"<li>repi-pr1 : Raw peaks called on the first pseudoreplicate from replicate i </li>" + \
+		"<li>repi-pr2 : Raw peaks called on the second pseudoreplicates from replicate i </li>" + \
+		"<li>overlap : Overlapped peaks (filtered if blacklist exists) </li>" +  \
+		"</ul></p><br>"
+}
+
+// WashU Epigenome browser datahub (json format)
+// color: string "R,G,B,#HEX"
+string html_epg_browser_viz( string[] files, string[] types, string[] names, string[] colors, string species ) {
+	if ( files.size() == 0 ) return ""
+
+	warn := (url_base=="") ? "(add <i>-url_base [URL_ROOT_DIR_FOR_OUT_DIR]</i> to the command line.)" : ""
+	html := "<div id='viz'><b>Visualization $warn </b><div style='padding-left: "+_padding_left+"px'>"
+	json := "[ " // json array starts here
+
+	for ( int i=0; i<files.size(); i++ ) {
+		file := files[i]
+		type := types[i]
+		color_arr := colors[i].split(",")
+			r := color_arr[0]
+			g := color_arr[1]
+			b := color_arr[2]
+			hex := color_arr[3] 
+			color_str := '"pr":'+r+',"pg":'+g+',"pb":'+b
+		trackname := names[i].trim()
+
+		// add url_base
+		url 	:= _get_url( file )
+		if ( type == "bam") {
+			// deep pink
+			json 	+= 	'{ "type": "bam", "name": "'+trackname+'", "url": "'+url+'", "mode": 2,' + \
+					'  "qtc" : { "forwardcolor" : "'+hex+'", "reversecolor" : "'+hex+'",'+color_str+'} },'
+		}
+		else if ( type == "bigwig") {
+			// deep pink
+			json 	+= 	'{ "type": "bigwig", "name": "'+trackname+'", "url": "'+url+'", "mode": 1,' + \
+					'  "qtc" : { "height": 20, "summeth":2, "smooth":3, '+color_str+' ,"thtype":1, "thmin":2, "thmax":40  } },'
+		}
+		else if ( type == "hammock") { // peak must be converted to hammock type (browser specific format)	
+			if ( file.indexOf(".IDR") > -1 ) { // bIDR narrowpeak has 11th (local IDR) and 12th (global IDR) columns
+				json += ' { "type": "hammock", "name": "'+trackname+'", "url": "'+url+'", "mode": "barplot", "showscoreidx":4,' + \
+					'   strokecolor: "#000000", scorescalelst:[{"type":1,"min":0,"max":40},{"type":0},{"type":0},{"type":0},{"type":0}],' + \
+					'   scorenamelst:["signal value","P value (-log10)","Q value (-log10)","local IDR (-log10)","global IDR (-log10)"],' + \
+					' "qtc": { "height" : 15, bedcolor: "'+hex+'", "summeth":2, "fontsize":"0pt","fontfamily":"sans-serif" } },'
+			}
+			else {
+				json += ' { "type": "hammock", "name": "'+trackname+'", "url": "'+url+'", "mode": "barplot", "showscoreidx":1,' + \
+					'   strokecolor: "#000000", scorescalelst:[{"type":1,"min":0,"max":40},{"type":0},{"type":0},{"type":0}],' + \
+					'   scorenamelst:["signal value", "P value (-log10)","Q value (-log10)"],' + \
+					' "qtc": { "height" : 15, bedcolor: "'+hex+'", "summeth":2, "fontsize":"0pt","fontfamily":"sans-serif" } },'
+			}
+		}
+	}
+	// add ref genome track
+	string ref_gene
+	if ( species.startsWith("hg38") ) ref_gene = "gencodeV23"
+	else if ( species.startsWith("hg19") ) ref_gene = "gencodeV19"
+	else if ( species.startsWith("mm") ) ref_gene = "ensGene"
+	else ref_gene = "refGene"
+	json += '{ "type":"native_track", "list":[ { "name":"'+ref_gene+'", "mode":"full", } ] },'
+	if ( viz_genome_coord ) {
+		arr := viz_genome_coord.split("[\:\-]")
+		chr := arr[0]
+		start := arr[1]
+		end := arr[2]
+		json += '{ "type":"coordinate_override", "coord":"'+chr+','+start+','+chr+','+end+'", },'
+	}
+
+	//hg38: gencodeV23
+	//hg19: gencodeV19
+	//mm10, mm9: ensGene
+	json += " ]" // json array ends here
+	prefix := title=="" ? "" : (title+"_")
+	json_file := "$out_dir/$prefix"+"tracks.json"
+	json_file.write( json )
+	json_url := _get_url( json_file )
+	viz_url	 := "http://epigenomegateway.wustl.edu/browser/?genome=" + species + "&tknamewidth=275&datahub=" + json_url
+	json_rel_path := get_rel_path( json_file )
+
+	html += "<a href=$viz_url target='_blank'>Visualize</a>&nbsp&nbsp"
+	html += "<a href=$json_rel_path target='_blank'>JSON (datahub)</a>"
+	html += "</div></div><br>\n\n"
+
+	return html
+}
+
+string get_predefined_rgb_str( int id ) {
+	if ( id == 0 ) return "255,0,255,#ff00ff" // fuchsia
+	else if ( id == 1 ) return "255,0,0,#ff0000" // red 
+	else if ( id == 2 ) return "0,0,255,#0000ff" // blue
+	else if ( id == 3 ) return "255,153,51,#ff9933" // orange
+	else if ( id == 4 ) return "102,153,0,#669900" // darkgreen
+	else if ( id == 5 ) return "0,153,204,#0099cc" // skyblue
+	else return "119,119,119,#777777" //darkgray
+}
+
+string html_link( string path, string name ) {
+	return "<a href='" + get_rel_path( path ) + "' target='_blank'>$name</a><br>"
+}
+
+string html_img( string path, int width, string cap ) {
+	return "<figure style='display: inline-block;'><img src='" + get_rel_path( path ) + \
+		"' width='$width'><figcaption style='text-align: center;'><b>$cap</b></figcaption></figure>"
+}
+
+string pdf_to_png( string pdf ) { 
+	png 	:= rm_ext( pdf, "pdf" ) + ".png"
+
+	// needs ghostscript installed
+	taskName := "pdf2png"
+	system := "local" // do not use cluster engine for this task
+	
+	task ( png <- pdf ) {
+		sys $shcmd_init
+		sys gs -dFirstPage=1 -dLastPage=1 -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r110x110 \
+			-dUseCropBox -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m \
+			-sOutputFile=$png \
+			-r144 $pdf
+		//sys pdftoppm -png $pdf > $png # Requirements: poppler-utils (sudo apt-get install poppler-utils)
+	}
+
+	return png
+}
+
+string peak_to_hammock( string peak ) {
+	prefix 	:= rm_ext( peak, ["gz"] )
+
+	hammock := "$prefix.hammock"
+	tmp 	:= "$prefix.tmp"
+	// choose correct converter .py : narrowpeak (regionpeak), broadpeak, gappedpeak to hammock
+	// they are under git_repo_root/utils/	
+	conv := "$script_dir/utils/"
+	if ( peak.toLower().indexOf( "regionpeak" ) > -1 || \
+	     peak.toLower().indexOf( "narrowpeak" ) > -1 ) 	conv += "narrowpeak.py"
+	else if ( peak.toLower().indexOf( "broadpeak" ) > -1 ) 	conv += "broadpeak.py"
+	else if ( peak.toLower().indexOf( "gappedpeak" ) > -1 ) conv += "gappedpeak.py"
+	else if ( peak.toLower().indexOf( "13-col.bed" ) > -1 ) conv += "narrowpeak_idr.py"
+	else 							conv += "narrowpeak.py"
+
+	in 	:= peak
+	out 	:= hammock+".gz"
+
+	taskName:= "peak2hammock"
+	system := "local" // do not use cluster engine for this task
+
+	task ( out<-in ) { // needs bgzip and tabix
+
+		sys $shcmd_init
+		sys zcat $peak | sed '/^\(chr\)/!d' | sort -k1,1V -k2,2n > $tmp
+		//sys python $conv $tmp $hammock
+		sys $conv $tmp $hammock
+		sys rm -f $tmp
+	}
+
+	wait
+
+	return out
+}
+
+string _get_url( string path ) {
+	rel_path := get_rel_path( path )
+	if ( rel_path == "" ) 	return ""
+	else 			return url_base + "/" + get_rel_path( path )
+}

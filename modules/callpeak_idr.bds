@@ -1,0 +1,329 @@
+#!/usr/bin/env bds
+#vim: syntax=java
+
+include "species.bds"
+include "module_template.bds"
+
+
+help == IDR settings
+idr_suffix 	:= false 	help Append IDR threshold to IDR output directory.
+
+
+grp_color_idr 		:= "limegreen" 
+grp_color_idr_final	:= "pink" 
+
+
+init_idr()
+
+void init_idr() {
+
+	idr_suffix 	= get_conf_val_bool( idr_suffix, 	["idr_suffix"] )
+
+	print( "\n\n== IDR settings\n")
+	print( "Append IDR threshold to IDR out_dir\t: $idr_suffix\n" )
+}
+
+void chk_idr() {
+	if ( !path_exists( blacklist ) ) print("\nWarning: Blacklist bed (-blacklist) for final IDR QC"+\
+						" is missing! (file: $blacklist)\n\n")
+}
+
+// 12-col.bed.gz (10 col for narrowPeak + local IDR, global IDR) will be generated for browser tracks
+// A temporary 13th column bed should be generated due to bedtools intersect compatibility issue
+// use function _get_idr_peak_trk( idr_peak ) to find 12-col.bed.gz for browser tracks
+// rank: 'signal.value' for SPP peaks, 'p.value' for MACS2 peaks
+string[] idr2( string peak1, string peak2, string pooled, real idr_thresh, string rank, string o_dir, string group ) {
+	if ( idr_suffix ) o_dir = mkdir( o_dir + "_$idr_thresh" )
+
+	prefix 			:= "$o_dir/" + (title=="" ? "" : (title+"_") ) + group	
+	peak_idr		:= "$prefix.IDR"+"$idr_thresh.narrowPeak.gz"
+	peak_idr_trk		:= "$prefix.IDR"+"$idr_thresh.12-col.bed.gz"
+	peak_idr_trk_tmp	:= "$prefix.IDR"+"$idr_thresh.13-col.bed.gz"
+	filt_peak_idr		:= "$prefix.IDR"+"$idr_thresh.filt.narrowPeak.gz"
+	filt_peak_idr_trk	:= "$prefix.IDR"+"$idr_thresh.filt.12-col.bed.gz"
+	filt_peak_idr_trk_tmp	:= "$prefix.IDR"+"$idr_thresh.filt.13-col.bed.gz"
+
+	idr_out 	:= "$prefix.unthresholded-peaks.txt"
+	idr_log 	:= "$prefix.IDR"+"$idr_thresh.log.txt"
+	idr_out_gz	:= "$idr_out.gz"
+	png 		:= "$idr_out.png"
+
+	string cmd1, cmd2, cmd3
+
+	if ( path_exists( blacklist ) ) {
+		cmd1 = "bedtools intersect -v -a <(zcat -f $peak_idr_trk_tmp) -b <(zcat -f $blacklist)"+\
+			" | grep -P 'chr[\\dXY]+[ \\t]'"+\
+			" | awk 'BEGIN{OFS=\"\\t\"} {if ($5>1000) $5=1000; print $0}'"+\
+			" | gzip -nc > $filt_peak_idr_trk_tmp"
+		cmd2 = "zcat $filt_peak_idr_trk_tmp | awk 'BEGIN{OFS=\"\\t\"} {print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' | gzip -nc > $filt_peak_idr"
+		cmd3 = "zcat $filt_peak_idr_trk_tmp | awk 'BEGIN{OFS=\"\\t\"} {print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12}' | gzip -nc > $filt_peak_idr_trk"
+	}
+	else {
+		cmd1 = "echo"
+		cmd2 = "echo"
+		cmd3 = "echo"
+	}
+
+	in 	:= [peak1, peak2, pooled]
+	out 	:= path_exists( blacklist ) ?  	[filt_peak_idr, png, idr_log, idr_out_gz, filt_peak_idr_trk ] : \
+						[peak_idr,      png, idr_log, idr_out_gz, peak_idr_trk]
+	taskName:= "idr2 " + group
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+		
+		sys $shcmd_init_py3
+
+		sys idr --samples $peak1 $peak2 --peak-list $pooled --input-file-type narrowPeak \
+			--output-file $idr_out --rank $rank --soft-idr-threshold $idr_thresh \
+			--plot --use-best-multisummit-IDR --log-output-file $idr_log
+		
+		sys idr_thresh_transformed=$(awk -v p=$idr_thresh 'BEGIN{print -log(p)/log(10)}')
+
+		//# Get peaks passing global IDR threshold and convert file to narrowPeak format (Step 9)
+		sys awk 'BEGIN{OFS="\t"} $12>='"${idr_thresh_transformed}"' {if ($2<0) $2=0; print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,"0"}' $idr_out \
+			| sort | uniq | sort -k7n,7n | gzip -nc > $peak_idr_trk_tmp
+
+		sys zcat $peak_idr_trk_tmp | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' | gzip -nc > $peak_idr
+		sys zcat $peak_idr_trk_tmp | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12}' | gzip -nc > $peak_idr_trk
+
+		sys $cmd1
+		sys $cmd2
+		sys $cmd3
+
+		sys gzip -f $idr_out
+		sys rm -f $peak_idr_trk_tmp $filt_peak_idr_trk_tmp
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "IDR", grp_color_idr )
+
+	return out
+}
+
+// use this for chipseq
+string FRiP_shifted( string tag, string peak_file, int fraglen, string o_dir, string group ) {
+	prefix 	:= replace_dir( rm_ext( peak_file, "gz" ), o_dir )
+	qc 	:= "$prefix.FRiP.qc"
+
+	int half_fraglen = (fraglen+1)/2
+
+	in := [tag, peak_file]
+	out := qc
+
+	taskName:= "FRiP " + group
+	wait_par( cpus )
+	tid := task( out<-in ) {
+		sys $shcmd_init
+		// method1
+		sys val1=$(bedtools slop -i $tag -g $chrsz -s -l -$half_fraglen -r $half_fraglen | \
+			awk '{if ($2>=0 && $3>=0 && $2<=$3) print $0}' | \
+			bedtools intersect -a stdin -b <(zcat -f $peak_file) -wa -u | wc -l)
+		// method2 (more accurate)
+		// sys bedtools sort -i $peak_file | bedtools merge -i stdin | gzip -nc > $tmp
+		// sys val1=$(bedtools slop -i $tag -g $chrsz -s -l -$half_fraglen -r $half_fraglen | \
+		// 	awk '{if ($2>=0 && $3>=0 && $2<=$3) print $0}' | \
+		// 	sort -k1,1 -k2,2n | \
+		// 	bedtools intersect -a $tmp -b stdin -c -sorted | awk '{sum+=$4} END{print sum}')
+		// sys rm -f $tmp
+		sys val2=$(zcat $tag | wc -l)
+		sys awk 'BEGIN {print '${val1}'/'${val2}'}' > $qc
+		sys $shcmd_finalize
+	}
+	register_par( tid, cpus )
+	add_task_to_graph( in, out, group )
+
+	return out
+}
+
+// use this for atac/dnase seq
+string FRiP( string tag, string peak_file, string o_dir, string group ) {
+	prefix 	:= replace_dir( rm_ext( peak_file, "gz" ), o_dir )
+	qc 	:= "$prefix.FRiP.qc"
+
+	in := [tag, peak_file]
+	out := qc
+
+	taskName:= "FRiP " + group
+	wait_par( cpus )
+	tid := task( out<-in ) {
+		sys $shcmd_init
+		// method1
+		sys val1=$(bedtools intersect -a <(zcat -f $tag) -b <(zcat -f $peak_file) -wa -u | wc -l)
+		sys val2=$(zcat $tag | wc -l)
+		sys awk 'BEGIN {print '${val1}'/'${val2}'}' > $qc
+		sys $shcmd_finalize
+	}
+	register_par( tid, cpus )
+	add_task_to_graph( in, out, group )
+
+	return out
+}
+
+// idr_tr: IDR peaks for true replicate (key:"rep_id1,rep_id2") e.g. "1,2" for rep1 and rep2
+// idr_pr: IDR peaks for pseudo replicates (key:"rep") e.g. "1" for pseudo replicates of replicate 1
+string[] idr_final_qc( string{} idr_tr, string{} idr_pr, string idr_ppr, \
+			string idr_o_dir, string qc_o_dir, string group ) {
+	//// get # of lines in each IDR peak files
+
+	// pseudo replicates
+	int[] N
+	for ( string peak : idr_pr ) N.add( get_num_lines( peak ) )
+
+	// true replicates
+	Nt := 0
+	string idr_tr_best, key_tr_best
+
+	for ( string key : idr_tr.keys() ) { // key = rep id 1, rep id 2
+
+		peak := idr_tr{ key }
+		nlines := ( peak != "" ) ? get_num_lines( peak ) : 0
+
+		if ( nlines >= Nt ) {
+			Nt = nlines
+			idr_tr_best = peak
+			key_tr_best = key
+		}
+	}
+
+	// pooled pseudo replicates
+	Np := ( idr_ppr != "" ) ? get_num_lines( idr_ppr ) : 0
+
+	//// find optimal set and conservative set
+	string optimal_set, conservative_set
+	int N_opt, N_consv
+	string idr_opt_set, idr_consv_set
+	string idr_opt_set_new, idr_consv_set_new // copy of above two
+
+	if ( Nt > 0 ) {
+
+		// optimal set
+		optimal_set 	= (Nt > Np) ? _get_group_from_key(key_tr_best) : "pooled_pseudo_rep"
+		idr_opt_set 	= (Nt > Np) ? idr_tr_best : idr_ppr
+		N_opt 		= (Nt > Np) ? Nt : Np
+
+		// conservative set
+		conservative_set= _get_group_from_key(key_tr_best)
+		idr_consv_set  	= idr_tr_best
+		N_consv 	= Nt
+	}
+	else {
+		optimal_set 	= "self_pseudo_rep_rep1"
+		idr_opt_set 	= idr_pr{1}
+		N_opt 		= N[0]
+
+		conservative_set= optimal_set
+		idr_consv_set  	= idr_opt_set
+		N_consv 	= N_opt
+	}
+
+	// make copies of them
+	idr_opt_o_dir 		:= mkdir( "$idr_o_dir/optimal_set" )
+	idr_consv_o_dir 	:= mkdir( "$idr_o_dir/conservative_set" )
+
+	idr_opt_set_new		= copy( idr_opt_set, idr_opt_o_dir )	
+	idr_consv_set_new 	= copy( idr_consv_set, idr_consv_o_dir )
+	
+	// for browser tracks
+	idr_opt_set_trk 	:= _get_idr_peak_trk( idr_opt_set ) // for browser tracks
+	idr_consv_set_trk	:= _get_idr_peak_trk( idr_consv_set ) // for browser tracks
+
+	copy( idr_opt_set_trk, idr_opt_o_dir )
+	copy( idr_consv_set_trk, idr_consv_o_dir )
+
+	wait
+
+	//// compute IDR scores
+
+	real max_Np_Nt = _max( Np, Nt )
+	real min_Np_Nt = _min( Np, Nt )
+
+	real max_N = N.size() > 0 ? _max( N ) : 0
+	real min_N = N.size() > 0 ? _min( N ) : 0
+
+	real rescue_ratio, self_consistency_ratio
+	if ( min_Np_Nt > 0 )	rescue_ratio 		= max_Np_Nt / min_Np_Nt
+	else 			rescue_ratio 		= 0.0
+	if ( min_N> 0 )  	self_consistency_ratio 	= max_N / min_N
+	else 			self_consistency_ratio 	= 1.0
+	reproducibility 	:= "pass"
+
+	if ( rescue_ratio > 2.0 || self_consistency_ratio > 2.0 ) reproducibility = "borderline" // BORDERLINE
+	if ( rescue_ratio > 2.0 && self_consistency_ratio > 2.0 ) reproducibility = "fail" // FAIL
+	
+	// write on IDR FINAL QC file
+	prefix 	:= "$qc_o_dir/" + (title=="" ? "" : (title+"_") ) + group
+	qc 	:= prefix+"IDR_final.qc"
+
+	in 	:= map_to_array( idr_tr ) + map_to_array( idr_pr ); if (idr_ppr!="") in += [idr_ppr]
+	out 	:= qc
+
+	string col_lbl, col_val
+	if ( N.size() == 0 ) {
+		col_lbl = ""
+		col_val = ""
+	}
+	else if ( N.size() == 1 ) {
+		col_lbl = "N1\tN2\t"
+		col_val = (N[0] + "\t0" + "\t")
+	}
+	else {
+		for ( int rep=1; rep<=N.size(); rep++) col_lbl += "N$rep\t"
+		col_val = (N.join("\t") + "\t")
+	}
+
+	taskName:= "idr final qc" + group
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init
+
+		sys echo -e "Nt\t$col_lbl""Np\tN_opt\tN_consv\topt_set\tconsv_set\trescue_ratio\tself_consistency_ratio\treproducibility_test" > $qc
+		sys echo -e "$Nt\t$col_val""$Np\t$N_opt\t$N_consv\t$optimal_set\t$conservative_set\t$rescue_ratio\t$self_consistency_ratio\t$reproducibility" >> $qc
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "IDR QC", grp_color_idr_final )
+
+	return [qc, idr_opt_set_new, idr_consv_set_new]
+}
+
+string _get_group_from_key( string key ) { //parse "i,j" to "repi-repj"
+	tmp := key.split(",")
+	i := tmp[0]
+	j := tmp[1]
+	return "rep$i-rep$j"
+}
+
+string _get_idr_peak_trk( string idr_peak ) {
+	return rm_ext( idr_peak, ["narrowPeak","regionPeak"] ) + ".12-col.bed.gz"	
+}
+
+int _max( int a, int b ) {
+	return max( a, b )
+}
+
+int _min( int a, int b ) {
+	return min( a, b )
+}
+
+int _max( int[] arr ) {
+	tmp := arr[0]
+	for( int i=1; i<arr.size();i++ ) tmp = _max( tmp, arr[i] )
+	return tmp
+}
+
+int _min( int[] arr ) {
+	tmp := arr[0]
+	for( int i=1; i<arr.size();i++ ) tmp = _min( tmp, arr[i] )
+	return tmp
+}

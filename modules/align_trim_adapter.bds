@@ -1,0 +1,221 @@
+#!/usr/bin/env bds
+#vim: syntax=java
+
+include "species.bds"
+include "module_template.bds"
+
+
+help == adapter trimmer settings
+adapter_err_rate	:= "0.10" 	help Maximum allowed adapter error rate (# errors divided by the length of the matching adapter region, default: 0.10).
+min_trim_len		:= 5 		help Minimum trim length for cutadapt -m, throwing away processed reads shorter than this (default: 5).
+
+wt_trim			:= "23h"	help Walltime for adapter trimming (default: 23h, 23:00:00).
+mem_trim		:= "12G"	help Max. memory for adapter trimming (default: 12G).
+
+
+grp_color_trim_adapter 	:= "darkorange"
+
+
+init_align_trim_adapter()
+
+
+void init_align_trim_adapter() {
+	adapter_err_rate	= get_conf_val( adapter_err_rate, 	["adapter_err_rate"] )
+	min_trim_len 		= get_conf_val_int( min_trim_len, 	["min_trim_len"] )
+	wt_trim 		= get_conf_val( wt_trim, 		["wt_trim"] )
+	mem_trim 		= get_conf_val( mem_trim, 		["mem_trim"] )
+
+	print("\n\n== adapter trimmer settings\n")
+	print( "Maximum allowed error rate for cutadapt\t: $adapter_err_rate\n")
+	print( "Minimum trim. length for cutadapt -m\t: $min_trim_len\n")
+	print( "Walltime (adapter trimming)\t\t: $wt_trim\n")
+	print( "Max. memory (adapter trimming)\t\t: $mem_trim\n")
+}
+
+// also returns tid
+string[] detect_adapter( string fastq, string o_dir, string group ) {
+
+	prefix	:= replace_dir( rm_ext( fastq, ["fastq","fq"] ), o_dir )
+	log	:= "$prefix.adapter.txt"
+
+	in 	:= [ fastq ]
+	out 	:= log
+
+	taskName:= "detect_adapter $group"
+
+	system 	:= "local"
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init_py3
+
+		sys python3 $(which detect_adapter.py) $fastq > $log
+
+		sys $shcmd_finalize
+	}
+
+	return [out, tid]
+}
+
+string parse_adapter_log( string log ) {
+	string adapter
+	lines := log.readLines()
+	for ( int i=0; i<lines.size(); i++ ) {
+		if ( lines[i].indexOf("Sequences analysed") > -1 ) {
+			if ( i+1>lines.size()-1 ) {
+				adapter = ""
+			}
+			else {
+				line := lines[i+1]
+				arr := line.split("\t")
+				if (arr.size()<3) adapter = ""
+				else adapter = arr[2]
+			}
+			break;
+		}
+	}
+	//if ( adapter == "" ) error("No adapter found ($log)!")
+	return adapter
+}
+
+string trim_adapters( string fastq, string adapter, string o_dir, string group, string graph_suffix ) {
+	if ( !adapter ) return fastq
+
+	prefix	:= replace_dir( rm_ext( fastq, ["fastq","fq"] ), o_dir )
+	p_gz	:= "$prefix"+".trim.fastq.gz"
+
+	in 	:= [ fastq ]
+	out 	:= p_gz
+
+	param_min_trim_len := min_trim_len==0 ? "" : "-m $min_trim_len"
+
+	taskName:= "trim_adapters $group"
+	mem := get_res_mem(mem_trim,1); 	timeout := get_res_wt(wt_trim)
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init
+
+		sys cutadapt $param_min_trim_len -e $adapter_err_rate -a $adapter $fastq | gzip -nc > $p_gz
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "CUT-\\nADAPT$graph_suffix", grp_color_trim_adapter )
+
+	return out
+}
+
+string[] trim_adapters_PE( string fastq1, string fastq2, string adapter1, string adapter2, string o_dir, \
+				string group, string graph_suffix ) {
+	if ( !adapter1 || !adapter2 ) return [fastq1, fastq2]
+
+	prefix1	:= replace_dir( rm_ext( fastq1, ["fastq","fq"] ), o_dir )
+	prefix2	:= replace_dir( rm_ext( fastq2, ["fastq","fq"] ), o_dir )
+	p1 	:= "$prefix1.trim.fastq"
+	p2 	:= "$prefix2.trim.fastq"
+	p1_gz	:= "$p1.gz"
+	p2_gz 	:= "$p2.gz"
+
+	in 	:= [ fastq1, fastq2 ]
+	out 	:= [ p1_gz, p2_gz ]
+
+	param_min_trim_len := min_trim_len==0 ? "" : "-m $min_trim_len"
+
+	taskName:= "trim_adapters_PE " + group
+	mem := get_res_mem(mem_trim,1); 	timeout := get_res_wt(wt_trim)
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init
+
+		sys cutadapt $param_min_trim_len -e $adapter_err_rate -a $adapter1 -A $adapter2 -o $p1 -p $p2 $fastq1 $fastq2
+
+		sys gzip -f $p1
+		sys gzip -f $p2
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "CUT-\\nADAPT$graph_suffix", grp_color_trim_adapter )
+
+	return out
+}
+
+string trim_adapters_old( string fastq, string o_dir, string group, string graph_suffix ) {
+
+	prefix	:= replace_dir( rm_ext( fastq, ["fastq","fq"] ), o_dir )
+	p 	:= "$prefix"+"_trimmed.fq"
+	p_gz	:= "$p.gz"
+	p2 	:= "$prefix"+"_trimmed.fastq"
+	p2_gz 	:= "$p2.gz"
+	in 	:= [ fastq ]
+	out 	:= p2_gz
+
+	taskName:= "trim_adapters " + group
+	mem := get_res_mem(mem_trim,1); 	timeout := get_res_wt(wt_trim)
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init
+
+		sys trim_galore $fastq -o $o_dir --dont_gzip
+		sys gzip -f $p
+		sys mv $p_gz $p2_gz
+		sys rm -f $p_gz $p
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "TRIM GALORE\\n$graph_suffix", grp_color_trim_adapter )
+
+	return out
+}
+
+string[] trim_adapters_PE_old( string fastq1, string fastq2, string o_dir, string group, string graph_suffix ) {
+
+	prefix1	:= replace_dir( rm_ext( fastq1, ["fastq","fq"] ), o_dir )
+	prefix2	:= replace_dir( rm_ext( fastq2, ["fastq","fq"] ), o_dir )
+	p1 	:= "$prefix1.trim.fastq"
+	p2 	:= "$prefix2.trim.fastq"
+	p1_gz	:= "$p1.gz"
+	p2_gz 	:= "$p2.gz"
+
+	in 	:= [ fastq1, fastq2 ]
+	out 	:= [ p1_gz, p2_gz ]
+
+	taskName:= "trim_adapters_PE " + group
+	mem := get_res_mem(mem_trim,1); 	timeout := get_res_wt(wt_trim)
+
+	wait_par( cpus )
+
+	tid := task( out<-in ) {
+
+		sys $shcmd_init
+
+		sys cd $o_dir
+		sys $(which trimAdapters.py) -a $fastq1 -b $fastq2
+		sys gzip -f $p1
+		sys gzip -f $p2
+
+		sys $shcmd_finalize
+	}
+
+	register_par( tid, cpus )
+
+	add_task_to_graph( in, out, group, "TRIMADAPTOR.PY\\n$graph_suffix", grp_color_trim_adapter )
+
+	return out
+}
