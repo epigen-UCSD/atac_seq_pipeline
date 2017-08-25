@@ -633,7 +633,7 @@ def get_fract_reads_in_regions(reads_bed, regions_bed):
 
 
 def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
-                        prom_regions, enh_regions):
+                        prom_regions, enh_regions, peaks):
     '''
     Given region sets, determine whether reads are
     falling in or outside these regions
@@ -656,8 +656,12 @@ def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
     # Enh regions
     reads_enh, fract_enh = get_fract_reads_in_regions(final_bed, enh_regions)
 
+    # Peak regions
+    reads_peaks, fract_peaks = get_fract_reads_in_regions(final_bed, peaks)
+
     return reads_dnase, fract_dnase, reads_blacklist, fract_blacklist, \
-        reads_prom, fract_prom, reads_enh, fract_enh
+        reads_prom, fract_prom, reads_enh, fract_enh, reads_peaks, \
+        fract_peaks
 
 def track_reads(reads_list, labels):
     '''
@@ -955,7 +959,28 @@ fragment lengths will arise. Good libraries will show these peaks in a
 fragment length distribution and will show specific peak ratios.
 </pre>
 
-  
+    <h2>Peak statistics</h2>
+  {{ qc_table(sample['peak_counts']) }}
+
+  <h3>Raw peak file statistics</h3>
+  <table class='qc_table'>
+    <tbody>
+      {% for field, value in sample['raw_peak_summ'].iteritems() %}
+      <tr>
+        <td>{{ field }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ inline_img(sample['raw_peak_dist']) }}
+
+<pre>
+For a good ATAC-seq experiment in human, you expect to get 100k-200k peaks
+for a specific cell type.
+</pre>
+
 
   <h2>Sequence quality metrics</h2>
   <h3>GC bias</h3>
@@ -1055,6 +1080,10 @@ def parse_args():
     parser.add_argument('--finalbam', help='Final filtered BAM file')
     parser.add_argument('--finalbed',
                         help='Final filtered alignments in BED format')
+    parser.add_argument('--bigwig',
+                        help='Final bigwig')
+    parser.add_argument('--peaks',
+                        help='Peak file')
     parser.add_argument('--use_sambamba_markdup', action='store_true',
                         help='Use sambamba markdup instead of Picard')
 
@@ -1087,6 +1116,10 @@ def parse_args():
         PBC_LOG = '{0}.nodup.pbc.qc'.format(INPUT_PREFIX)
         FINAL_BAM = '{0}.nodup.nonchrM.bam'.format(INPUT_PREFIX)
         FINAL_BED = '{0}.nodup.nonchrM.tn5.bed.gz'.format(INPUT_PREFIX)
+        BIGWIG = '{0}.nodup.nonchrM.tn5.pf.pval.signal.bigwig'.format(
+            INPUT_PREFIX)
+        PEAKS = '{0}.nodup.nonchrM.tn5.pf_peaks.narrowPeak'.format(
+            INPUT_PREFIX)
     else:  # mode 2
         FASTQ = args.fastq1
         ALIGNED_BAM = args.alignedbam
@@ -1096,12 +1129,14 @@ def parse_args():
         PBC_LOG = args.pbc
         FINAL_BAM = args.finalbam
         FINAL_BED = args.finalbed
+        BIGWIG = args.bigwig
+        PEAKS = args.peaks
         USE_SAMBAMBA_MARKDUP = args.use_sambamba_markdup
 
     return NAME, OUTPUT_PREFIX, REF, TSS, DNASE, BLACKLIST, PROM, ENH, \
         GENOME, CHROMSIZES, FASTQ, ALIGNED_BAM, \
         ALIGNMENT_LOG, COORDSORT_BAM, DUP_LOG, PBC_LOG, FINAL_BAM, \
-        FINAL_BED, USE_SAMBAMBA_MARKDUP
+        FINAL_BED, BIGWIG, PEAKS, USE_SAMBAMBA_MARKDUP
 
 
 def main():
@@ -1111,7 +1146,7 @@ def main():
     [NAME, OUTPUT_PREFIX, REF, TSS, DNASE, BLACKLIST, PROM, ENH,
       GENOME, CHROMSIZES, FASTQ, ALIGNED_BAM,
      ALIGNMENT_LOG, COORDSORT_BAM, DUP_LOG, PBC_LOG, FINAL_BAM,
-     FINAL_BED, USE_SAMBAMBA_MARKDUP] = parse_args()
+     FINAL_BED, BIGWIG, PEAKS, USE_SAMBAMBA_MARKDUP] = parse_args()
 
     # Set up the log file and timing
     logging.basicConfig(filename='{0}.log'.format(OUTPUT_PREFIX), level=logging.DEBUG,
@@ -1177,8 +1212,9 @@ def main():
     # Signal to noise: reads in DHS regions vs not, reads falling
     # into blacklist regions
     reads_dnase, fract_dnase, reads_blacklist, fract_blacklist, \
-    reads_prom, fract_prom, reads_enh, fract_enh= get_signal_to_noise(FINAL_BED,
-                                                                      DNASE,BLACKLIST,PROM,ENH)
+    reads_prom, fract_prom, reads_enh, fract_enh, \
+    reads_peaks, fract_peaks = get_signal_to_noise(FINAL_BED,
+                          DNASE,BLACKLIST,PROM,ENH,PEAKS)
 
     # Also need to run n-nucleosome estimation
     if paired_status == 'Paired-ended':
@@ -1186,7 +1222,9 @@ def main():
     else:
         nucleosomal_qc = ''
 
-
+    # Peak metrics
+    peak_counts = get_peak_counts(PEAKS) # raw peaks only 
+    raw_peak_summ, raw_peak_dist = get_region_size_metrics(PEAKS)
 
     # Finally output the bar chart of reads
     read_count_data = [first_read_count, first_read_count*fract_mapq,
@@ -1233,6 +1271,8 @@ def main():
                                                     fract_blacklist)),
         ('Fraction of reads in promoter regions', (reads_prom, fract_prom)),
         ('Fraction of reads in enhancer regions', (reads_enh, fract_enh)),
+        ('Fraction of reads in called peak regions', (reads_peaks,
+                                                      fract_peaks)),
 
     ])
 
@@ -1259,6 +1299,11 @@ def main():
         # Fragment length statistics
         ('fraglen_dist', fragment_length_plot(insert_data)),
         ('nucleosomal', nucleosomal_qc),
+
+        # Peak metrics
+        ('peak_counts', peak_counts),
+        ('raw_peak_summ', raw_peak_summ),
+        ('raw_peak_dist', raw_peak_dist),
 
         # GC
         ('gc_bias', plot_gc(gc_out)),

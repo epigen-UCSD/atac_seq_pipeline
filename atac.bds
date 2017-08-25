@@ -1652,19 +1652,19 @@ void ataqc( int rep ) {
 
 	if ( bam.hasKey(rep) ) {
 
-		string idr_ataqc, peak
+		string idr_ataqc, peak_
 
 		if ( !enable_idr ) {
 			idr_ataqc = ""
-			peak = peak_overlap
+			peak_ = peak_overlap
 		}
 		else if ( get_num_rep() == 1 ) 	{
 			idr_ataqc = idr_pr{1}
-			peak = idr_pr{rep}
+			peak_ = idr_pr{rep}
 		}
 		else {
 			idr_ataqc = idr_opt
-			peak = idr_pr{rep}
+			peak_ = idr_pr{rep}
 		}
 
 		string ataqc_html
@@ -1677,8 +1677,8 @@ void ataqc( int rep ) {
 		}
 		else {
 			( ataqc_html, ataqc_qc{rep} ) = ataqc( fastq{rep+",1"}, fastq{rep+",2"}, bam{rep}, align_log{rep}, pbc_qc{rep}, \
-				dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak, \
-				peak_overlap, idr_ataqc, qc_o_dir, group )
+							       dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak{rep}, \
+							       peak_overlap, idr_ataqc, qc_o_dir, group ) //only call peak from one lib not the overlapped 
 		}
 
 		add_file_to_report( ataqc_html, "ATAQC\\nreport", group, "QC and logs/ATAQC/$long/ATAQC HTML report" )
