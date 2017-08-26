@@ -340,7 +340,7 @@ def preseq_plot(data_file):
 
 
 def make_tss_plot(bam_file, tss, prefix, chromsizes, read_len, bins=400, bp_edge=2000,
-                  processes=8, greenleaf_norm=True):
+                  processes=1, greenleaf_norm=True):
     '''
     Take bootstraps, generate tss plots, and get a mean and
     standard deviation on the plot. Produces 2 plots. One is the
