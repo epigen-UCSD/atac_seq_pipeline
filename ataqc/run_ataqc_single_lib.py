@@ -126,6 +126,7 @@ def get_read_length(fastq_file):
     '''
     Get read length out of fastq file
     '''
+    logging.info('Getting read lenth out of fastq file...')
     total_reads_to_consider = 1000000
     line_num = 0
     total_reads_considered = 0
@@ -139,7 +140,7 @@ def get_read_length(fastq_file):
             if total_reads_considered >= total_reads_to_consider:
                 break
             line_num += 1
-
+    logging.info('read length:'+str(max_length)))
     return int(max_length)
 
 
