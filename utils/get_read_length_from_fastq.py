@@ -1,13 +1,17 @@
 #!/usr/bin/env python2
 # code extracted from Daniel Kim's ATAQC module (run_ataqc.py)
 
-import os, sys, re, gzip
+import os, sys, re, gzip, bz2
 
 def getFileHandle(filename, mode="r"):
     if (re.search('.gz$',filename) or re.search('.gzip',filename)):
         if (mode=="r"):
             mode="rb";
         return gzip.open(filename,mode)
+    elif (re.search('.bz2$',filename)):
+        if(mode=="rb"):
+            mode="r";
+        return bz2.BZ2File(filename,mode)
     else:
         return open(filename,mode)
 
