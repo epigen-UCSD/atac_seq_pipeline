@@ -1,0 +1,1975 @@
+#!/usr/bin/env bds
+#vim: syntax=java
+
+
+help == atac pipeline settings
+
+type 		:= "atac-seq" 	help Type of the pipeline. atac-seq or dnase-seq (default: atac-seq).
+dnase_seq	:= false  	help DNase-Seq (no tn5 shifting).
+trimmed_fastq 	:= false	help Skip fastq-trimming stage.
+align	 	:= false	help Align only (no MACS2 peak calling or IDR or ataqc analysis).
+subsample_xcor	:= "25M"	help # reads to subsample for cross corr. analysis (default: 25M).
+subsample 	:= "0" 		help # reads to subsample exp. replicates. Subsampled tagalign will be used for steps downstream (default: 0; no subsampling).
+true_rep 	:= false 	help No pseudo-replicates.
+no_ataqc 	:= false 	help No ATAQC
+no_xcor 	:= false 	help No Cross-correlation analysis.
+csem	 	:= false	help Use CSEM for alignment.
+smooth_win 	:= "150" 	help Smoothing window size for MACS2 peak calling (default: 150).
+idr_thresh 	:= 0.1		help IDR threshold : -log_10(score) (default: 0.1).
+old_trimmer 	:= false 	help Use legacy trim adapters (trim_galore and trimAdapter.py).
+ENCODE3		:= false	help Force to use parameter set (-smooth_win 73 -idr_thresh 0.05 -multimapping 4) for ENCODE3.
+ENCODE		:= false	help Force to use parameter set (-smooth_win 73 -idr_thresh 0.05 -multimapping 4) for ENCODE.
+no_browser_tracks := false 	help Disable generation of genome browser tracks (workaround for bzip2 shared library issue).
+overlap_pval_thresh := 0.01	help p-val threshold for overlapped peaks (default: 0.01).
+macs2_pval_thresh := 0.01	help MACS2 p-val threshold for calling peaks (default: 0.1).
+macs2_pval_thresh_bw := 0.01	help MACS2 p-val threshold for generating BIGWIG signal tracks (default: 0.1).
+enable_idr 	:= false 	help Enable IDR on called peaks.
+
+exclude_ppr_in_naive_overlap := false //help Exclude peaks from pooled pseudo replicates in naive overlap. This flag works for multiple replicate case only.
+disable_gb_peak := true // disable gapped/broad peak generation
+
+help() // show help contexts
+
+include "modules/pipeline_template.bds"
+include "modules/input.bds"
+include "modules/input_adapter.bds"
+
+include "modules/align_bowtie2.bds"
+include "modules/align_trim_adapter.bds"
+include "modules/align_etc.bds"
+
+include "modules/postalign_bam.bds"
+include "modules/postalign_bed.bds"
+include "modules/postalign_xcor.bds"
+
+include "modules/callpeak_macs2_atac.bds"
+include "modules/callpeak_naive_overlap.bds"
+include "modules/callpeak_filter.bds"
+include "modules/callpeak_idr.bds"
+include "modules/callpeak_blacklist_filter.bds"
+include "modules/callpeak_bigbed.bds"
+
+include "modules/ataqc.bds"
+include "modules/ENCODE_accession.bds"
+
+// Important output file names are stored in global variables (usually a string map string{} with a key with replicate id, pair id)
+// e.g. filt_bam{"1"} = filtered bam for replicate 1, peak_pr1{"2"} = peak file for pseudo replicate 1 of replicate 2
+
+string{} fastq, align_log, flagstat_qc, bam, filt_bam, dup_qc, flagstat_nodup_qc, pbc_qc, xcor_qc, xcor_plot
+string{} final_tag, final_tag_pr1, final_tag_pr2
+string final_tag_pooled, final_tag_ppr1, final_tag_ppr2
+
+string{} peak, peak_001, peak_pr1, peak_pr2
+string peak_pooled, peak_pooled_001, peak_ppr1, peak_ppr2, peak_overlap
+
+string{} gpeak, gpeak_001, gpeak_pr1, gpeak_pr2
+string gpeak_pooled, gpeak_pooled_001, gpeak_ppr1, gpeak_ppr2, gpeak_overlap
+string num_peak_log
+
+string{} pval_bigwig_001, fc_bigwig_001
+
+string{} idr_tr, idr_pr, idr_tr_png, idr_pr_png, idr_tr_log, idr_pr_log
+string idr_ppr, idr_opt, idr_consv, idr_ppr_png, idr_ppr_log
+
+string idr_qc
+string{} idr_qc_FRiP
+
+string{} ataqc_qc
+
+main()
+
+
+void main() { // atac pipeline starts here
+
+	init_atac()
+
+	chk_param() // check if parameters are valid
+
+	chk_adapters()
+
+	chk_input( true_rep, false )
+
+	do_align()
+
+	call_peaks()
+
+	read_input_peak() // if inputs are peaks, read them
+
+	do_idr()
+
+	log_number_of_peaks()
+
+	ataqc()
+
+	// blacklist-filter peaks and also make ENCODE accession metadata for them
+	filter_peak_and_convert_to_bigbed() 
+
+	tar_all_logs()
+
+	ENCODE3_overall_qc()
+
+	report()
+}
+
+void init_atac() {
+
+	read_conf_atac()
+
+	init_etc_atac()
+
+	print_atac()
+
+	init_filetable()
+}
+
+void read_conf_atac() {
+
+	type		= get_conf_val( type,			["type"] )
+	trimmed_fastq 	= get_conf_val_bool( trimmed_fastq,	["trimmed_fastq"] )
+	align		= get_conf_val_bool( align,		["align"] )
+	true_rep	= get_conf_val_bool( true_rep, 		["true_rep"] )
+	no_ataqc 	= get_conf_val_bool( no_ataqc, 		["no_ataqc"] )
+	no_xcor 	= get_conf_val_bool( no_xcor, 		["no_xcor"] )
+	csem 		= get_conf_val_bool( csem, 		["csem"] )
+	smooth_win	= get_conf_val( smooth_win,		["smooth_win"] )
+	dnase_seq 	= get_conf_val_bool( dnase_seq, 	["dnase_seq"] )
+	idr_thresh 	= get_conf_val_real( idr_thresh, 	["idr_thresh"] )
+	subsample_xcor 	= get_conf_val( subsample_xcor,		["subsample_xcor"] )
+	subsample	= get_conf_val( subsample, 		["subsample"] )
+	old_trimmer 	= get_conf_val_bool( old_trimmer,	["old_trimmer"] )
+	ENCODE3	 	= get_conf_val_bool( ENCODE3,		["ENCODE3"] )
+	ENCODE	 	= get_conf_val_bool( ENCODE,		["ENCODE","ENCODE1"] )
+	no_browser_tracks = get_conf_val_bool( no_browser_tracks,	["no_browser_tracks"] )
+	overlap_pval_thresh = get_conf_val_real( overlap_pval_thresh, 	["overlap_pval_thresh"] )
+	// exclude_ppr_in_naive_overlap = get_conf_val_bool( exclude_ppr_in_naive_overlap, ["exclude_ppr_in_naive_overlap"] )
+	macs2_pval_thresh = get_conf_val_real( macs2_pval_thresh, ["macs2_pval_thresh"] )
+	macs2_pval_thresh_bw = get_conf_val_real( macs2_pval_thresh_bw, ["macs2_pval_thresh_bw"] )
+	enable_idr 	= get_conf_val_bool( enable_idr,	["enable_idr"] )
+}
+
+void init_etc_atac() {
+
+	default_is_pe 	= true
+	speak_xcor 	= 0 // set fragment length explicitly as zero for cross corr. analysis
+	if ( rm_chr_from_tag == "" ) rm_chr_from_tag = "chrM"; // remove lines with chrM in _bam_to_tag
+}
+
+void print_atac() {
+
+	print( "\n\n== atac pipeline settings\n")
+	print( "Type of pipeline\t\t\t: $type\n")
+	print( "Fastqs are trimmed?\t\t\t: $trimmed_fastq\n")
+	print( "Align only\t\t\t\t: " + align + "\n")
+	print( "# reads to subsample replicates (0 if no subsampling)\t: "+parse_number( subsample )+"\n")
+	print( "# reads to subsample for cross-corr. analysis \t: " +parse_number( subsample_xcor)+"\n")
+	print( "No pseudo replicates\t\t\t: $true_rep\n")
+	print( "No ATAQC (advanced QC report)\t\t: $no_ataqc\n")
+	print( "No Cross-corr. analysis\t\t\t: $no_xcor\n")
+	print( "Use CSEM for alignment\t\t\t: $csem\n")
+	print( "Smoothing window for MACS2\t\t: $smooth_win\n")
+	print( "DNase Seq\t\t\t\t: $dnase_seq\n")
+	print( "IDR threshold\t\t\t\t: $idr_thresh\n" )
+	print( "Use old trim adapters\t\t\t: $old_trimmer\n" )
+	print( "Force to use ENCODE3 parameter set\t: $ENCODE3\n" )
+	print( "Force to use ENCODE parameter set\t: $ENCODE\n" )
+	print( "Disable genome browser tracks\t: $no_browser_tracks\n" )
+	print( "p-val thresh. for overlapped peaks\t: $overlap_pval_thresh\n")
+	// print( "Exclude ppr in naive overlap\t: $exclude_ppr_in_naive_overlap\n")
+	print( "MACS2 p-val thresh. for peaks\t: $macs2_pval_thresh\n")
+	print( "MACS2 p-val thresh. for BIGWIGs\t\t: $macs2_pval_thresh_bw\n")
+	print( "Enable IDR on called peaks\t: $enable_idr\n")
+
+	if ( dnase_seq ) type = "dnase-seq"	
+}
+
+
+void init_filetable() { // init file table labels in HTML report
+
+	// add label to graphviz
+	// : Items in filetable will be sorted in the ascending order of rank
+ 	// : Items added later will have higher rank
+
+	// Level 1
+	add_label_to_table("Raw reads")
+	add_label_to_table("Alignment")
+	add_label_to_table("Signal tracks")
+	add_label_to_table("Peaks")
+	add_label_to_table("QC and logs")
+
+	// Level 2
+	for (int i=1; i<=100; i++) \
+		add_label_to_table("Replicate $i")
+	
+	add_label_to_table("True replicates")
+	add_label_to_table("Pooled replicate")
+	add_label_to_table("Pseudo-replicates")
+	add_label_to_table("Pooled pseudo-replicate")
+	add_label_to_table("Pooled pseudo-replicates")
+	add_label_to_table("Optimal set")
+	add_label_to_table("Conservative set")
+	add_label_to_table("Naive overlap")
+	add_label_to_table("MACS2")
+	add_label_to_table("IDR")
+
+	// Level 2 or 3
+	add_label_to_table("Pseudo-replicate 1")
+	add_label_to_table("Pseudo-replicate 2")
+	add_label_to_table("Pooled pseudo-replicate 1")
+	add_label_to_table("Pooled pseudo-replicate 2")
+	for (int i=1; i<=20; i++) \
+	    for (int j=i+1; j<=20; j++) \
+	        add_label_to_table("Rep. $i vs Rep. $j")
+
+	// Higher levels
+	add_label_to_table("IDR QC")
+	add_label_to_table("Fastq")
+	add_label_to_table("Fastq 1")
+	add_label_to_table("Fastq 2")
+	add_label_to_table("Trimmed fastq")
+	add_label_to_table("Trimmed fastq 1")
+	add_label_to_table("Trimmed fastq 2")
+	add_label_to_table("Bowtie2 map. log")
+	add_label_to_table("Bam")
+	add_label_to_table("Filtered bam")
+	add_label_to_table("Sorted bam")
+	add_label_to_table("Dedup. log")
+	add_label_to_table("Bowtie2 map. flagstat log")
+	add_label_to_table("PBC log")
+	add_label_to_table("Bedpe")
+	add_label_to_table("Subsampled bedpe")
+	add_label_to_table("Tag-align")
+	add_label_to_table("Subsampled tag-align")
+	add_label_to_table("Cross-corr. log")
+	add_label_to_table("Cross-corr. plot")
+	add_label_to_table("P-value")
+	add_label_to_table("Fold enrichment")
+	add_label_to_table("Narrow peak")
+	add_label_to_table("Gapped peak")
+	add_label_to_table("Filtered narrow peak")
+	add_label_to_table("Filtered gapped peak")
+	add_label_to_table("IDR peak")
+	add_label_to_table("Peak")
+	add_label_to_table("Filtered peak")
+	add_label_to_table("Filtered gapped peak")
+	add_label_to_table("ATAQC")
+	add_label_to_table("IDR plot")
+	add_label_to_table("Unthresholded IDR peak")
+
+	// add label to graphviz (short name, long name)
+
+	for (int i=1; i<=50; i++) {
+		add_label_to_graph("rep$i", "Replicate $i")
+		add_label_to_graph("rep$i-pr1", "Pseudo-replicate 1 for rep. $i")
+		add_label_to_graph("rep$i-pr2", "Pseudo-replicate 2 for rep. $i")
+		add_label_to_graph("rep$i-pr", "Pseudo replicates for rep. $i")
+		for (int j=1; j<=20; j++) {
+			add_label_to_graph("rep$i-rep$j", "Rep. $i vs. Rep. $j")
+		}
+	}
+	add_label_to_graph("pooled_rep", "Pooled replicate")
+	add_label_to_graph("ppr", "Pooled pseudo-replicates")
+	add_label_to_graph("ppr1", "Pooled pseudo-replicate 1")
+	add_label_to_graph("ppr2", "Pooled pseudo-replicate 2")
+}
+
+void chk_param() {
+
+	print( "\n== checking atac parameters ...\n" );
+
+	if ( has_input_fastq() ) chk_align_bwt2()
+	if ( !align ) 		chk_callpeak_macs2()
+	if ( enable_idr ) 		chk_idr()
+	if ( !no_ataqc ) {
+		no_ataqc = !chk_ataqc()
+	}
+
+	if ( has_pe_input_tag() && subsample > 0 ) {
+		print("Warning: Cannot subsample paired end tagaligns. Disabling subsampling...\n")
+		subsample = 0
+	}
+
+	if ( !has_input_fastq() && !no_ataqc ) {
+		print("Warning: ATAQC is available for fastq inputs only. Disabling ATAQC...\n")
+		no_ataqc = true
+	}
+
+	if ( has_pe_input_fastq() && csem ) {
+		error("CSEM (-csem) is not available for paired end fastqs!\n")
+	}
+
+	if ( ENCODE ) {
+		print("Info: ENCODE flag is on (-smooth_win 73 -idr_thresh 0.05 -multimapping 4).\n")
+		smooth_win = 73
+		idr_thresh = 0.05
+		multimapping = 4
+	}
+	if ( ENCODE3 ) {
+		print("Info: ENCODE3 flag is on (-smooth_win 73 -idr_thresh 0.05 -multimapping 4).\n")
+		smooth_win = 73
+		idr_thresh = 0.05
+		multimapping = 4
+	}
+
+	//ENCODE_assay_category = "DNA accessibility"
+	if ( dnase_seq ) {
+		ENCODE_assay_title = "DNase-seq"
+	}
+	else {
+		ENCODE_assay_title = "ATAC-seq"
+	}
+}
+
+void chk_adapters() {
+
+	print( "\n== checking adapters to be trimmed ...\n" );
+
+	// check adapters
+	for ( int rep=1; rep <= get_num_rep(); rep++) {
+
+		string prefix
+		if ( is_input_fastq( rep ) ) {
+
+			if ( !trimmed_fastq && !old_trimmer ) { // check adapters
+				adapters := get_adapters( rep )
+				
+				prefix += "Replicate $rep adapters : "
+
+				if ( adapters.size()==0 ) {
+					prefix += "automatically detected"
+				}
+				else {
+					for ( int i=0; i<adapters.size(); i++) {
+						prefix = prefix + adapters[i] + ", "
+						if ( adapters[i] == "" ) {
+							print("$prefix :\n")
+							error("Adapter sequence (-adapter, -adapter[REP_ID] for SE or "\
+								+"-adapter[REP_ID]_[PAIR_ID] for PE) must be defined for adapter trimmer!\n")
+						}
+					}
+				}
+				
+			}
+
+			//if ( !is_se( rep ) && fastqs.size() < 2 ) \
+			//	error("A pair of fastqs are needed for replicate $rep (if it's single-ended add '-se')\n")
+		}
+		print("$prefix\n")
+	}
+}
+
+void do_align() {
+
+	if ( is_input_peak() ) return
+
+	// filesize of input ( map with key $rep )
+	int{} filesize
+
+	for ( int rep=1; rep <= get_num_rep(); rep++) {
+
+		// check file size to distribute nth to each nth_app
+		// determine # threads for each app related to alignment
+
+		// get file size in bytes
+		if ( is_input_fastq( rep ) ) {
+
+			fastqs := get_fastqs( rep )
+			filesize{rep} = (fastqs[0]).size()
+			if ( fastqs.size() > 1) filesize{rep} += (fastqs[1]).size()*3 // multiply 3 to allocate more cpus for align
+		}
+		else if ( is_input_bam( rep ) ) 	filesize{rep} = (get_bam( 0, rep )).size()
+		else if ( is_input_filt_bam( rep ) ) 	filesize{rep} = (get_filt_bam( 0, rep )).size()
+		else if ( is_input_tag( rep ) ) 	filesize{rep} = (get_tag( 0, rep )).size()*10
+	}
+
+	//// distribute # threads for each replicate
+	nth_rep := distribute_nonzero( nth, filesize ) // distribute # threads according to input filesize
+
+	for (int rep=1; rep<=get_num_rep(); rep++) {
+
+		if ( no_par ) do_align( rep, nth_rep{rep} )
+		else 	  par do_align( rep, nth_rep{rep} )
+	}
+
+	wait
+
+	print( "\n== Done do_align()\n" )
+}
+
+void do_align( int rep, int nth_rep ) {
+
+	if ( is_se( rep ) ) 	align_SE( rep, nth_rep )
+	else 			align_PE( rep, nth_rep )
+}
+
+void align_SE( int rep, int nth_rep ) {
+
+	group 	:= get_group_name( rep )
+	long 	:= get_long_group_name( rep )
+
+	aln_o_dir := mkdir( "$out_dir/align/$group" ) // create align output directory
+	qc_o_dir  := mkdir( "$out_dir/qc/$group" ) // create qc output dir.
+
+	string bam_, read_length_log, flagstat_qc_
+	string[] fastqs
+
+	if ( is_input_fastq( rep ) ) {
+
+		fastqs = get_fastqs( rep )
+
+		string[] trimmed_fastqs
+		for ( int i=0; i<fastqs.size(); i++) {
+			id := i+1
+			suffix := fastqs.size()==1 ? "" : ":$id"
+			// add_file_to_report( fastqs[i], "fastq$suffix", group, "Raw reads/$long/Fastq$suffix" )
+
+			if ( trimmed_fastq ) {
+				trimmed_fastqs.add( fastqs[i] )
+			}
+			else {
+				string p1
+				if ( old_trimmer ) {
+					p1 = trim_adapters_old( fastqs[i], aln_o_dir, group, suffix )
+				}
+				else {
+					adapters := get_adapters( rep )
+
+					if ( adapters.size()==0 ) {
+						string adapter_log, tid
+						(adapter_log, tid) = detect_adapter( fastqs[i], qc_o_dir, group )
+						wait tid
+
+						adapter := parse_adapter_log( adapter_log )
+						if ( adapter ) \
+							print("\nDetected adapter for $group (SE) : $adapter\n")
+						else \
+							print("\nDetected adapter for $group (SE) : No adapter detected.\n")
+						adapters.add( adapter )
+					}
+
+					p1 = trim_adapters( fastqs[i], adapters[0], aln_o_dir, group, suffix )
+				}
+				trimmed_fastqs.add( p1 )
+				// add_file_to_report( p1, "trimmed\\nfastq$suffix" , group, "Raw reads/$long/Trimmed fastq$suffix" )
+			}
+		}
+		wait
+
+		string p1
+		if ( trimmed_fastqs.size() > 1 ) { // if multiple fastqs are given, pool trimmed fastqs
+			p1 = pool_fastq( trimmed_fastqs, aln_o_dir, group )
+			// add_file_to_report( p1, "pooled\\nfastq" , group, "Raw reads/$long/Pooled fastq" )
+			wait
+		}
+		else {
+			p1 = trimmed_fastqs[0]
+		}
+		fastq{rep} = p1
+
+		string align_log_ 
+
+		read_length_log = get_read_length_log( p1, qc_o_dir, group )
+ 		if ( csem ) {
+			( bam_, align_log_ ) = bowtie2_csem( p1, aln_o_dir, qc_o_dir, group, nth_rep )
+		}
+		else {
+			( bam_, align_log_ ) = bowtie2( p1, aln_o_dir, qc_o_dir, group, nth_rep )
+		}
+		wait
+		align_log{rep} = align_log_
+		add_file_to_table( align_log_, "QC and logs/$long/Bowtie2 map. log")
+
+		flagstat_qc_ = samtools_flagstat_bam( bam_, qc_o_dir, group )		
+		wait
+		flagstat_qc{rep} = flagstat_qc_
+		add_file_to_table( flagstat_qc_, "QC and logs/$long/Bowtie2 map. flagstat log")
+
+		// add to report
+		tmp_log := parse_flagstat( flagstat_qc_ )
+		raw_reads := metric_prefix( parse_int( tmp_log{"total"} ) )		
+		mapped_reads := metric_prefix( parse_int( tmp_log{"mapped"} ) )
+		if ( trimmed_fastqs.size() > 1 ) { // if multiple fastqs are given, pool trimmed fastqs
+			for ( int i=0; i<fastqs.size(); i++) {
+				id := i+1
+				suffix := fastqs.size()==1 ? "" : ":$id"
+				add_file_to_report( fastqs[i], "fastq$suffix", group, \
+					"Raw reads/$long/Fastq$suffix" )
+				if ( !trimmed_fastq ) {
+					add_file_to_report( trimmed_fastqs[i], "trimmed\\nfastq$suffix", group, \
+						"Raw reads/$long/Trimmed fastq$suffix" )
+				}
+			}
+			add_file_to_report( p1, "pooled\\nfastq" + (raw_reads ? "\\n$raw_reads" : ""), group, \
+				"Raw reads/$long/Pooled fastq"+ (raw_reads ? " ($raw_reads)" : "") )
+		}
+		else {
+			for ( int i=0; i<fastqs.size(); i++) {
+				if ( trimmed_fastq ) {
+					add_file_to_report( fastqs[i], "fastq" + (raw_reads ? "\\n$raw_reads" : ""), group, \
+						"Raw reads/$long/Fastq"+ (raw_reads ? " ($raw_reads)" : "") )
+				}
+				else {
+					add_file_to_report( fastqs[i], "fastq", group, \
+						"Raw reads/$long/Fastq" )
+					add_file_to_report( trimmed_fastqs[i], "trimmed\\nfastq" + (raw_reads ? "\\n$raw_reads" : ""), group, \
+						"Raw reads/$long/Trimmed fastq"+ (raw_reads ? " ($raw_reads)" : "") )
+				}
+			}
+		}
+
+		bam{rep} = bam_
+		add_file_to_report( bam_, "bam" + (mapped_reads ? "\\n$mapped_reads" : ""), group, \
+			"Alignment/$long/Bam" + (mapped_reads ? " ($mapped_reads)" : "") )
+	}
+
+	string filt_bam_, dup_qc_, pbc_qc_, flagstat_nodup_qc_
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) ) {
+
+		if ( is_input_bam( rep ) ) {
+			bam_ = get_bam( 0, rep )
+			bam{rep} = bam_
+		}
+
+		string deduped_reads
+		if ( no_dup_removal ) {
+			string tmp
+			( filt_bam_, tmp ) = dedup_bam( bam_, aln_o_dir, qc_o_dir, group, nth_rep )
+			wait
+		}
+		else {
+			( filt_bam_, dup_qc_, flagstat_nodup_qc_, pbc_qc_ ) \
+						= dedup_bam( bam_, aln_o_dir, qc_o_dir, group, nth_rep )
+			dup_qc{rep} = dup_qc_
+			pbc_qc{rep} = pbc_qc_
+			flagstat_nodup_qc{rep} = flagstat_nodup_qc_
+			add_file_to_table( dup_qc_, "QC and logs/$long/Dedup. log")
+			add_file_to_table( pbc_qc_, "QC and logs/$long/PBC log")
+			add_file_to_table( flagstat_nodup_qc_, "QC and logs/$long/Filtered flagstat log")
+			wait
+			tmp_log := parse_flagstat( flagstat_nodup_qc_ )
+			deduped_reads = metric_prefix( parse_int( tmp_log{"total"} ) )
+		}
+		// add to report
+		filt_bam{rep} = filt_bam_
+		add_file_to_report( filt_bam_, "filt. bam" + (deduped_reads ? "\\n$deduped_reads" : ""), group, \
+			"Alignment/$long/Filtered & deduped bam" + (deduped_reads ? " ($deduped_reads)" : "") )
+
+		// For ENCODE accession, use different step name for single rep case
+		if ( is_input_fastq( rep ) ) {
+			string ENCODE_step_name
+			if ( get_num_rep() == 1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-single-rep-v1"
+			else 			  ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+
+			if ( fastqs.size() > 0 ) \
+				add_ENCODE_metadata_to_summary_json( "bam", "", "alignments", \
+					ENCODE_step_name, filt_bam_, fastqs )
+			if ( flagstat_qc_ ) { 
+				add_ENCODE_quality_metrics_to_summary_json( "samtools_flagstats_quality_metric", \
+					ENCODE_step_name, [filt_bam_], [flagstat_qc_] )
+			}
+		}
+	}
+
+	string tag
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) || is_input_filt_bam( rep ) ) {
+
+		if ( is_input_filt_bam( rep ) ) {
+			filt_bam_ = get_filt_bam( 0, rep )
+			filt_bam{rep} = filt_bam_
+		}
+
+		tag = bam_to_tag( filt_bam_, aln_o_dir, group )
+
+		wait
+	}
+
+	string final_tag_, final_tag_pr1_, final_tag_pr2_
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) || is_input_filt_bam( rep ) || is_input_tag( rep ) ) {
+
+		if ( is_input_tag( rep ) ) tag = get_tag( 0, rep )
+
+		string subsampled_tag
+
+		if ( parse_number( subsample ) != 0 ) {
+			subsampled_tag = subsample_tag( tag, parse_number( subsample ), aln_o_dir, group )
+			wait
+		}
+		else {
+			subsampled_tag = tag
+		}
+
+		if ( is_dnase_seq() ) {
+			final_tag_ = subsampled_tag
+		}
+		else {
+			final_tag_ = tn5_shift_tag( subsampled_tag, aln_o_dir, group )
+		}
+
+		final_tag{rep} = final_tag_
+
+		add_file_to_report( final_tag_, "tag-align", group, "Alignment/$long/Tag-align" )
+
+		wait
+
+		if ( !true_rep ) {
+
+			aln_pr1_o_dir := mkdir( "$out_dir/align/pseudo_reps/$group/pr1" )
+			aln_pr2_o_dir := mkdir( "$out_dir/align/pseudo_reps/$group/pr2" )
+
+			( final_tag_pr1_, final_tag_pr2_ ) = spr( final_tag_, aln_pr1_o_dir, aln_pr2_o_dir, group )
+			final_tag_pr1{rep} = final_tag_pr1_
+			final_tag_pr2{rep} = final_tag_pr2_
+
+			add_file_to_report( final_tag_pr1_, "tag-align", "$group-pr1", "Alignment/Pseudo-replicates/$long/Pseudo-replicate 1/Tag-align" )
+			add_file_to_report( final_tag_pr2_, "tag-align", "$group-pr2", "Alignment/Pseudo-replicates/$long/Pseudo-replicate 2/Tag-align" )
+
+			wait
+		}
+
+		if ( !no_xcor ) {
+			// cross-corr. analysis
+			subsampled_tag_xcor := subsample_tag( tag, parse_number( subsample_xcor ), aln_o_dir, group )
+			wait
+
+			// xcor
+			string xcor_qc_, xcor_plot_
+			( xcor_qc_, xcor_plot_ ) = xcor( subsampled_tag_xcor, qc_o_dir, group, nth_rep )
+
+			xcor_qc{rep} = xcor_qc_
+			xcor_plot{rep} = xcor_plot_
+
+			add_file_to_report( final_tag_, "tag-align", group, "Alignment/$long/Tag-align" )
+			add_file_to_table( xcor_plot_, "QC and logs/$long/Cross-corr. plot" )
+
+			wait
+			string ENCODE_step_name
+			if ( pbc_qc_ && read_length_log ) {
+				if ( get_num_rep() == 1 ) \
+					ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-single-rep-v1"
+				else 			  \
+					ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+				add_ENCODE_quality_metrics_to_summary_json( "complexity_xcorr_quality_metric", \
+					ENCODE_step_name, \
+					[filt_bam_], [pbc_qc_, xcor_qc_, read_length_log], [ "false", xcor_plot_] )
+			}
+		}
+	}
+}
+
+void align_PE( int rep, int nth_rep ) {
+
+	group 	:= get_group_name( rep )
+	long 	:= get_long_group_name( rep )
+
+	aln_o_dir := mkdir( "$out_dir/align/$group" ) // create align output directory
+	qc_o_dir  := mkdir( "$out_dir/qc/$group" ) // create qc output dir.
+
+	string bam_, align_log_, read_length_log, flagstat_qc_
+	string[] fastqs_pair1, fastqs_pair2
+
+	if ( is_input_fastq( rep ) ) {
+
+		fastqs_pair1 = get_fastq( 0, rep, 1 )
+		fastqs_pair2 = get_fastq( 0, rep, 2 )
+
+		string[] trimmed_fastqs_pair1, trimmed_fastqs_pair2
+
+		if ( fastqs_pair1.size() != fastqs_pair2.size() ) {
+			error("Number of fastqs to be pooled for pair 1 and pair 2 do not match!\n")
+		}
+		for ( int i=0; i<fastqs_pair1.size(); i++) {
+			id := i+1
+			suffix := fastqs_pair1.size()==1 ? "" : ":$id"
+
+			// add_file_to_report( fastqs_pair1[i], "fastq 1$suffix", group, "Raw reads/$long/Fastq 1$suffix" )
+			// add_file_to_report( fastqs_pair2[i], "fastq 2$suffix", group, "Raw reads/$long/Fastq 2$suffix" )
+
+			if ( trimmed_fastq ) {
+				trimmed_fastqs_pair1.add( fastqs_pair1[i] )
+				trimmed_fastqs_pair2.add( fastqs_pair2[i] )
+			}
+			else {
+				string p1, p2
+				if ( old_trimmer ) {
+					( p1, p2 ) = trim_adapters_PE_old( fastqs_pair1[i], fastqs_pair2[i], \
+									aln_o_dir, group, suffix )
+				}
+				else {
+					adapters := get_adapters( rep )
+
+					if ( adapters.size()==0 ) {
+						string adapter_log1, adapter_log2, tid1, tid2						
+						(adapter_log1, tid1) = detect_adapter( fastqs_pair1[i], qc_o_dir, group )
+						(adapter_log2, tid2) = detect_adapter( fastqs_pair2[i], qc_o_dir, group )
+						wait [tid1, tid2]
+
+						adapter1 := parse_adapter_log( adapter_log1 )
+						adapter2 := parse_adapter_log( adapter_log2 )
+
+						if ( adapter1 && adapter2 ) \
+							print("\nDetected adapter for $group (PE) : $adapter1, $adapter2\n")
+						else \
+							print("\nDetected adapter for $group (SE) : No adapter detected.\n")
+						adapters.add( adapter1 )
+						adapters.add( adapter2 )
+					}
+
+					( p1, p2 ) = trim_adapters_PE( fastqs_pair1[i], fastqs_pair2[i], \
+									adapters[0], adapters[1], aln_o_dir, group, suffix )
+				}
+
+				trimmed_fastqs_pair1.add( p1 )
+				trimmed_fastqs_pair2.add( p2 )
+
+				// add_file_to_report( p1, "trimmed\\nfastq 1$suffix", group, "Raw reads/$long/Trimmed fastq 1$suffix" )
+				// add_file_to_report( p2, "trimmed\\nfastq 2$suffix", group, "Raw reads/$long/Trimmed fastq 2$suffix" )
+			}
+			//if ( i==0 ) read_length_log = get_read_length_log( trimmed_fastqs_pair1[0], qc_o_dir, group )
+		}
+		wait
+
+		string p1, p2
+		if ( trimmed_fastqs_pair1.size() > 1 ) { // if multiple fastqs are given, pool trimmed fastqs
+			p1 = pool_fastq( trimmed_fastqs_pair1, aln_o_dir, group )
+			p2 = pool_fastq( trimmed_fastqs_pair2, aln_o_dir, group )
+			// add_file_to_report( p1, "pooled\\nfastq 1" , group, "Raw reads/$long/Pooled fastq 1" )
+			// add_file_to_report( p2, "pooled\\nfastq 2" , group, "Raw reads/$long/Pooled fastq 2" )
+			wait
+		}
+		else {
+			p1 = trimmed_fastqs_pair1[0]
+			p2 = trimmed_fastqs_pair2[0]
+		}
+
+		fastq{rep+",1"} = p1
+		fastq{rep+",2"} = p2
+
+		read_length_log = get_read_length_log( p1, qc_o_dir, group )
+		( bam_, align_log_ ) = bowtie2_PE( p1, p2, aln_o_dir, qc_o_dir, group, nth_rep )
+		wait
+		align_log{rep} = align_log_
+		add_file_to_table( align_log_, "QC and logs/$long/Bowtie2 map. log")
+
+		flagstat_qc_ = samtools_flagstat_bam( bam_, qc_o_dir, group )
+		wait
+		flagstat_qc{rep} = flagstat_qc_
+		add_file_to_table( flagstat_qc_, "QC and logs/$long/Bowtie2 map. flagstat log")
+
+		// add to report
+		tmp_log := parse_flagstat( flagstat_qc_ )
+		raw_reads := metric_prefix( parse_int( tmp_log{"total"} ) )
+		half_raw_reads := metric_prefix( parse_int( tmp_log{"total"} )/2 )
+		if ( trimmed_fastqs_pair1.size() > 1 ) { // if multiple fastqs are given, pool trimmed fastqs
+			for ( int i=0; i<fastqs_pair1.size(); i++) {
+				id := i+1
+				suffix := fastqs_pair1.size()==1 ? "" : ":$id"
+				add_file_to_report( fastqs_pair1[i], "fastq 1$suffix", group, \
+					"Raw reads/$long/Fastq 1$suffix" )
+				add_file_to_report( fastqs_pair2[i], "fastq 2$suffix", group, \
+					"Raw reads/$long/Fastq 2$suffix" )
+				if ( !trimmed_fastq ) {
+					add_file_to_report( trimmed_fastqs_pair1[i], "trimmed\\nfastq 1$suffix", group, \
+						"Raw reads/$long/Trimmed fastq 1$suffix" )
+					add_file_to_report( trimmed_fastqs_pair2[i], "trimmed\\nfastq 2$suffix", group, \
+						"Raw reads/$long/Trimmed fastq 2$suffix" )
+				}
+			}
+			add_file_to_report( p1, "pooled\\nfastq 1" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+				"Raw reads/$long/Pooled fastq 1"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+			add_file_to_report( p2, "pooled\\nfastq 2" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+				"Raw reads/$long/Pooled fastq 2"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+		}
+		else {
+			for ( int i=0; i<fastqs_pair1.size(); i++) {
+				if ( trimmed_fastq ) {
+					add_file_to_report( fastqs_pair1[i], "fastq 1" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+						"Raw reads/$long/Fastq 1"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+					add_file_to_report( fastqs_pair2[i], "fastq 2" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+						"Raw reads/$long/Fastq 2"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+				}
+				else {
+					add_file_to_report( fastqs_pair1[i], "fastq 1", group, \
+						"Raw reads/$long/Fastq 1" )
+					add_file_to_report( fastqs_pair2[i], "fastq 2", group, \
+						"Raw reads/$long/Fastq 2" )
+					add_file_to_report( trimmed_fastqs_pair1[i], "trimmed\\nfastq 1" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+						"Raw reads/$long/Trimmed fastq 1"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+					add_file_to_report( trimmed_fastqs_pair2[i], "trimmed\\nfastq 2" + (half_raw_reads ? "\\n$half_raw_reads" : ""), group, \
+						"Raw reads/$long/Trimmed fastq 2"+ (half_raw_reads ? " ($half_raw_reads)" : "") )
+				}
+			}
+		}
+
+		mapped_reads := metric_prefix( parse_int( tmp_log{"mapped"} ) )
+		bam{rep} = bam_
+		add_file_to_report( bam_, "bam" + (mapped_reads ? "\\n$mapped_reads" : ""), group, \
+			"Alignment/$long/Bam" + (mapped_reads ? " ($mapped_reads)" : "") )
+	}
+
+	string filt_bam_, dup_qc_, pbc_qc_, flagstat_nodup_qc_
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) ) {
+
+		if ( is_input_bam( rep ) ) {
+			bam_ = get_bam( 0, rep )
+			bam{rep} = bam_
+		}
+
+		string deduped_reads
+		if ( no_dup_removal ) {
+			string tmp
+			(filt_bam_, tmp ) \
+				= dedup_bam_PE( bam_, aln_o_dir, qc_o_dir, group, nth_rep )
+			wait
+		}
+		else {
+			(filt_bam_, dup_qc_, flagstat_nodup_qc_, pbc_qc_ ) \
+				= dedup_bam_PE( bam_, aln_o_dir, qc_o_dir, group, nth_rep )
+			dup_qc{rep} = dup_qc_
+			pbc_qc{rep} = pbc_qc_
+			flagstat_nodup_qc{rep} = flagstat_nodup_qc_
+			add_file_to_table( dup_qc_, "QC and logs/$long/Dedup. log")
+			add_file_to_table( pbc_qc_, "QC and logs/$long/PBC log")
+			add_file_to_table( flagstat_nodup_qc_, "QC and logs/$long/Filtered flagstat log")
+			wait
+			tmp_log := parse_flagstat( flagstat_nodup_qc_ )
+			deduped_reads = metric_prefix( parse_int( tmp_log{"total"} ) )			
+		}
+		// add to report
+		filt_bam{rep} = filt_bam_
+		add_file_to_report( filt_bam_, "filt. bam" + (deduped_reads ? "\\n$deduped_reads" : ""), group, \
+			"Alignment/$long/Filtered & deduped bam" + (deduped_reads ? " ($deduped_reads)" : "") )
+
+		if ( is_input_fastq( rep ) ) {
+			string ENCODE_step_name
+			if ( get_num_rep()==1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-single-rep-v1"
+			else 			ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+			if ( fastqs_pair1.size() > 0 || fastqs_pair2.size() > 0 ) {
+				add_ENCODE_metadata_to_summary_json( "bam", "", "alignments", \
+					ENCODE_step_name, filt_bam_, fastqs_pair1+fastqs_pair2 )
+			}
+			if ( flagstat_qc_) { 
+				add_ENCODE_quality_metrics_to_summary_json( "samtools_flagstats_quality_metric", \
+					ENCODE_step_name, [filt_bam_], [flagstat_qc_] )
+			}
+		}
+	}
+
+	string bedpe, subsampled_bedpe, tag
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) || is_input_filt_bam( rep ) ) {
+
+		if ( is_input_filt_bam( rep ) ) {
+			filt_bam_ = get_filt_bam( 0, rep )
+			filt_bam{rep} = filt_bam_
+		}
+
+		bedpe = bam_to_bedpe( filt_bam_, aln_o_dir, group )
+		wait
+
+		if ( parse_number( subsample )!=0 ) {
+
+			subsampled_bedpe = subsample_bedpe( bedpe, parse_number( subsample ), aln_o_dir, group )
+		}
+		else {
+			subsampled_bedpe = bedpe
+		}
+		wait
+
+		tag = bedpe_to_tag( subsampled_bedpe, aln_o_dir, group )
+		wait
+	}
+
+	string final_tag_, final_tag_pr1_, final_tag_pr2_
+
+	if ( is_input_fastq( rep ) || is_input_bam( rep ) || is_input_filt_bam( rep ) || is_input_tag( rep ) ) {
+
+		if ( is_input_tag( rep ) ) tag = get_tag( 0, rep )
+
+		string aln_pr1_o_dir, aln_pr2_o_dir
+		string tag_pr1, tag_pr2
+
+		if ( !true_rep ) {
+
+			aln_pr1_o_dir = mkdir( "$out_dir/align/pseudo_reps/$group/pr1" )
+			aln_pr2_o_dir = mkdir( "$out_dir/align/pseudo_reps/$group/pr2" )
+
+			if ( is_input_tag( rep ) ) {
+				( tag_pr1, tag_pr2 ) = spr_tag_PE( tag, aln_pr1_o_dir, aln_pr2_o_dir, group )
+			}
+			else {
+				( tag_pr1, tag_pr2 ) = spr_PE( subsampled_bedpe, aln_pr1_o_dir, aln_pr2_o_dir, group )
+			}
+			wait
+		}
+
+		if ( is_dnase_seq() ) {
+			final_tag_ = tag
+		}
+		else {
+			final_tag_ = tn5_shift_tag( tag, aln_o_dir, group )
+		}		
+		final_tag{rep} = final_tag_
+
+		add_file_to_report( final_tag_, "tag-align", group, "Alignment/$long/Tag-align" )
+
+		if ( !true_rep ) {
+
+			if ( is_dnase_seq() ) {
+				final_tag_pr1_ = tag_pr1
+				final_tag_pr2_ = tag_pr2
+			}
+			else {
+				final_tag_pr1_ = tn5_shift_tag( tag_pr1, aln_pr1_o_dir, group )
+				final_tag_pr2_ = tn5_shift_tag( tag_pr2, aln_pr2_o_dir, group )
+			}
+			final_tag_pr1{rep} = final_tag_pr1_
+			final_tag_pr2{rep} = final_tag_pr2_
+
+			add_file_to_report( final_tag_pr1_, "tag-align", "$group-pr1", \
+				"Alignment/Pseudo-replicates/$long/Pseudo-replicate 1/Tag-align" )
+			add_file_to_report( final_tag_pr2_, "tag-align", "$group-pr2", \
+				"Alignment/Pseudo-replicates/$long/Pseudo-replicate 2/Tag-align" )			
+		}
+		wait
+
+		string subsampled_tag_xcor
+
+		if ( bedpe == "" ) {
+			subsampled_tag_xcor = subsample_tag_PE_xcor( tag, parse_number( subsample_xcor ), aln_o_dir, group )
+		}
+		else {
+			subsampled_tag_xcor = subsample_bedpe_to_tag_xcor( bedpe, parse_number( subsample_xcor ), aln_o_dir, group )
+		}
+		wait
+
+		if ( !no_xcor ) {
+			// cross-corr. analysis
+			string xcor_qc_, xcor_plot_
+			( xcor_qc_, xcor_plot_ ) = xcor( subsampled_tag_xcor, qc_o_dir, group, nth_rep ) 
+
+			xcor_qc{rep} = xcor_qc_
+			xcor_plot{rep} = xcor_plot_
+
+			add_file_to_report( final_tag_, "tag-align", group, "Alignment/$long/Tag-align" )
+			add_file_to_table( xcor_plot_, "QC and logs/$long/Cross-corr. plot" )
+
+			wait
+			string ENCODE_step_name
+			if ( pbc_qc_ && read_length_log ) {
+				if ( get_num_rep() == 1 ) \
+					ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-single-rep-v1"
+				else 			  \
+					ENCODE_step_name = "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"			
+				add_ENCODE_quality_metrics_to_summary_json( "complexity_xcorr_quality_metric", \
+					ENCODE_step_name, \
+					[filt_bam_], [pbc_qc_, xcor_qc_, read_length_log], [ "true", xcor_plot_] )
+			}
+		}
+	}
+}
+
+void read_input_peak() {
+
+	if ( !is_input_peak() ) return // read peaks here
+
+	for ( int rep=0; rep<=get_num_rep_peak(); rep++) { // rep==0 : pooled
+		if ( get_num_rep_peak() == 1 && rep==0 ) continue // if only one replicate, skip reading pooled rep
+
+		for (int pse=0; pse<=2; pse++) { // pse==0 : true rep
+			if ( true_rep && pse > 0 ) continue			
+
+			peak_ := get_peak(rep,pse)
+
+			if ( rep == 0 ) {
+				if ( pse == 0 )		peak_pooled 	= peak_
+				else if ( pse == 1 )	peak_ppr1	= peak_
+				else if ( pse == 2 )	peak_ppr2 	= peak_
+			}
+			else {
+				if ( pse == 0 )		peak{rep} 	= peak_
+				else if ( pse == 1 )	peak_pr1{rep}	= peak_
+				else if ( pse == 2 )	peak_pr2{rep}	= peak_
+			}
+		}
+	}
+}
+
+void call_peaks() { // for pooling two replicates and calling peaks on them
+
+	if ( align ) return
+	if ( is_input_peak() ) return
+
+	// pool tag-aligns
+	string[] tags, tags_pr1, tags_pr2
+
+	for ( int rep=1; rep<=get_num_rep(); rep++ ) {
+		tags.add( final_tag{rep} )
+	 	if ( !true_rep ) {
+			tags_pr1.add( final_tag_pr1{rep} )
+			tags_pr2.add( final_tag_pr2{rep} )
+		}
+	}
+	
+	if ( get_num_rep() > 1 ) {
+	 	aln_pooled_o_dir := mkdir( "$out_dir/align/pooled_rep" )
+		final_tag_pooled = pool_tag( tags, aln_pooled_o_dir, "pooled_rep" )
+		add_file_to_report( final_tag_pooled, "tag-align", "pooled_rep", "Alignment/Pooled replicate/Tag-align" )
+
+		if ( !true_rep ) {
+			// Make shifted tags for pooled pseudo rep (ppr).
+		 	aln_ppr1_o_dir   := mkdir( "$out_dir/align/pooled_pseudo_reps/ppr1" )
+		 	aln_ppr2_o_dir   := mkdir( "$out_dir/align/pooled_pseudo_reps/ppr2" )
+
+			final_tag_ppr1 = pool_tag( tags_pr1, aln_ppr1_o_dir, "ppr1" )
+			final_tag_ppr2 = pool_tag( tags_pr2, aln_ppr2_o_dir, "ppr2" )
+
+			add_file_to_report( final_tag_ppr1, "tag-align", "ppr1", "Alignment/Pooled pseudo-replicates/Pooled pseudo-replicate 1/Tag-align" )
+			add_file_to_report( final_tag_ppr2, "tag-align", "ppr2", "Alignment/Pooled pseudo-replicates/Pooled pseudo-replicate 2/Tag-align" )			
+		}
+
+		wait
+	}
+
+	string tmp
+	// call peaks for each replicate
+	for ( int rep=1; rep<=get_num_rep(); rep++ ) {
+		group 	:= get_group_name( rep )
+		long 	:= get_long_group_name( rep )
+
+		// call peaks
+		peak_o_dir 	:= mkdir( "$out_dir/peak/macs2/$group")
+		sig_o_dir 	:= mkdir( "$out_dir/signal/macs2/$group" )
+
+		// signal track generation = true
+		string peak_001_, gpeak_001_
+		( peak_001_, fc_bigwig_001{rep}, pval_bigwig_001{rep} ) \
+				= macs2_atac_npeak_and_signal( final_tag{rep}, "$smooth_win", macs2_pval_thresh_bw, true, peak_o_dir, sig_o_dir, group )
+		peak_001{rep} = peak_001_
+		add_file_to_report( peak_001{rep}, "n. peak\\np-val<$macs2_pval_thresh_bw", group, \
+			"Peaks/MACS2/$long/Narrow peak (p-val thresh=$macs2_pval_thresh_bw)" )
+		add_file_to_report( fc_bigwig_001{rep}, "signal fc", group, "Signal tracks/MACS2/$long/Fold enrichment" )
+		add_file_to_report( pval_bigwig_001{rep}, "signal p-val", group, "Signal tracks/MACS2/$long/P-value" )
+
+		if ( !disable_gb_peak ) {
+			( gpeak_001_, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag{rep}, "$smooth_win", macs2_pval_thresh_bw, peak_o_dir, group )
+			gpeak_001{rep} = gpeak_001_
+			add_file_to_report( gpeak_001{rep}, "g. peak\\np-val<$macs2_pval_thresh_bw", group, \
+				"Peaks/MACS2/$long/Gapped peak (p-val thresh=$macs2_pval_thresh_bw)" )
+		}
+		if ( macs2_pval_thresh_bw == macs2_pval_thresh ) { // if two p-val threshold are the same, skip one of them.			
+			peak{rep} = peak_001_
+			if ( !disable_gb_peak ) {
+				gpeak{rep} = gpeak_001_
+			}
+		}
+		else {
+			( peak{rep}, tmp )  \
+					= macs2_atac_npeak_and_signal( final_tag{rep}, "$smooth_win", macs2_pval_thresh, false, peak_o_dir, sig_o_dir, group )
+			add_file_to_report( peak{rep}, "n. peak", group, "Peaks/MACS2/$long/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak{rep}, tmp )  \
+						= macs2_atac_gpeak_and_bpeak( final_tag{rep}, "$smooth_win", macs2_pval_thresh, peak_o_dir, group )
+				add_file_to_report( gpeak{rep}, "g. peak", group, "Peaks/MACS2/$long/Gapped peak" )
+			}
+		}
+
+		if ( !true_rep ) {
+			peak_pr1_o_dir 	:= mkdir( "$out_dir/peak/macs2/pseudo_reps/$group/pr1" )
+			peak_pr2_o_dir 	:= mkdir( "$out_dir/peak/macs2/pseudo_reps/$group/pr2" )
+			sig_pr1_o_dir 	:= mkdir( "$out_dir/signal/macs2/pseudo_reps/$group/pr1" )
+			sig_pr2_o_dir 	:= mkdir( "$out_dir/signal/macs2/pseudo_reps/$group/pr2" )
+
+			// ( peak_pr1{rep}, gpeak_pr1{rep} ) \
+			( peak_pr1{rep}, tmp ) \
+				= macs2_atac_npeak_and_signal( final_tag_pr1{rep}, "$smooth_win", macs2_pval_thresh, false, peak_pr1_o_dir, sig_pr1_o_dir, "$group-pr1" )
+			add_file_to_report( peak_pr1{rep}, "n. peak", "$group-pr1", "Peaks/MACS2/Pseudo-replicates/$long/Pseudo-replicate 1/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak_pr1{rep}, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag_pr1{rep}, "$smooth_win", macs2_pval_thresh, peak_pr1_o_dir, "$group-pr1" )
+				add_file_to_report( gpeak_pr1{rep},"g. peak", "$group-pr1", "Peaks/MACS2/Pseudo-replicates/$long/Pseudo-replicate 1/Gapped peak" )
+			}
+
+			// ( peak_pr2{rep}, gpeak_pr2{rep} ) \
+			( peak_pr2{rep}, tmp ) \
+				= macs2_atac_npeak_and_signal( final_tag_pr2{rep}, "$smooth_win", macs2_pval_thresh, false, peak_pr2_o_dir, sig_pr2_o_dir, "$group-pr2" )
+			add_file_to_report( peak_pr2{rep}, "n. peak", "$group-pr2", "Peaks/MACS2/Pseudo-replicates/$long/Pseudo-replicate 2/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak_pr2{rep}, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag_pr2{rep}, "$smooth_win", macs2_pval_thresh, peak_pr2_o_dir, "$group-pr2" )
+				add_file_to_report( gpeak_pr2{rep},"g. peak", "$group-pr2", "Peaks/MACS2/Pseudo-replicates/$long/Pseudo-replicate 2/Gapped peak" )			
+			}
+		}
+	}
+
+	// call peaks for pooled replicates
+	if ( get_num_rep() > 1 ) {
+
+		peak_o_dir 	:= mkdir( "$out_dir/peak/macs2")
+		sig_o_dir 	:= mkdir( "$out_dir/signal/macs2")
+
+		pooled_o_dir	:= mkdir( "$peak_o_dir/pooled_rep" )
+		pooled_sig_o_dir:= mkdir( "$sig_o_dir/pooled_rep" )
+
+		// macs2 on pooled reps, signal tracks are generated
+		( peak_pooled_001, fc_bigwig_001{"pooled"}, pval_bigwig_001{"pooled"} ) \
+			= macs2_atac_npeak_and_signal( final_tag_pooled, "$smooth_win", macs2_pval_thresh_bw, true, pooled_o_dir, pooled_sig_o_dir, "pooled_rep" )
+		add_file_to_report( peak_pooled_001, "n. peak\\np-val<$macs2_pval_thresh_bw", "pooled_rep", "Peaks/MACS2/Pooled replicate/Narrow peak (p-val thresh=.01)" )
+		add_file_to_report( fc_bigwig_001{"pooled"}, "signal fc", "pooled_rep", "Signal tracks/MACS2/Pooled replicate/Fold enrichment" )
+		add_file_to_report( pval_bigwig_001{"pooled"}, "signal p-val", "pooled_rep", "Signal tracks/MACS2/Pooled replicate/P-value" )
+
+		if ( !disable_gb_peak ) {
+			( gpeak_pooled_001, tmp ) \
+				= macs2_atac_gpeak_and_bpeak( final_tag_pooled, "$smooth_win", macs2_pval_thresh_bw, pooled_o_dir, "pooled_rep" )
+			add_file_to_report( gpeak_pooled_001, "g. peak\\np-val<$macs2_pval_thresh_bw", "pooled_rep", "Peaks/MACS2/Pooled replicate/Gapped peak (p-val thresh=.01)" )
+		}
+
+		// macs2 on pooled reps
+		if ( macs2_pval_thresh_bw == macs2_pval_thresh ) { // if two p-val threshold are the same, skip one of them.
+			peak_pooled = peak_pooled_001
+			if ( !disable_gb_peak ) {
+				gpeak_pooled = gpeak_pooled_001
+			}
+		}
+		else {
+			( peak_pooled, tmp ) \
+				= macs2_atac_npeak_and_signal( final_tag_pooled, "$smooth_win", macs2_pval_thresh, false, pooled_o_dir, pooled_sig_o_dir, "pooled_rep" )
+			add_file_to_report( peak_pooled, "n. peak", "pooled_rep", "Peaks/MACS2/Pooled replicate/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak_pooled, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag_pooled, "$smooth_win", macs2_pval_thresh, pooled_o_dir, "pooled_rep" )
+				add_file_to_report( gpeak_pooled, "g. peak", "pooled_rep", "Peaks/MACS2/Pooled replicate/Gapped peak" )
+			}
+		}
+
+		if ( !true_rep ) {
+			ppr1_o_dir 	:= mkdir( "$peak_o_dir/pooled_pseudo_reps/ppr1" )
+			ppr2_o_dir 	:= mkdir( "$peak_o_dir/pooled_pseudo_reps/ppr2" )
+			ppr1_sig_o_dir 	:= mkdir( "$sig_o_dir/pooled_pseudo_reps/ppr1" )
+			ppr2_sig_o_dir 	:= mkdir( "$sig_o_dir/pooled_pseudo_reps/ppr2" )
+
+			// call peaks on ppr
+			( peak_ppr1, tmp ) \
+				= macs2_atac_npeak_and_signal( final_tag_ppr1, "$smooth_win", macs2_pval_thresh, false, ppr1_o_dir, ppr1_sig_o_dir, "ppr1" )
+			add_file_to_report( peak_ppr1, "n. peak", "ppr1", "Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 1/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak_ppr1, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag_ppr1, "$smooth_win", macs2_pval_thresh, ppr1_o_dir, "ppr1" )
+				add_file_to_report( gpeak_ppr1, "g. peak", "ppr1","Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 1/Gapped peak" )
+			}
+
+			// ( peak_ppr2, gpeak_ppr2 ) \
+			( peak_ppr2, tmp ) \
+				= macs2_atac_npeak_and_signal( final_tag_ppr2, "$smooth_win", macs2_pval_thresh, false, ppr2_o_dir, ppr2_sig_o_dir, "ppr2" )
+			add_file_to_report( peak_ppr2, "n. peak", "ppr2", "Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 2/Narrow peak" )
+
+			if ( !disable_gb_peak ) {
+				( gpeak_ppr2, tmp ) \
+					= macs2_atac_gpeak_and_bpeak( final_tag_ppr2, "$smooth_win", macs2_pval_thresh, ppr2_o_dir, "ppr2" )
+				add_file_to_report( gpeak_ppr2, "g. peak", "ppr2","Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 2/Gapped peak" )
+			}
+		}
+	}
+
+	wait
+
+	print( "\n== Done call_peaks()\n" )
+}
+
+void do_idr() {
+
+	//if ( align || !enable_idr ) return
+	if ( align ) return
+
+	string{} top_peak, top_peak_pr1, top_peak_pr2
+	string top_peak_pooled, top_peak_ppr1, top_peak_ppr2
+
+	string{} filt_gpeak, filt_gpeak_pr1, filt_gpeak_pr2
+	string filt_gpeak_pooled, filt_gpeak_ppr1, filt_gpeak_ppr2
+
+	// take top $npeak_filt lines from narrowpeaks for idr
+	for ( int rep=1; rep<=get_num_rep(); rep++ ) {
+
+		top_peak{rep} 	= filt_top_peaks( "narrowPeak", peak{rep}, overlap_pval_thresh, "", "rep$rep" )
+		add_file_to_table( top_peak{rep}, "Peaks/MACS2/Replicate $rep/Filtered narrow peak" )
+
+		if ( !is_input_peak() && !disable_gb_peak ) {
+			filt_gpeak{rep} = filt_top_peaks( "gappedPeak", gpeak{rep}, overlap_pval_thresh, "", "rep$rep" )
+			add_file_to_table( filt_gpeak{rep},"Peaks/MACS2/Replicate $rep/Filtered gapped peak" )
+		}
+
+		if ( !true_rep ) {
+			top_peak_pr1{rep}  = filt_top_peaks( "narrowPeak", peak_pr1{rep}, overlap_pval_thresh, "", "rep$rep-pr1" )
+			top_peak_pr2{rep}  = filt_top_peaks( "narrowPeak", peak_pr2{rep}, overlap_pval_thresh, "", "rep$rep-pr2" )
+			add_file_to_table( top_peak_pr1{rep}, \
+				"Peaks/MACS2/Pseudo-replicates/Replicate $rep/Pseudo-replicate 1/Filtered narrow peak" )
+			add_file_to_table( top_peak_pr2{rep}, \
+				"Peaks/MACS2/Pseudo-replicates/Replicate $rep/Pseudo-replicate 2/Filtered narrow peak" )
+
+			if ( !is_input_peak() && !disable_gb_peak ) {
+				filt_gpeak_pr1{rep} = filt_top_peaks( "gappedPeak", gpeak_pr1{rep}, overlap_pval_thresh, "", "rep$rep-pr1" )
+				filt_gpeak_pr2{rep} = filt_top_peaks( "gappedPeak", gpeak_pr2{rep}, overlap_pval_thresh, "", "rep$rep-pr2" )
+				add_file_to_table( filt_gpeak_pr1{rep}, \
+				"Peaks/MACS2/Pseudo-replicates/Replicate $rep/Pseudo-replicate 1/Filtered gapped peak" )
+				add_file_to_table( filt_gpeak_pr2{rep}, \
+				"Peaks/MACS2/Pseudo-replicates/Replicate $rep/Pseudo-replicate 2/Filtered gapped peak" )
+			}
+		}
+	}
+
+	if ( get_num_rep() > 1 ) {
+
+		top_peak_pooled = filt_top_peaks( "narrowPeak", peak_pooled, overlap_pval_thresh, "", "pooled_rep" )
+		add_file_to_table( top_peak_pooled, "Peaks/MACS2/Pooled replicate/Filtered narrow peak" )
+
+		if ( !is_input_peak() && !disable_gb_peak ) {
+			filt_gpeak_pooled= filt_top_peaks( "gappedPeak", gpeak_pooled, overlap_pval_thresh, "", "pooled_rep" )
+			add_file_to_table( filt_gpeak_pooled, "Peaks/MACS2/Pooled replicate/Filtered gapped peak" )
+		}
+
+		if ( !true_rep ) {
+			top_peak_ppr1 	= filt_top_peaks( "narrowPeak", peak_ppr1, overlap_pval_thresh, "", "ppr1" )
+			top_peak_ppr2 	= filt_top_peaks( "narrowPeak", peak_ppr2, overlap_pval_thresh, "", "ppr2" )
+			add_file_to_table( top_peak_ppr1, \
+				"Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 1/Filtered narrow peak" )
+			add_file_to_table( top_peak_ppr2, \
+				"Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 2/Filtered narrow peak" )
+
+			if ( !is_input_peak() && !disable_gb_peak  ) {
+				filt_gpeak_ppr1 = filt_top_peaks( "gappedPeak", gpeak_ppr1, overlap_pval_thresh, "", "ppr1" )
+				filt_gpeak_ppr2 = filt_top_peaks( "gappedPeak", gpeak_ppr2, overlap_pval_thresh, "", "ppr2" )
+				add_file_to_table( filt_gpeak_ppr1, \
+					"Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 1/Filtered gapped peak" )
+				add_file_to_table( filt_gpeak_ppr2, \
+					"Peaks/MACS2/Pooled pseudo-replicates/Pooled pseudo-replicate 2/Filtered gapped peak" )
+			}
+		}
+	}
+
+	wait
+
+	// naive overlap peak
+
+	overlap_o_dir := mkdir( "$out_dir/peak/macs2/overlap" )
+
+	if ( get_num_rep() == 1 ) {
+
+		if ( !true_rep ) {
+			peak_overlap = naive_overlap_peak( "narrowPeak", \
+						top_peak{1}, top_peak_pr1{1}, top_peak_pr2{1}, overlap_o_dir, "" )
+			if ( !is_input_peak() && !disable_gb_peak  ) {
+				gpeak_overlap_tmp := naive_overlap_peak( "gappedPeak", \
+						filt_gpeak{1}, filt_gpeak_pr1{1}, filt_gpeak_pr2{1}, overlap_o_dir, "" )
+				wait
+				gpeak_overlap = overlap_gpeak_over_npeak( gpeak_overlap_tmp, peak_overlap, overlap_o_dir, "" )
+			}
+		}
+	}
+	else {
+		if ( !exclude_ppr_in_naive_overlap ) {
+			peak_overlap = naive_overlap_peak( "narrowPeak", top_peak_pooled, map_to_array( top_peak ), \
+								  top_peak_ppr1, top_peak_ppr2, overlap_o_dir, "" )
+		}
+		else {
+			peak_overlap = naive_overlap_peak( "narrowPeak", top_peak_pooled, map_to_array( top_peak ), \
+								  "", "", overlap_o_dir, "" )
+		}
+
+		if ( !is_input_peak() && !disable_gb_peak ) {
+			string gpeak_overlap_tmp
+			if ( !exclude_ppr_in_naive_overlap ) {
+				gpeak_overlap_tmp = naive_overlap_peak( "gappedPeak", filt_gpeak_pooled, map_to_array( filt_gpeak ), \
+									  filt_gpeak_ppr1, filt_gpeak_ppr2, overlap_o_dir, "" )
+			}
+			else {
+				gpeak_overlap_tmp = naive_overlap_peak( "gappedPeak", filt_gpeak_pooled, map_to_array( filt_gpeak ), \
+									  "", "", overlap_o_dir, "" )				
+			}
+			wait
+			gpeak_overlap = overlap_gpeak_over_npeak( gpeak_overlap_tmp, peak_overlap, overlap_o_dir, "" )
+		}
+	}
+
+	add_file_to_report( peak_overlap, "n. peak\\noverlap", "", "Peaks/MACS2/Naive overlap/Narrow peak" )
+	if ( !is_input_peak() && !disable_gb_peak ) \
+		add_file_to_report( gpeak_overlap, "g. peak\\noverlap", "", "Peaks/MACS2/Naive overlap/Gapped peak" )
+
+	if ( !enable_idr ) {
+		wait
+		print( "\n== Done naive_overlap()\n" )
+		return
+	}
+
+	// do IDR
+	peak_o_dir := "$out_dir/peak/macs2"
+	idr_o_dir_old_version := "$peak_o_dir/../idr"
+	idr_o_dir := "$peak_o_dir/idr"
+	// for backward compatibility (old version has idr on out/peak), make symlink for old dir. to new dir. 
+	if ( path_exists( idr_o_dir_old_version ) ) { 
+		system := "local"
+		task {
+			sys cd $peak_o_dir
+			sys rm -f idr
+			sys ln -s ../idr
+		}
+	}
+	else {
+		idr_o_dir = mkdir( idr_o_dir )
+	}
+	wait
+
+	for ( int i=1; i<=get_num_rep(); i++ ) {
+
+		for ( int j=i+1; j<=get_num_rep(); j++ ) {
+
+			idr_true_o_dir 	:= mkdir( "$idr_o_dir/true_reps/rep$i-rep$j" )
+
+			(idr_tr{"$i,$j"}, idr_tr_png{"$i,$j"}, idr_tr_log{"$i,$j"} ) \
+				= idr2( top_peak{i}, top_peak{j}, top_peak_pooled, idr_thresh, "p.value", idr_true_o_dir, "rep$i-rep$j" )
+
+			add_file_to_report( idr_tr{"$i,$j"}, "IDR peak", "rep$i-rep$j", "Peaks/MACS2/IDR/True replicates/Rep. $i vs. Rep. $j/IDR peak" )
+			add_file_to_table( idr_tr_png{"$i,$j"}, "QC and logs/IDR/True replicates/Rep. $i vs. Rep. $j/IDR plot" )	
+		}
+
+		if ( !true_rep ) {
+
+			idr_pr_o_dir := mkdir( "$idr_o_dir/pseudo_reps/rep$i" )
+
+			(idr_pr{i}, idr_pr_png{i}, idr_pr_log{i}) \
+				= idr2( top_peak_pr1{i}, top_peak_pr2{i}, top_peak{i}, idr_thresh, "p.value", idr_pr_o_dir, "rep$i-pr" )
+
+			add_file_to_report( idr_pr{i}, "IDR peak", "rep$i-pr", "Peaks/MACS2/IDR/Pseudo-replicates/Replicate $i/IDR peak" )
+			add_file_to_table( idr_pr_png{i}, "QC and logs/IDR/Pseudo-replicates/Replicate $i/IDR plot" )
+		}
+	}
+
+	if ( !true_rep && get_num_rep() > 1 ) {
+
+		idr_ppr_o_dir := mkdir( "$idr_o_dir/pooled_pseudo_reps" )
+
+		(idr_ppr, idr_ppr_png, idr_ppr_log) \
+			= idr2( top_peak_ppr1, top_peak_ppr2, top_peak_pooled, idr_thresh, "p.value", idr_ppr_o_dir, "ppr" )
+
+		add_file_to_report( idr_ppr, "IDR peak", "ppr", "Peaks/MACS2/IDR/Pooled pseudo-replicates/IDR peak" )
+		add_file_to_table( idr_ppr_png, "QC and logs/IDR/Pooled pseudo-replicates/IDR plot" )
+	}
+	wait
+
+	// FRiP calculation
+	for ( int i=1; i<=get_num_rep(); i++ ) {
+		for ( int j=i+1; j<=get_num_rep(); j++ ) {
+			idr_true_o_dir 	:= mkdir( "$idr_o_dir/true_reps/rep$i-rep$j" )
+			if ( final_tag_pooled ) {
+				idr_qc_FRiP{"rep$i-rep$j"} = \
+					FRiP( final_tag_pooled, idr_tr{"$i,$j"}, idr_true_o_dir, "rep$i-rep$j" )
+				add_file_to_table( idr_qc_FRiP{"rep$i-rep$j"}, \
+					"QC and logs/IDR/True replicates/Rep. $i vs. Rep. $j/FRiP" )
+			}
+		}
+		if ( !true_rep ) {
+			idr_pr_o_dir := mkdir( "$idr_o_dir/pseudo_reps/rep$i" )
+			if ( final_tag.hasKey(i) ) {
+				idr_qc_FRiP{"rep$i-pr"} = \
+					FRiP( final_tag{i}, idr_pr{i}, idr_pr_o_dir, "rep$i-pr" )
+				add_file_to_table( idr_qc_FRiP{"rep$i-pr"}, \
+					"QC and logs/IDR/Pseudo-replicates/Replicate $i/FRiP" )
+			}
+		}
+	}
+	if ( !true_rep && get_num_rep() > 1 ) {
+		idr_ppr_o_dir := mkdir( "$idr_o_dir/pooled_pseudo_reps" )
+		if ( final_tag_pooled ) {
+			idr_qc_FRiP{"ppr"} = FRiP( final_tag_pooled, idr_ppr, idr_ppr_o_dir, "ppr" )
+			add_file_to_table( idr_qc_FRiP{"ppr"}, "QC and logs/IDR/Pooled pseudo-replicates/FRiP" )
+		}
+	}
+	wait
+
+	qc_o_dir := mkdir( "$out_dir/qc" ) // create qc output dir.
+
+	// get final idr qc score, use idr final idr narrow peak files from true, pseudo and pooled pseudo reps
+	(idr_qc, idr_opt, idr_consv) = idr_final_qc( idr_tr, idr_pr, idr_ppr, idr_o_dir, qc_o_dir, "" )
+
+	add_file_to_report( idr_qc, "IDR QC log", "", "QC and logs/IDR/IDR QC log" )
+	add_file_to_report( idr_opt, "opt. IDR peak", "", "Peaks/MACS2/IDR/Optimal set/IDR peak" )
+	add_file_to_report( idr_consv, "consv. IDR peak", "", "Peaks/MACS2/IDR/Conservative set/IDR peak" )
+
+	print( "\n== Done do_idr()\n" )
+}
+
+void log_number_of_peaks() {
+	if ( align ) return
+
+	log_o_dir := mkdir("$out_dir/qc")
+	num_peak_log = "$log_o_dir/" + (title ? (title+"_") : "" ) + "number_of_peaks.txt"
+	string lines
+	for ( int rep=1; rep<=get_num_rep(); rep++) { // rep==0 : pooled
+		if ( peak.hasKey(rep) ) \
+			lines += "rep$rep\t"+get_num_lines( peak{rep} )+"\n"
+		if ( peak_pr1.hasKey(rep) ) \
+			lines += "rep$rep-pr1\t"+get_num_lines( peak_pr1{rep} )+"\n"
+		if ( peak_pr2.hasKey(rep) ) \
+			lines += "rep$rep-pr2\t"+get_num_lines( peak_pr2{rep} )+"\n"
+	}
+	if ( peak_pooled ) \
+		lines += "pooled\t"+get_num_lines( peak_pooled )+"\n"
+	if ( peak_ppr1 ) \
+		lines += "ppr1\t"+get_num_lines( peak_ppr1 )+"\n"
+	if ( peak_ppr2 ) \
+		lines += "ppr2\t"+get_num_lines( peak_ppr2 )+"\n"
+	if ( peak_overlap ) \
+		lines += "overlap\t"+get_num_lines( peak_overlap )+"\n"
+	if ( gpeak_overlap ) \
+		lines += "overlap (gpeak)\t"+get_num_lines( gpeak_overlap )+"\n"
+	num_peak_log.write(lines)
+}
+
+// black list filter and then convert to bigbed (for true replicates only)
+void filter_peak_and_convert_to_bigbed() { 
+	if ( align ) return
+	if ( !path_exists( blacklist ) ) return
+
+	// peaks for true replicates
+	if ( get_num_rep() > 1 ) {
+		filt_peak_pooled_001 := \
+			blacklist_filter_peak( "narrowPeak", peak_pooled_001, peak_pooled_001.dirName(), "peak_pooled" )
+		string filt_gpeak_pooled_001
+		if ( !disable_gb_peak ) {
+			filt_gpeak_pooled_001 = \
+				blacklist_filter_peak( "gappedPeak", gpeak_pooled_001, gpeak_pooled_001.dirName(), "gpeak_pooled" )
+		}
+		wait
+
+		peak_to_bigbed( "narrowPeak", filt_peak_pooled_001, filt_peak_pooled_001.dirName(), "peak_pooled" )
+		if ( !disable_gb_peak ) {
+			peak_to_bigbed( "gappedPeak", filt_gpeak_pooled_001, filt_gpeak_pooled_001.dirName(), "gpeak_pooled" )
+		}
+	}
+
+	string[] filt_peaks, filt_gpeaks
+	for (int rep=1; rep<=get_num_rep(); rep++) {
+		filt_peak_001 := \
+			blacklist_filter_peak( "narrowPeak", peak_001{rep}, (peak_001{rep}).dirName(), "peak $rep" )
+		string filt_gpeak_001
+		if ( !disable_gb_peak ) {
+			filt_gpeak_001 = \
+				blacklist_filter_peak( "gappedPeak", gpeak_001{rep}, (gpeak_001{rep}).dirName(), "gpeak $rep" )
+		}
+		wait
+		// For ENCODE accession, use different step name for single rep case
+		string ENCODE_step_name
+		if ( is_input_fastq( rep ) ) {
+			if ( get_num_rep() == 1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-peaks-filter-step-run-single-rep-v1"
+			else 			  ENCODE_step_name = "anshul-kundaje:atac-seq-peaks-filter-step-run-v1"
+			add_ENCODE_metadata_to_summary_json( "bed", "narrowPeak", "raw peaks", \
+				ENCODE_step_name, filt_peak_001, [filt_bam{rep}])
+
+			if ( !disable_gb_peak ) {
+				add_ENCODE_metadata_to_summary_json( "bed", "gappedPeak", "raw peaks", \
+					ENCODE_step_name, filt_gpeak_001, [filt_bam{rep}])
+			}
+
+			if ( get_num_rep() == 1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-signal-generation-step-run-single-rep-v1"
+			else 			  ENCODE_step_name = "anshul-kundaje:atac-seq-signal-generation-step-run-v1"
+			add_ENCODE_metadata_to_summary_json( "bigWig", "", "signal p-value", \
+				ENCODE_step_name, pval_bigwig_001{rep}, [filt_bam{rep}])
+			add_ENCODE_metadata_to_summary_json( "bigWig", "", "fold change over control", \
+				ENCODE_step_name, fc_bigwig_001{rep}, [filt_bam{rep}])
+
+			npeak_bb := peak_to_bigbed( "narrowPeak", filt_peak_001, filt_peak_001.dirName(), "peak $rep" )
+
+			string gpeak_bb
+			if ( !disable_gb_peak ) {
+				gpeak_bb = peak_to_bigbed( "gappedPeak", filt_gpeak_001, filt_gpeak_001.dirName(), "gpeak $rep" )
+			}
+
+			wait
+			if ( get_num_rep() == 1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-filtered-peaks-to-bigbed-step-run-single-rep-v1"
+			else 			  ENCODE_step_name = "anshul-kundaje:atac-seq-filtered-peaks-to-bigbed-step-run-v1"
+			add_ENCODE_metadata_to_summary_json( "bigBed", "narrowPeak", "raw peaks", \
+				ENCODE_step_name, npeak_bb, [filt_peak_001])
+			if ( !disable_gb_peak ) {
+				add_ENCODE_metadata_to_summary_json( "bigBed", "gappedPeak", "raw peaks", \
+					ENCODE_step_name, gpeak_bb, [filt_gpeak_001])
+			}
+		}
+		filt_peaks.add(filt_peak_001)
+		if ( !disable_gb_peak ) {
+			filt_gpeaks.add(filt_gpeak_001)
+		}
+	}
+
+	wait
+
+	string ENCODE_step_name
+	if ( enable_idr && idr_qc && idr_opt && idr_consv ) {
+
+		string[] idr_ENCODE 
+		// IDR peaks
+		if ( idr_pr.hasKey(1) && get_num_rep()==1 ) {
+			idr_ENCODE = [idr_pr{1}]
+			ENCODE_step_name = "anshul-kundaje:atac-seq-unreplicated-idr-step-run-single-rep-v1"
+			add_ENCODE_metadata_to_summary_json( "bed", "narrowPeak", "pseudoreplicated idr thresholded peaks", \
+				ENCODE_step_name, idr_pr{1}, filt_peaks )
+			idr_bb := peak_to_bigbed( "narrowPeak", idr_pr{1}, idr_pr{1}.dirName(), "idr peak pr" )
+			wait
+			ENCODE_step_name = "anshul-kundaje:atac-seq-pseudoreplicated-idr-peaks-conversion-step-run-single-rep-v1"			
+			add_ENCODE_metadata_to_summary_json( "bigBed", "narrowPeak", "pseudoreplicated idr thresholded peaks", \
+				ENCODE_step_name, idr_bb, [idr_pr{1}] )
+		}
+		else {
+			// find idr_opt and idr_consv		
+			idr_ENCODE = [idr_opt]
+			ENCODE_step_name = "anshul-kundaje:atac-seq-idr-step-run-v1"
+			add_ENCODE_metadata_to_summary_json( "bed", "narrowPeak", "optimal idr thresholded peaks", \
+				ENCODE_step_name, idr_opt, filt_peaks )
+			idr_opt_bb := peak_to_bigbed( "narrowPeak", idr_opt, idr_opt.dirName(), "idr peak opt" )
+			wait
+			ENCODE_step_name = "anshul-kundaje:atac-seq-idr-peaks-conversion-step-run-v1"
+			add_ENCODE_metadata_to_summary_json( "bigBed", "narrowPeak", "optimal idr thresholded peaks", \
+				ENCODE_step_name, idr_opt_bb, [idr_opt])
+
+			if ( idr_consv && get_basename( idr_opt )!=get_basename( idr_consv ) ) {
+				ENCODE_step_name = "anshul-kundaje:atac-seq-idr-step-run-v1"
+				add_ENCODE_metadata_to_summary_json( "bed", "narrowPeak", "conservative idr thresholded peaks", \
+					ENCODE_step_name, idr_consv, filt_peaks )
+				idr_consv_bb := peak_to_bigbed( "narrowPeak", idr_consv, idr_consv.dirName(), "idr peak consv" )
+				wait
+				ENCODE_step_name = "anshul-kundaje:atac-seq-idr-peaks-conversion-step-run-v1"
+				add_ENCODE_metadata_to_summary_json( "bigBed", "narrowPeak", "conservative idr thresholded peaks", \
+					ENCODE_step_name, idr_consv_bb, [idr_consv] )
+			}
+		}
+
+		if ( !true_rep ) {
+			if ( get_num_rep()==1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-unreplicated-idr-step-run-single-rep-v1"
+			else 			ENCODE_step_name = "anshul-kundaje:atac-seq-idr-step-run-v1"
+			add_ENCODE_quality_metrics_to_summary_json( "idr_quality_metric", \
+				ENCODE_step_name, \
+				idr_ENCODE, \
+					[ idr_qc, \
+					idr_qc_FRiP.hasKey("ppr") ? idr_qc_FRiP{"ppr"} : "",\
+					idr_qc_FRiP.hasKey("rep1-rep2") ? idr_qc_FRiP{"rep1-rep2"} : "",\
+					idr_qc_FRiP.hasKey("rep1-pr") ? idr_qc_FRiP{"rep1-pr"} : "",\
+					idr_qc_FRiP.hasKey("rep2-pr") ? idr_qc_FRiP{"rep2-pr"} : ""], \
+					[ "$idr_thresh", \
+					idr_tr_png.hasKey("1,2") ? idr_tr_png{"1,2"} : "", \
+					idr_pr_png.hasKey(1) ? idr_pr_png{1} : "", \
+					idr_pr_png.hasKey(2) ? idr_pr_png{2} : "", \
+					idr_ppr_png, \
+					idr_tr_log.hasKey("1,2") ? idr_tr_log{"1,2"} : "", \
+					idr_pr_log.hasKey(1) ? idr_pr_log{1} : "", \
+					idr_pr_log.hasKey(2) ? idr_pr_log{2} : "", \
+					idr_ppr_log])
+		}
+	}
+
+	// naive overlap peaks
+	string ENCODE_peak_name
+	if ( peak_overlap ) {
+		if ( get_num_rep()==1 ) {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-overlap-step-run-single-rep-v1"
+			ENCODE_peak_name = "pseudoreplicated stable peaks"
+		}
+		else {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-overlap-step-run-v1"
+			ENCODE_peak_name = "replicated peaks"
+		}
+		add_ENCODE_metadata_to_summary_json( "bed", "narrowPeak", ENCODE_peak_name, \
+			ENCODE_step_name, peak_overlap, filt_peaks )
+		npeak_bb := peak_to_bigbed( "narrowPeak", peak_overlap, peak_overlap.dirName(), "peak overlap" )
+		wait
+		if ( get_num_rep()==1 )	ENCODE_step_name = "anshul-kundaje:atac-seq-stable-peaks-conversion-step-run-v1"
+		else 			ENCODE_step_name = "anshul-kundaje:atac-seq-replicated-peaks-conversion-step-run-v1"
+		add_ENCODE_metadata_to_summary_json( "bigBed", "narrowPeak", ENCODE_peak_name, \
+			ENCODE_step_name, npeak_bb, [peak_overlap] )
+	}
+
+	if ( gpeak_overlap ) {
+		if ( get_num_rep()==1 ) {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-overlap-step-run-single-rep-v1"
+			ENCODE_peak_name = "pseudoreplicated stable peaks"
+		}
+		else {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-overlap-step-run-v1"
+			ENCODE_peak_name = "replicated peaks"
+		}
+		add_ENCODE_metadata_to_summary_json( "bed", "gappedPeak", ENCODE_peak_name, \
+			ENCODE_step_name, gpeak_overlap, filt_gpeaks )
+		gpeak_bb := peak_to_bigbed( "gappedPeak", gpeak_overlap, gpeak_overlap.dirName(), "gpeak overlap" )
+		wait
+		if ( get_num_rep()==1 ) ENCODE_step_name = "anshul-kundaje:atac-seq-stable-peaks-conversion-step-run-v1"
+		else 			ENCODE_step_name = "anshul-kundaje:atac-seq-replicated-peaks-conversion-step-run-v1"
+		add_ENCODE_metadata_to_summary_json( "bigBed", "gappedPeak", ENCODE_peak_name, \
+			ENCODE_step_name, gpeak_bb, [gpeak_overlap] )
+	}
+
+	wait
+
+	print( "\n== Done filter_peak_and_convert_to_bigbed()\n" )	
+}
+
+void ataqc() {
+
+	if ( no_ataqc || align ) return
+	if ( is_input_peak() ) return
+
+	for (int rep=1; rep<=get_num_rep(); rep++) {
+
+		if ( no_par ) ataqc( rep )
+		else 	  par ataqc( rep )
+	}
+
+	wait
+
+	print( "\n== Done ataqc()\n" )
+}
+
+void ataqc( int rep ) {
+
+    //	if ( true_rep ) {
+    //		print("Warning: ATAQC cannot run with a flag -true_rep\n");
+    //		return
+    //	}
+	if ( no_dup_removal ) {
+		print("Warning: ATAQC cannot run with the flag -no_dup_removal\n");
+		return
+	}
+
+	group := get_group_name( rep )
+	long  := get_long_group_name( rep )
+
+	qc_o_dir 	:= mkdir( "$out_dir/qc/$group" )
+	aln_o_dir 	:= mkdir( "$out_dir/align/$group" ) // create align output directory
+
+	if ( bam.hasKey(rep) ) {
+
+		string idr_ataqc, peak_
+
+		if ( !enable_idr ) {
+			idr_ataqc = ""
+			peak_ = peak_overlap
+		}
+		else if ( get_num_rep() == 1 ) 	{
+			idr_ataqc = idr_pr{1}
+			peak_ = idr_pr{rep}
+		}
+		else {
+			idr_ataqc = idr_opt
+			peak_ = idr_pr{rep}
+		}
+
+		string ataqc_html
+
+		if ( is_se( rep ) ) {
+
+			( ataqc_html, ataqc_qc{rep} ) = ataqc( fastq{rep}, "", bam{rep}, align_log{rep}, pbc_qc{rep}, \
+				dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak, \
+				peak_overlap, idr_ataqc, qc_o_dir, group )
+		}
+		else {
+			( ataqc_html, ataqc_qc{rep} ) = ataqc( fastq{rep+",1"}, fastq{rep+",2"}, bam{rep}, align_log{rep}, pbc_qc{rep}, \
+							       dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak{rep}, \
+							       peak_overlap, idr_ataqc, qc_o_dir, group ) //only call peak from one lib not the overlapped 
+		}
+
+		add_file_to_report( ataqc_html, "ATAQC\\nreport", group, "QC and logs/ATAQC/$long/ATAQC HTML report" )
+	}
+}
+
+void report() {
+
+	wait
+
+	string html
+	html += html_title()
+	html += html_cmd_line_args()
+	html += html_conf_file_info()
+	html += html_pipeline_version( "https://github.com/kundajelab/atac_dnase_pipelines/commit" ) // pipeline version info
+	html += html_filetable() 	// treeview for directory and file structure
+	html += html_atac_tracks() 	// epigenome browser tracks
+	html += html_graph()	// graphviz workflow diagram
+	html += html_atac_QC()	// show QC tables and images
+
+	report( html )
+	write_summary_json()
+
+	print( "\n== Done report()\n" )
+}
+
+string html_atac_QC() {
+
+	string[] align_qcs, flagstat_qcs, dup_qcs, flagstat_nodup_qcs, pbc_qcs, xcor_qcs, xcor_plots, ataqc_qcs
+	string[] groups
+
+	for ( int rep=1; rep <= get_num_rep(); rep++) {
+
+		group := "rep$rep"
+		key := "$rep"
+		groups.add( group )
+
+		if ( xcor_qc.hasKey( key ) )	{
+			xcor_qcs 		+= xcor_qc{key}
+			xcor_plots 		+= xcor_plot{key}
+		}
+		if ( flagstat_qc.hasKey( key ) )	flagstat_qcs 		+= flagstat_qc{key}
+		if ( dup_qc.hasKey( key ) ) 		dup_qcs 		+= dup_qc{key}
+		if ( flagstat_nodup_qc.hasKey( key ) )	flagstat_nodup_qcs 	+= flagstat_nodup_qc{key}
+		if ( pbc_qc.hasKey( key ) ) 		pbc_qcs			+= pbc_qc{key}
+		if ( ataqc_qc.hasKey( key ) )		ataqc_qcs		+= ataqc_qc{key}
+	}
+
+	html := "<div id='atac_qc'>"
+	html += "<div style='float:left'>"
+	html += html_table_multiple_logs( "Flagstat (raw) QC", false, "flagstat", groups, flagstat_qcs )
+	html += "</div>"
+	if ( !no_dup_removal ) {
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Dup. QC", false, "dup", groups, dup_qcs )
+		html += "</div>"
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Flagstat (filtered) QC", false, "flagstat_filt", groups, flagstat_nodup_qcs )
+		html += "</div>"
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Library Complexity QC", false, has_pe() ? "pbc_PE" : "pbc", groups, pbc_qcs )
+		if ( pbc_qcs.size()>0 ) html += html_help_pbc()
+		html += "</div>"
+	}
+	html += "<div style='float:left'>"
+	html += html_table_multiple_logs( "Enrichment QC (strand cross-correlation measures)", false, "xcor", groups, xcor_qcs )
+	if ( xcor_qcs.size()>0 ) html += html_help_xcor( subsample_xcor, has_se(), has_pe() )
+	html += "</div>"
+	// xcor images
+	for ( int i=0; i<xcor_plots.size(); i++ ) {
+		png := pdf_to_png( xcor_plots[i] )
+		html += html_img( png, 500, groups[i] ) + "&nbsp"
+	}
+	// number of peaks
+	if ( num_peak_log ) {
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Number of peaks", false, "num_peaks", num_peak_log )
+		html += html_help_num_peaks()
+		html += "</div>"
+	}	
+	// IDR FRiP
+	if ( idr_qc_FRiP.size()>0 ) {
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Enrichment QC (Fraction of reads in peaks)", false, "idr_FRiP", idr_qc_FRiP )
+		html += html_help_idr_FRiP()
+		html += "</div>"
+	}
+	// if idr qc's exists, add them to html
+	if ( idr_qc != "" ) {
+		html += "<div style='float:left'>"
+		html += html_table_multiple_logs( "Reproducibility QC and Peak Detection Statistics (Irreproducible Discovery Rate)", \
+							false, "idr", ["rep1"], [idr_qc] )
+		html += html_help_idr( idr_thresh )
+		html += "</div>"
+	}
+	for ( int i=1; i<=get_num_rep(); i++ ) {
+		for ( int j=i+1; j<=get_num_rep(); j++ ) {
+			if ( idr_tr_png.hasKey("$i,$j") ) \
+				html += html_img( idr_tr_png{"$i,$j"}, 800, "true reps (rep$i-rep$j)" ) + "&nbsp"
+		}
+	}
+	if ( idr_ppr_png != "" ) html += html_img( idr_ppr_png, 800, "pooled pseudo-reps" ) + "&nbsp"
+	for ( int i=1; i<=get_num_rep(); i++ ) {
+		if ( !true_rep ) {
+			if ( idr_pr_png.hasKey(i) ) \
+				html += html_img( idr_pr_png{i}, 800, "rep$i pseudo-reps" ) + "&nbsp"
+		}
+	}
+	html += "<div style='float:left'>"
+	html += html_table_multiple_logs( "ATAQC", false, "ataqc", groups, ataqc_qcs )
+	html += "</div>"
+
+	html += "</div><br>"
+	return html
+}
+
+string html_atac_tracks() {
+	if ( no_browser_tracks ) return ""
+
+	string[] trk_files, trk_types, trk_names, trk_colors
+	string color
+
+	// for (int rep=1; rep<=get_num_rep(); rep++) {
+	// 	color = get_predefined_rgb_str( rep )
+	// 	if ( bam.hasKey(rep) ) { trk_types += "bam"; trk_names += "$title bam (rep$rep)"; trk_colors += color; trk_files += bam{rep} }
+	// }
+
+	color = get_predefined_rgb_str( 0 ) // color for pooled reps
+	if ( pval_bigwig_001.hasKey( "pooled" ) ) { trk_types += "bigwig"; trk_names += "$title pval (pooled)"; trk_colors += color; trk_files += pval_bigwig_001{"pooled"} }
+	if ( peak_overlap != "" ) { trk_types += "hammock"; trk_names += "$title peak overlap"; trk_colors += color; trk_files += peak_to_hammock( peak_overlap ) }
+	if ( gpeak_overlap != "" ) { trk_types += "hammock"; trk_names += "$title gpeak overlap"; trk_colors += color; trk_files += peak_to_hammock( gpeak_overlap ) }
+	if ( idr_opt != "" ) {	trk_types += "hammock"; trk_names += "$title peak idr (opt. set)"; trk_colors += color; trk_files += peak_to_hammock( _get_idr_peak_trk( idr_opt ) ) } // find IDR tracks
+
+	for (int rep=1; rep<=get_num_rep(); rep++) {
+		color = get_predefined_rgb_str( rep )
+		if ( pval_bigwig_001.hasKey( "$rep" ) ) { trk_types += "bigwig"; trk_names += "$title pval (rep$rep)"; trk_colors += color; trk_files += pval_bigwig_001{rep} }
+		if ( peak_001.hasKey( "$rep" ) ) { trk_types += "hammock"; trk_names += "$title peak (rep$rep)"; trk_colors += color; trk_files += peak_to_hammock( peak_001{rep} ) }
+		if ( idr_pr.hasKey(rep) ) {	trk_types += "hammock"; trk_names += "$title peak idr (rep$rep-pr)"; trk_colors += color; trk_files += peak_to_hammock( _get_idr_peak_trk( idr_pr{rep} ) ) }
+	}
+
+	html := html_epg_browser_viz( trk_files, trk_types, trk_names, trk_colors, species_browser )
+
+	return html
+}
+
+void help() {
+
+	if ( is_cmd_line_arg_empty() ) {
+
+		printHelp()
+		exit
+	}
+}
+
+bool is_atac_seq() {
+
+	return type.toLower().startsWith( "atac" )
+}
+
+bool is_dnase_seq() {
+
+	return type.toLower().startsWith( "dnase" )
+}
+
+void tar_all_logs() {
+	if ( enable_idr && idr_qc && idr_opt && idr_consv ) {
+		// *.align.log: bowtie2 log
+		// *_qc.txt: ATAQC text report
+		// *_qc.html: ATAQC HTML report
+		string tar
+		mkdir("$out_dir/qc")
+		if ( title ) tar = "$out_dir/qc/$title.all_quality_metrics.tar"
+		else tar = "$out_dir/qc/all_quality_metrics.tar"
+
+		taskName:= "tar_all_logs"
+		system 	:= "local"
+		tid := task {
+			sys cd $out_dir
+			sys find . -type f \
+				-name '*.align.log' -or \
+				-name '*.dot' -or \
+				-name '*.svg' -or \
+				-name '*.css' -or \
+				-name '*.json' -or \
+				-name '*.html' -or \
+				-name '*.js' -or \
+				-name '*.qc' -or \
+				-name '*.pdf' -or \
+				-name '*.png' -or \
+				-name '*_qc.txt' -or \
+				-name '*read_length.txt' \
+				-name '*number_of_peaks.txt' \
+				| xargs tar -cvf $tar
+		}
+
+		wait
+
+		string[] quality_metric_of
+		string ENCODE_step_name
+		if ( idr_pr.hasKey(1) && get_num_rep()==1 ) {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-unreplicated-idr-step-run-single-rep-v1"
+			quality_metric_of.add(idr_pr{1})
+		}
+		else {
+			ENCODE_step_name = "anshul-kundaje:atac-seq-idr-step-run-v1"
+			quality_metric_of.add(idr_opt)
+		}
+		add_ENCODE_quality_metrics_to_summary_json( "generic_quality_metric", ENCODE_step_name, \
+								quality_metric_of, [tar] )
+	}
+}
+
+void ENCODE3_overall_qc() {
+	if ( !ENCODE3 ) return
+	//// QC for individual replicate	
+	for ( int rep=1; rep<=get_num_rep(); rep++ ) {
+		string{} QC
+		if ( rep == 1 ) {
+			if ( idr_opt ) {
+				npeak := get_num_lines( idr_opt )
+				QC{"03_No. of IDR peaks"} = npeak
+				QC{"03_IDR peaks pass? (threshold > 70K)"} = npeak >= 70000 ? "OK" : "FAIL"
+			}	
+			if ( peak_overlap ) {
+				num_overlap_peaks := get_num_lines( peak_overlap )
+				QC{"04_No. of naive overlap peaks"} = num_overlap_peaks
+				QC{"04_Naive overlap peaks pass? (> 150K)"} = num_overlap_peaks >= 150000 ? "OK" : "FAIL"
+			}
+			// FRIP >0.1 ok
+			if ( idr_qc_FRiP.hasKey("ppr") ) {
+				idr_qc_FRiP_log := parse_idr_FRiP( idr_qc_FRiP{"ppr"} )
+				FRiP := parse_real( idr_qc_FRiP_log{"FRiP"} )
+				QC{"06_FRiP of pooled sample"} = FRiP
+				QC{"06_FRiP of pooled sample QC pass? (> 0.1)"} = FRiP >= 0.1 ? "OK" : "FAIL"
+			}
+			// IDR reproducibility test (IDR)
+			if ( idr_qc ) {
+				idr_log := parse_idr( idr_qc )
+				QC{"07_IDR reproducibility"} = idr_log{"reproducibility_test"}.toUpper()
+			}
+		}
+		if ( flagstat_qc.hasKey(rep) && flagstat_nodup_qc.hasKey(rep) ) {
+			flagstat_log := parse_flagstat(flagstat_qc{rep})
+			flagstat_nodup_log := parse_flagstat(flagstat_nodup_qc{rep})
+
+			// num nodup reads > 50000000 (PE), > 25000000 (SE)
+			num_raw_reads := parse_int( flagstat_log{"total"} )			
+			num_mapped_reads := parse_int( flagstat_log{"mapped"} )
+			num_nodup_reads := parse_int( flagstat_nodup_log{"total"} )
+			QC{"01_No. of mapped nodup nomito reads"} = num_nodup_reads
+			if ( is_se( rep ) ) {
+				QC{"01_Read depth pass? (>50M for PE, >25M SE)"} = num_nodup_reads >= 25000000 ? "OK" : "FAIL"
+			}
+			else {
+				QC{"01_Read depth pass? (>50M for PE, >25M SE)"} = num_nodup_reads >= 50000000 ? "OK" : "FAIL"
+			}
+			// alignment rate > 80% ok, > 95% good (FLAGSTAT.%MAPPED)
+			alignment_rate := "$num_mapped_reads".parseReal()/"$num_raw_reads".parseReal()
+			QC{"02_Alignment rate"} = alignment_rate
+			QC{"02_Alignment rate pass? (>0.95 OK, >0.8 ACCEPTABLE"} = alignment_rate >= 0.95 ? "OK" : \
+						( alignment_rate >= 0.80 ? "ACCEPTABLE" : "FAIL" )
+		}
+		// FRIP >0.1 ok
+		if ( idr_qc_FRiP.hasKey("rep$rep-pr") ) {
+			idr_qc_FRiP_log := parse_idr_FRiP( idr_qc_FRiP{"rep$rep-pr"} )
+			FRiP := parse_real( idr_qc_FRiP_log{"FRiP"} )
+			QC{"05_FRiP per replicate"} = FRiP
+			QC{"05_FRiP per replicate QC pass? (> 0.1)"} =  FRiP >= 0.1 ? "OK" : "FAIL"
+		}
+		if ( ataqc_qc.hasKey(rep) ) {
+			ataqc_log := parse_multi_col_txt( ataqc_qc{rep} )
+			// TSS enrichment (ATAQC) > 10
+			TSS_enrichment := parse_real( ataqc_log{"TSS_enrichment"} )
+			QC{"08_TSS enrichment"} = TSS_enrichment
+			QC{"08_TSS enrichment pass? (> 10)"} = TSS_enrichment >= 10.0 ? "OK" : "FAIL"
+			// NFR present (ATAQC)
+			QC{"09_NFR region"} = ataqc_log.hasKey("Presence of NFR peak") ? \
+					ataqc_log{"Presence of NFR peak"} : "N/A"
+			// (SKIP) mono-nucleosome peak present? 147*2 > length > 147.
+			QC{"10_mono-nuc region"} = ataqc_log.hasKey("Presence of Mono-Nuc peak") ? \
+					ataqc_log{"Presence of Mono-Nuc peak"} : "N/A"
+		}
+		if ( pbc_qc.hasKey(rep) ) {
+			pbc_log := parse_pbc(pbc_qc{rep})
+			QC{"11_NRF"} = pbc_log{"NRF"}
+			QC{"12_PBC1"} = pbc_log{"PBC1"}
+			QC{"13_PBC2"} = pbc_log{"PBC2"}
+		}
+		_summary_qc.add( map_to_json_str( \
+				{ "info"=>"rep$rep","qc_type"=>"ENCODE3_qc_consolidated",\
+				"header"=>array_to_str(get_map_keys( QC ),"\\t"),\
+				"contents"=>array_to_str(get_map_vals( QC ),"\\t") } ) )
+	}
+}
