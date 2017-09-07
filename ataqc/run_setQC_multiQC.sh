@@ -1,4 +1,4 @@
-#!/bin/bash
+o#!/bin/bash
 # setQC1: get the multiQC reports for the input libs
 
 usage() { echo "Usage: $0 [-l <ints>] [-s <int>]" 1>&2; exit 1; }
@@ -35,7 +35,7 @@ mkdir -p $out_dir
 echo "${libs_array[@]/#/JYH_}"> ${out_dir}including_libs.txt
 
 # paste the command 
-cmd="multiqc ${libs_array[@]/#/${libQC_dir}libQCs/JYH_}  ${libs_array[@]/#/${libQC_dir}peaks/JYH_} -o $out_dir -k tsv -f"
+cmd="multiqc -k tsv -f -p ${libs_array[@]/#/${libQC_dir}libQCs/JYH_}  ${libs_array[@]/#/${libQC_dir}peaks/JYH_} -o $out_dir  "
 
 echo "running command:"
 echo $cmd 
