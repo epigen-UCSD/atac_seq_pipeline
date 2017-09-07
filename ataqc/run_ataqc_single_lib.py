@@ -355,6 +355,7 @@ def make_tss_plot(bam_file, tss, prefix, chromsizes, read_len, bins=400, bp_edge
     '''
     logging.info('Generating tss plot...')
     tss_plot_file = '{0}_tss-enrich.png'.format(prefix)
+    tss_plot_data_file = '{0}_tss-enrich.txt'.format(prefix)    
     tss_plot_large_file = '{0}_large_tss-enrich.png'.format(prefix)
 
     # Load the TSS file
@@ -405,6 +406,10 @@ def make_tss_plot(bam_file, tss, prefix, chromsizes, read_len, bins=400, bp_edge
     fig.savefig(tss_plot_file)
 
     # Print a more complicated plot with lots of info
+
+    # write the plot data; numpy object
+    np.savetxt(tss_plot_data_file,bam_array.mean(axis=0),delimiter=",")
+
 
     # Find a safe upper percentile - we can't use X if the Xth percentile is 0
     upper_prct = 99
@@ -1452,4 +1457,5 @@ def main():
 
     return None
 
-main()
+if __name__ == '__main__':
+    main()

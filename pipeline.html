@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>pipeline.html</title>
+
+</head>
+
+<body>
+
+<h1 id="overall-steps">Overall steps:</h1>
+<p>The pipeline for a single paired-end lib contains 15 steps as follow:</p>
+<ol style="list-style-type: decimal">
+<li>report read length</li>
+<li>alignment</li>
+<li>flagstat bam</li>
+<li>post align: dedup bam</li>
+<li>post align: picard markedup</li>
+<li>post align: dedup bam (again) - final bam file</li>
+<li>post align: name sort bam</li>
+<li>post align: bam to bedpe</li>
+<li>bedpe to tagalign</li>
+<li>shift tagalign</li>
+<li>xcor subset sample</li>
+<li>xcor calculation use subset</li>
+<li>macs2 peak calling</li>
+<li>filter peaks</li>
+<li>ataqc</li>
+</ol>
+<h1 id="individual-steps">Individual steps</h1>
+<h2 id="alignment">Alignment</h2>
+<pre class="shell"><code>bowtie2  -X2000 --mm --local | samtools view -Su /dev/stdin | samtools sort &amp; index &gt; xxx.PE2SE.bam &amp;.bai</code></pre>
+<p>For bowtie2:</p>
+<ul>
+<li>Use memory-mapped I/O to load the index (--mm);</li>
+<li>'-X2000' means maximum fragment length for valid paired-end alignments is 2000bp;</li>
+<li>--local: a preset options mode, default as --sensitive-local,</li>
+</ul>
+<p>For samtools view:</p>
+<ul>
+<li>-S: ignore for compatibility with previous samtools versions</li>
+<li>-u: uncompressed BAM outputs</li>
+</ul>
+<h2 id="filter-deduplicate-bam">Filter &amp; deduplicate bam</h2>
+<pre class="shell"><code>samtools view -F 1804 -f 2 -u -q 30 xxx.PE2SE.bam | sambamba sort -n  /dev/stdin -o /output_dir/xxx.PE2SE.dupmark.bam</code></pre>
+<ol style="list-style-type: decimal">
+<li>Remove improper mapping marker (1804) &amp; poor mapping score (&lt;30) &amp; output [u]ncompressed bam &amp; [f] output fwd and rev. both mapped pairs</li>
+<li>Sort the bam by name (-n) and prepair for the deduplicating step</li>
+</ol>
+<pre class="shell"><code>samtools fixmate -r xxx.PE2SE.dupmark.bam (tmp)  xxx.PE2SE.dupmark.bam.fixmate.bam (tmp) </code></pre>
+<p>Fill in mate coordinate. ISIZE (insert size) and mate related flags from the name-sorted bam and remove secondary and ummapped reads (-r)</p>
+<pre class="shell"><code> samtools view -F 1804 -f 2 -u xxx.PE2SE.dupmark.bam.fixmate.bam | sambamba sort  /dev/stdin -o xxx.PE2SE.filt.bam </code></pre>
+<h2 id="call-peaks">Call peaks</h2>
+<pre class="shell"><code>macs2 callpeak -t xxx.PE2SE.nodup.tn5.tagAlign.gz -f BED \
+-n xxx.PE2SE.nodup.tn5.pf&quot; -g &quot;hs&quot; -p 0.01 --nomodel \ 
+--shift -75 --extsize 150 -B --SPMR --keep-dup all --call-summits </code></pre>
+<p>Sort by Col8 in descending order and replace long peak names in Column 4 with Peak_</p>
+<pre class="shell"><code>sort -k 8gr,8gr xxx.PE2SE.nodup.tn5.pf&quot;_peaks.narrowPeak | awk &#39;BEGIN{OFS=&quot;\t&quot;}{$4=&quot;Peak_&quot;NR ; print $0}&#39; | gzip -nc &gt; xxx.PE2SE.nodup.tn5.pf.narrowPeak.gz</code></pre>
+<pre class="shell"><code> macs2 bdgcmp -t xxx.PE2SE.nodup.tn5.pf&quot;_treat_pileup.bdg -c xxx.PE2SE.nodup.tn5.pf&quot;_control_lambda.bdg \
+ --o-prefix xxx.PE2SE.nodup.tn5.pf&quot; -m FE
+ 
+slopBed -i xxx.PE2SE.nodup.tn5.pf&quot;_FE.bdg -g hg38.chrom.sizes -b 0 | bedClip stdin hg38.chrom.sizes xxx.PE2SE.nodup.tn5.pf.fc.signal.bedgraph
+
+sort -k1,1 -k2,2n xxx.PE2SE.nodup.tn5.pf.fc.signal.bedgraph &gt; xxx.PE2SE.nodup.tn5.pf.fc.signal.srt.bedgraph
+
+
+bedGraphToBigWig xxx.pf.fc.signal.srt.bedgraph hg38.chrom.sizes xxx.PE2SE.nodup.tn5.pf.fc.signal.bigwig
+</code></pre>
+<h2 id="lib-qcs">Lib QCs</h2>
+<p>Some concerpts:</p>
+<ul>
+<li>insert size</li>
+<li>fragment distribution</li>
+</ul>
+<h3 id="tss-enrichment-caclculation">tss enrichment caclculation</h3>
+<ul>
+<li>Calculated by using the final bam file</li>
+<li>Extended TSS to -/+2kb</li>
+<li>Use metaseq package to create <a href="https://pythonhosted.org/metaseq/autodocs/metaseq._genomic_signal.BamSignal.html">BamSignal class</a>, and caclulated coverageover TSS features which stores in a (length(features)*bins) NumPy array</li>
+<li>Shifted the bam file to half of the read length in the 5' direction</li>
+<li>Reversed the promoters on the minus strand</li>
+<li>Use normalization method from Greenleaf et al. 2013:</li>
+<li>background average noise is to use averaged coverage of 100bps at both ends</li>
+<li>enrichment = coverage / background average noise</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<ol style="list-style-type: decimal">
+<li><a href="https://www.encodeproject.org/atac-seq/">ENCODE Standards</a></li>
+</ol>
+
+</body>
+</html>
