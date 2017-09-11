@@ -8,6 +8,7 @@
 import os
 import re
 import sys
+import bz2
 import gzip
 import string
 import Levenshtein
@@ -38,8 +39,8 @@ def rreplace(s, old, new, occurrence):
 opts = OptionParser()
 usage = "usage: %prog [options] [inputs] This will trim adapters"
 opts = OptionParser(usage=usage)
-opts.add_option("-a", help="<Read1> Accepts fastq or fastq.gz")
-opts.add_option("-b", help="<Read2> Accepts fastq or fastq.gz")
+opts.add_option("-a", help="<Read1> Accepts fastq or fastq.gz or fastq.bz2")
+opts.add_option("-b", help="<Read2> Accepts fastq or fastq.gz or fastq.bz2")
 options, arguments = opts.parse_args()
 
 # return usage information if no argvs given AND they're not available in the environment
@@ -81,8 +82,15 @@ elif append == "gz":
     p2_out = re.sub(".fastq.gz", ".trim.fastq", p2_file)
     p1_out = re.sub(".fq.gz", ".trim.fastq", p1_out)
     p2_out = re.sub(".fq.gz", ".trim.fastq", p2_out)
+elif append == "bz2":
+    p1_rds = bz2.BZ2File(p1_in,'r')
+    p2_rds = bz2.BZ2File(p2_in,'r')
+    p1_out = re.sub(".fastq.bz2", ".trim.fastq", p1_file)
+    p2_out = re.sub(".fastq.bz2", ".trim.fastq", p2_file)
+    p1_out = re.sub(".fq.bz2", ".trim.fastq", p1_out)
+    p2_out = re.sub(".fq.bz2", ".trim.fastq", p2_out)
 else:
-    sys.exit("ERROR! The input file2 must be a .fastq or .fastq.gz")
+    sys.exit("ERROR! The input file2 must be a .fastq or .fastq.gz or .fastq.bz2")
 
 ##### SCRIPT #####
 # initialize variables

@@ -33,7 +33,6 @@ def detect_adapters_and_cnts(fname, max_n_lines=1000000):
         'Nextera ': 0,
         'smallRNA': 0
     }
-
     with getFileHandle(sys.argv[1]) as fp:
         # read the first million sequences or to the end of the while -- whichever
         # comes first, and then use the adapter for trimming which was found to
@@ -44,7 +43,6 @@ def detect_adapters_and_cnts(fname, max_n_lines=1000000):
             for key in adapters:
                 if line.find(adapters[key]) > -1:
                     adapter_cnts[key] += 1
-
     observed_adapters = [
         adapter for adapter, cnt in sorted(
             adapter_cnts.items(), key=lambda x: -x[1])
@@ -58,12 +56,9 @@ def detect_most_likely_adapter(fname):
         best_adapter = observed_adapters[0]
     else:
         best_adapter = ""
-
     if VERBOSE:
         print("\n\nAUTO-DETECTING ADAPTER TYPE\n===========================")
-        print("Attempting to auto-detect adapter type from the first 1 million sequences of the first file (>> {} <<)\n".format(
-            fname)
-        )
+        print("Attempting to auto-detect adapter type from the first 1 million sequences of the first file (>> {} <<)\n".format(fname))
         print("Found perfect matches for the following adapter sequences:")
         print("Adapter type\tCount\tSequence\tSequences analysed\tPercentage")
         for adapter in observed_adapters:
@@ -74,6 +69,7 @@ def detect_most_likely_adapter(fname):
                 n_obs_adapters,
                 adapter_cnts[adapter]/n_obs_adapters)
             )
+                
     return best_adapter
 
 def main():
