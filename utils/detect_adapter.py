@@ -2,6 +2,9 @@
 
 import sys
 import gzip
+import re
+import bz2
+
 
 VERBOSE = False
 
@@ -11,6 +14,19 @@ adapters = {
     'smallRNA': b'TGGAATTCTCGG'
 }
 
+def getFileHandle(filename, mode="r"):
+    if (re.search('.gz$',filename) or re.search('.gzip',filename)):
+        if (mode=="r"):
+            mode="rb";
+        return gzip.open(filename,mode)
+    elif (re.search('.bz2$',filename)):
+        if(mode=="rb"):
+            mode="r";
+        return bz2.BZ2File(filename,mode)
+    else:
+        return open(filename,mode)
+
+
 def detect_adapters_and_cnts(fname, max_n_lines=1000000):
     adapter_cnts = {
         'Illumina': 0,
@@ -18,7 +34,7 @@ def detect_adapters_and_cnts(fname, max_n_lines=1000000):
         'smallRNA': 0
     }
 
-    with gzip.open(sys.argv[1]) as fp:
+    with getFileHandle(sys.argv[1]) as fp:
         # read the first million sequences or to the end of the while -- whichever
         # comes first, and then use the adapter for trimming which was found to
         # occur most often
