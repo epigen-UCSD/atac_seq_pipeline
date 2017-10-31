@@ -357,6 +357,19 @@ void chk_adapters() {
 	}
 }
 
+/*
+void do_fastqc_screen(){
+    if ( is_input_peak()) return
+
+    for ( int rep=1; rep <= get_num_rep(); rep++) {
+        // 
+        if (is_input_fastq
+    }
+    
+}
+
+*/
+
 void do_align() {
 
 	if ( is_input_peak() ) return
