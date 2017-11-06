@@ -1,5 +1,8 @@
 ATAC-Seq  Pipeline in Epigen-UCSD
 ===================================================
 
-This pipeline is largely based on [Encode pipeline](./README_legend.md), with few small changes. 
+This pipeline is largely based on [Encode pipeline](./README_legend.md), with few small changes.: 
+
+1. Enabled handling `fastq.bz` files 
+2. Enabled to run by lib 
 
