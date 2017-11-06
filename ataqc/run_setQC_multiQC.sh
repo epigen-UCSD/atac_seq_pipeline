@@ -1,4 +1,4 @@
-o#!/bin/bash
+#!/bin/bash
 # setQC1: get the multiQC reports for the input libs
 
 usage() { echo "Usage: $0 [-l <ints>] [-s <int>]" 1>&2; exit 1; }
