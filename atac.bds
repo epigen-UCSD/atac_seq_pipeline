@@ -298,7 +298,7 @@ void chk_param() {
 	}
 
 	if ( ENCODE ) {
-		print("Info: ENCODE flag is on (-smooth_win 73 -idr_thresh 0.05 -multimapping 4).\n")
+	print("Info: ENCODE flag is on (-smooth_win 73 -idr_thresh 0.05 -multimapping 4).\n")
 		smooth_win = 73
 		idr_thresh = 0.05
 		multimapping = 4

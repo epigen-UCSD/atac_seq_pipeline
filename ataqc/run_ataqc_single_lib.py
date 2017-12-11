@@ -35,6 +35,40 @@ from matplotlib import pyplot as plt
 from matplotlib import mlab
 
 
+# utils
+
+def run_shell_cmd(cmd): 
+    """Taken from ENCODE DCC ATAC pipeline
+    """
+    print cmd
+    try:
+        p = subprocess.Popen(cmd, shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+            preexec_fn=os.setsid)
+        pid = p.pid
+        pgid = os.getpgid(pid)
+        ret = ''
+        while True:
+            line = p.stdout.readline()
+            if line=='' and p.poll() is not None:
+                break
+            # log.debug('PID={}: {}'.format(pid,line.strip('\n')))
+            #print('PID={}: {}'.format(pid,line.strip('\n')))
+            ret += line
+        p.communicate() # wait here
+        if p.returncode > 0:
+            raise subprocess.CalledProcessError(
+                p.returncode, cmd)
+        return ret.strip('\n')
+    except:
+        # kill all child processes
+        os.killpg(pgid, signal.SIGKILL)
+        p.terminate()
+        raise Exception('Unknown exception caught. PID={}'.format(pid))
+
+
 # QC STUFF
 
 QCResult = namedtuple('QCResult', ['metric', 'qc_pass', 'message'])
