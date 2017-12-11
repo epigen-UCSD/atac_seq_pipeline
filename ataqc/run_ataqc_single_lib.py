@@ -619,19 +619,22 @@ def get_fract_mapq(bam_file, q=30):
     fract_good_mapq = float(num_qreads)/tot_reads
     return num_qreads, fract_good_mapq
 
+def get_read_count(bam):
+    '''
+    Get total reads from a bam file, need indexed first 
+    '''
+    cmd="samtools idxstats {0} 2> /dev/null | awk '{{sum += $3+$4}} END {{print sum}}'".format(bam)
+    return int(run_shell_cmd(cmd))
+
 
 def get_final_read_count(first_bam, last_bam):
     '''
     Get final mapped reads compared to initial reads
     '''
     logging.info('final read counts...')
-    # Bug in pysam.view
-    num_reads_last_bam = int(subprocess.check_output(['samtools',
-                                                      'view', '-c',
-                                                      last_bam]).strip())
-    num_reads_first_bam = int(subprocess.check_output(['samtools',
-                                                       'view', '-c',
-                                                       first_bam]).strip())
+
+    num_reads_last_bam = get_read_count(last_bam)
+    num_reads_first_bam = get_read_count(first_bam)
     fract_reads_left = float(num_reads_last_bam)/num_reads_first_bam
 
     return num_reads_first_bam, num_reads_last_bam, fract_reads_left
