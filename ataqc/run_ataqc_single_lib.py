@@ -485,7 +485,7 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
                 dup_stats['READ_PAIR_DUPLICATES'] = line_elems[5]
                 dup_stats['READ_PAIRS_EXAMINED'] = line_elems[2]
                 if paired_status == 'Paired-ended':
-                    return int(line_elems[5]), float(line_elems[7])
+                    return int(2*line_elems[5]), float(line_elems[7])
                 else:
                     return int(line_elems[4]), float(line_elems[7])
 
