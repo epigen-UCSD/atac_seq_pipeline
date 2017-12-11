@@ -485,9 +485,9 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
                 dup_stats['READ_PAIR_DUPLICATES'] = line_elems[5]
                 dup_stats['READ_PAIRS_EXAMINED'] = line_elems[2]
                 if paired_status == 'Paired-ended':
-                    return float(line_elems[5]), float(line_elems[7])
+                    return int(line_elems[5]), float(line_elems[7])
                 else:
-                    return float(line_elems[4]), float(line_elems[7])
+                    return int(line_elems[4]), float(line_elems[7])
 
             if mark > 0:
                 mark += 1
@@ -604,18 +604,16 @@ def get_samtools_flagstat(bam_file):
 def get_fract_mapq(bam_file, q=30):
     '''
     Runs samtools view to get the fraction of reads of a certain
-    map quality.
+    map quality ( primary and have mate) 
     '''
     # Current bug in pysam.view module...
     logging.info('samtools mapq 30...')
 
     # There is a bug in pysam.view('-c'), so just use subprocess
-    num_qreads = int(subprocess.check_output(['samtools',
-                                              'view', '-c',
-                                              '-q', str(q), bam_file]).strip())
-    tot_reads = int(subprocess.check_output(['samtools',
-                                             'view', '-c',
-                                             bam_file]).strip())
+    cmd="samtools view -c -F 1804 -f 2 -q {0} {1}".format(q,bam_file)
+    num_qreads = run_shell_cmd(cmd)
+    tot_reads=get_read_count(bam_file)
+
     fract_good_mapq = float(num_qreads)/tot_reads
     return num_qreads, fract_good_mapq
 
