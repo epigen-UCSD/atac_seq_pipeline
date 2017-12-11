@@ -1028,7 +1028,8 @@ if your file is paired end, then you should divide these counts by two.
   </table>
   <pre>
 Mapping quality refers to the quality of the read being aligned to that
-particular location in the genome. A standard quality score is > 30.
+particular location in the genome. A standard quality score is > 30 and we also
+applied unproper reads (-F 1804) and unmmated reads (-u 2). 
 Duplications are often due to PCR duplication rather than two unique reads
 mapping to the same location. High duplication is an indication of poor
 libraries. Mitochondrial reads are often high in chromatin accessibility
@@ -1390,7 +1391,7 @@ def main():
     ])
 
     FILTERING_STATS = OrderedDict([
-        ('Mapping quality > q30 (out of total)', (num_mapq, fract_mapq)),
+        ('Mapping quality passed filters (out of total)', (num_mapq, fract_mapq)),
         ('Duplicates (after filtering)', (read_dups, percent_dup)),
         ('Mitochondrial reads (out of total)', (chr_m_reads, fraction_chr_m)),
         ('Duplicates that are mitochondrial (out of all dups)',
