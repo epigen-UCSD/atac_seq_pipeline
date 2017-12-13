@@ -611,7 +611,7 @@ def get_fract_mapq(bam_file, q=30):
 
     # There is a bug in pysam.view('-c'), so just use subprocess
     cmd="samtools view -c -F 1804 -f 2 -q {0} {1}".format(q,bam_file)
-    num_qreads = run_shell_cmd(cmd)
+    num_qreads = int(run_shell_cmd(cmd))
     tot_reads=get_read_count(bam_file)
 
     fract_good_mapq = float(num_qreads)/tot_reads
