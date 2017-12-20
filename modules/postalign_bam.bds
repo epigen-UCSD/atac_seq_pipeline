@@ -191,7 +191,7 @@ string[] dedup_bam( string bam, string o_dir, string log_o_dir, string group, in
 
 				//# Remove duplicates
 				//# Index final position sorted BAM
-				sys samtools view -F 1804 -b $dupmark_bam > $nodup_bam
+				sys samtools view -F 1804 -h -u -b $dupmark_bam | awk '($3 != "chrM")' | samtools view -@ 8 -Sb - > $nodup_bam
 
 				//# Index Final BAM file
 				sys sambamba index -t $nth_dedup $nodup_bam
