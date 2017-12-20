@@ -601,7 +601,7 @@ def get_samtools_flagstat(bam_file):
     return flagstat, mapped_reads
 
 
-def get_fract_mapq(bam_file, paired_status, ,q=30):
+def get_fract_mapq(bam_file, paired_status,q=30):
     '''
     Runs samtools view to get the fraction of reads of a certain
     map quality ( primary and have mate) 
