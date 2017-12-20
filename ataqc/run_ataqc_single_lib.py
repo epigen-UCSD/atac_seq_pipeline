@@ -1318,7 +1318,7 @@ def main():
     encode_lib_metrics = get_encode_complexity_measures(PBC_LOG)
 
     # Filtering metrics: duplicates, map quality
-    num_mapq, fract_mapq = get_fract_mapq(ALIGNED_BAM)
+    num_mapq, fract_mapq = get_fract_mapq(ALIGNED_BAM,paired_status)
 
     if USE_SAMBAMBA_MARKDUP:
         read_dups, percent_dup = get_sambamba_dup_stats(DUP_LOG, paired_status)
