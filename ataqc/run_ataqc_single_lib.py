@@ -601,7 +601,7 @@ def get_samtools_flagstat(bam_file):
     return flagstat, mapped_reads
 
 
-def get_fract_mapq(bam_file, q=30):
+def get_fract_mapq(bam_file, paired_status, ,q=30):
     '''
     Runs samtools view to get the fraction of reads of a certain
     map quality ( primary and have mate) 
@@ -610,7 +610,11 @@ def get_fract_mapq(bam_file, q=30):
     logging.info('samtools mapq 30...')
 
     # There is a bug in pysam.view('-c'), so just use subprocess
-    cmd="samtools view -c -F 1804 -f 2 -q {0} {1}".format(q,bam_file)
+    if paired_status == 'Paired-ended':
+        cmd="samtools view -c -F 1804 -f 2 -q {0} {1}".format(q,bam_file)
+    else:
+        cmd="samtools view -c -F 1804 -q {0} {1}".format(q,bam_file)
+        
     num_qreads = int(run_shell_cmd(cmd))
     tot_reads=get_read_count(bam_file)
 
