@@ -1685,7 +1685,7 @@ void ataqc( int rep ) {
 		if ( is_se( rep ) ) {
 
 			( ataqc_html, ataqc_qc{rep} ) = ataqc( fastq{rep}, "", bam{rep}, align_log{rep}, pbc_qc{rep}, \
-				dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak, \
+                                                               dup_qc{rep}, filt_bam{rep}, final_tag{rep}, pval_bigwig_001{rep}, peak{rep}, \
 				peak_overlap, idr_ataqc, qc_o_dir, group )
 		}
 		else {
