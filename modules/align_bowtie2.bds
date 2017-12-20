@@ -65,7 +65,7 @@ string[] bowtie2( string fastq, string o_dir, string log_o_dir, string group, in
 
 		//sys bowtie2 $param -x $bwt2_idx --threads $nth_bwt2 -U <(zcat -f $fastq) 2> $log | \
 		//	samtools view -Su /dev/stdin | sambamba sort -t 1 /dev/stdin -o $bam
-		sys bowtie2 $extra_param_bwt2 $param $param3 --local -x $bwt2_idx --threads $nth_bwt2 -U <(zcat -f $fastq) 2> $log | \
+		sys bowtie2 $extra_param_bwt2 $param $param3 --local -x $bwt2_idx --threads $nth_bwt2 -U $fastq 2> $log | \
 			samtools view -Su /dev/stdin | samtools sort - $prefix
 		sys samtools index $bam
 
