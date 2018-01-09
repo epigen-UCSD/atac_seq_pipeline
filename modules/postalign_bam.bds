@@ -191,7 +191,7 @@ string[] dedup_bam( string bam, string o_dir, string log_o_dir, string group, in
 
 				//# Remove duplicates
 				//# Index final position sorted BAM
-				sys samtools view -F 1804 -h -u -b $dupmark_bam | awk '($3 != "chrM")' | samtools view -@ 8 -Sb - > $nodup_bam
+				sys samtools view -F 1804 -h $dupmark_bam | awk '($3 != "chrM")' | samtools view -@ 8 -Sb - > $nodup_bam
 
 				//# Index Final BAM file
 				sys sambamba index -t $nth_dedup $nodup_bam
@@ -330,7 +330,7 @@ string[] dedup_bam_PE( string bam, string o_dir, string log_o_dir, string group,
 				//# Index final position sorted BAM
 				//# Create final name sorted BAM
 				//# ============================
-				sys samtools view -h -F 1804 -f 2 -u $dupmark_bam | awk '($3 != "chrM") '| samtools view -@ 8 -Sb -  > $nodup_bam
+				sys samtools view -h -F 1804 -f 2 $dupmark_bam | awk '($3 != "chrM") '| samtools view -@ 8 -Sb -  > $nodup_bam
 
 				sys sambamba index -t $nth_dedup $nodup_bam
 
