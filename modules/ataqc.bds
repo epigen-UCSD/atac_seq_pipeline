@@ -58,9 +58,9 @@ bool chk_ataqc() {
 	if ( species == "" ) 	{ print("Warning: Genome name is missing ( '-species [GENOME_NAME; hg19, mm9, ...]' )!\n" ); disable_ataqc  = true }
 	if ( ref_fa == "" ) 	{ print("Warning: Specify your reference genome .fa ('-ref_fa [FA]')!\n"); disable_ataqc  = true }
 	if ( tss_enrich == "" ) { print("Warning: TSS enrichment bed is missing ( '-tss_enrich' )!\n"); disable_ataqc  = true }
-	if ( blacklist == "" ) 	{ print("Warning: Blacklist bed is missing ( '-blacklist' )!\n"); disable_ataqc  = true }
-	if ( prom == "" ) 	{ print("Warning: Promoter bed is missing ( '-prom' )!\n"); disable_ataqc  = true }
-	if ( enh == "" ) 	{ print("Warning: Enhancer bed is missing ( '-enh' )!\n"); disable_ataqc  = true }
+	//if ( blacklist == "" ) 	{ print("Warning: Blacklist bed is missing ( '-blacklist' )!\n"); disable_ataqc  = true }
+	//if ( prom == "" ) 	{ print("Warning: Promoter bed is missing ( '-prom' )!\n"); disable_ataqc  = true }
+	//if ( enh == "" ) 	{ print("Warning: Enhancer bed is missing ( '-enh' )!\n"); disable_ataqc  = true }
 	// if ( reg2map == "" ) 	{ print("Warning: reg2map is missing ( '-reg2map' )!\n"); disable_ataqc  = true }
 	// if ( reg2map_bed == "" ){ print("Warning: reg2map_bed is missing ( '-reg2map_bed' )!\n"); disable_ataqc  = true }
 	// if ( roadmap_meta == "" ) { print("Warning: Roadmap metadata are missing ( '-roadmap_meta' )!\n"); disable_ataqc  = true }
@@ -83,6 +83,10 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 	prefix_basename := get_basename( prefix )
 
 	param_fastq 	:= (fastq2!="") ? " --fastq1 $fastq1 --fastq2 $fastq2" : " --fastq1 $fastq1"
+        param_blacklist 	:= (blacklist!="") ? " --blacklist $blacklist" : ""
+        param_prom 	:= (prom!="") ? " --prom $prom" : ""
+        param_enh 	:= (enh!="") ? " --enh $enh" : ""        
+        
 
 	species_ataqc 	:= species.indexOf("_")>=0 ? (species.split("_"))[0] : species
 	print("species_ataqc: $species_ataqc\n")
@@ -120,9 +124,9 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 		    --chromsizes $chrsz \
 		    --ref $ref_fa \
 		    --tss $tss_enrich \
-		    --blacklist $blacklist \
-		    --prom $prom \
-		    --enh $enh \
+		    $param_blacklist \
+		    $param_prom \
+		    $param_enh \
 		    --pbc $pbc_log\
 		    $param_fastq \
 		    --alignedbam $bam \
