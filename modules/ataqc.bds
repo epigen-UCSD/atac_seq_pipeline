@@ -83,13 +83,6 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 	prefix_basename := get_basename( prefix )
 
 	param_fastq 	:= (fastq2!="") ? " --fastq1 $fastq1 --fastq2 $fastq2" : " --fastq1 $fastq1"
-	param_overlap 	:= (peak_naive_overlap!="") ? " --naive_overlap_peaks $peak_naive_overlap" : ""
-	param_idr 	:= (idr_peak!="") ? " --idr_peaks $idr_peak" : ""
-	param_use_sambamba	:=	(use_sambamba_markdup) ? " --use_sambamba_markdup" : ""
-
-	param_reg2map 	:= (reg2map!="") ? " --reg2map $reg2map" : ""
-	param_reg2map_bed 	:= (reg2map_bed!="") ? " --reg2map_bed $reg2map_bed" : ""
-	param_meta	:= (roadmap_meta!="") ? " --meta $roadmap_meta" : ""
 
 	species_ataqc 	:= species.indexOf("_")>=0 ? (species.split("_"))[0] : species
 	print("species_ataqc: $species_ataqc\n")
