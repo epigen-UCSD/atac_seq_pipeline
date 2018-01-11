@@ -124,9 +124,6 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 		    --chromsizes $chrsz \
 		    --ref $ref_fa \
 		    --tss $tss_enrich \
-		    $param_blacklist \
-		    $param_prom \
-		    $param_enh \
 		    --pbc $pbc_log\
 		    $param_fastq \
 		    --alignedbam $bam \
@@ -136,7 +133,8 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 		    --finalbam $filt_bam \
 		    --finalbed $bed \
 		    --bigwig $bigwig \
-		    --peaks $peak 
+		    --peaks $peak \
+		    $param_blacklist $param_prom $param_enh
 
 		//sys rm -f test.log test.png
 
