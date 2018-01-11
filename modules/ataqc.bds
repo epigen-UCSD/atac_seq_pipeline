@@ -58,7 +58,6 @@ bool chk_ataqc() {
 	if ( species == "" ) 	{ print("Warning: Genome name is missing ( '-species [GENOME_NAME; hg19, mm9, ...]' )!\n" ); disable_ataqc  = true }
 	if ( ref_fa == "" ) 	{ print("Warning: Specify your reference genome .fa ('-ref_fa [FA]')!\n"); disable_ataqc  = true }
 	if ( tss_enrich == "" ) { print("Warning: TSS enrichment bed is missing ( '-tss_enrich' )!\n"); disable_ataqc  = true }
-	if ( dnase == "" ) 	{ print("Warning: DNase bed is missing ( '-dnase' )!\n"); disable_ataqc  = true }
 	if ( blacklist == "" ) 	{ print("Warning: Blacklist bed is missing ( '-blacklist' )!\n"); disable_ataqc  = true }
 	if ( prom == "" ) 	{ print("Warning: Promoter bed is missing ( '-prom' )!\n"); disable_ataqc  = true }
 	if ( enh == "" ) 	{ print("Warning: Enhancer bed is missing ( '-enh' )!\n"); disable_ataqc  = true }
@@ -128,7 +127,6 @@ string[] ataqc( string fastq1, string fastq2, string bam, string align_log, stri
 		    --chromsizes $chrsz \
 		    --ref $ref_fa \
 		    --tss $tss_enrich \
-		    --dnase $dnase \
 		    --blacklist $blacklist \
 		    --prom $prom \
 		    --enh $enh \
