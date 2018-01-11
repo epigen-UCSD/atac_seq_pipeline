@@ -690,9 +690,6 @@ def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
     '''
     logging.info('signal to noise...')
 
-    # Dnase regions
-    reads_dnase, fract_dnase = get_fract_reads_in_regions(final_bed,
-                                                          dnase_regions)
 
     # Blacklist regions
     reads_blacklist, \
@@ -709,7 +706,7 @@ def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
     # Peak regions
     reads_peaks, fract_peaks = get_fract_reads_in_regions(final_bed, peaks)
 
-    return reads_dnase, fract_dnase, reads_blacklist, fract_blacklist, \
+    return  reads_blacklist, fract_blacklist, \
         reads_prom, fract_prom, reads_enh, fract_enh, reads_peaks, \
         fract_peaks
 
@@ -1353,7 +1350,7 @@ def main():
 
     # Signal to noise: reads in DHS regions vs not, reads falling
     # into blacklist regions
-    reads_dnase, fract_dnase, reads_blacklist, fract_blacklist, \
+    reads_blacklist, fract_blacklist, \
     reads_prom, fract_prom, reads_enh, fract_enh, \
     reads_peaks, fract_peaks = get_signal_to_noise(FINAL_BED,
                           DNASE,BLACKLIST,PROM,ENH,PEAKS)
