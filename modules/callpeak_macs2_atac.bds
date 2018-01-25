@@ -49,6 +49,10 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 	peakfile 	:= "$prefix.narrowPeak.gz"
 	bpeakfile	:= "$prefix.broadPeak.gz"
 	gpeakfile	:= "$prefix.gappedPeak.gz"
+        
+	pileup_bedgraph 	:= "$prefix.pileup.signal.bedgraph"
+	pileup_bedgraph_srt	:= "$prefix.pileup.signal.srt.bedgraph"	
+	pileup_bigwig 	:= "$prefix_sig.pileup.signal.bigwig"
 
 	fc_bedgraph 	:= "$prefix.fc.signal.bedgraph"
 	fc_bedgraph_srt	:= "$prefix.fc.signal.srt.bedgraph"	
@@ -64,7 +68,7 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 
 	in 	:= [ tag ]
 	// out 	:= make_sig ? [ peakfile, gpeakfile, fc_bigwig, pval_bigwig ] : [ peakfile, gpeakfile ]
-	out 	:= make_sig ? [ peakfile, fc_bigwig, pval_bigwig ] : [ peakfile ]
+	out 	:= make_sig ? [ peakfile, fc_bigwig, pval_bigwig, pileup_bigwig ] : [ peakfile ]
 
 	taskName:= "macs2 n/s " + group + pval_str
 	mem := get_res_mem(mem_macs2,1);	timeout := get_res_wt(wt_macs2)
@@ -90,6 +94,11 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 			$shcmd_finalize; \
 			exit; \
 		fi
+                
+		sys slopBed -i "$prefix"_treat_pileup.bdg -g "$chrsz" -b 0 | bedClip stdin "$chrsz" $pileup_bedgraph
+		sys sort -k1,1 -k2,2n $pileup_bedgraph > $pileup_bedgraph_srt
+		sys bedGraphToBigWig $pileup_bedgraph_srt "$chrsz" "$pileup_bigwig"
+		sys rm -f $pileup_bedgraph $pileup_bedgraph_srt
 
 		sys macs2 bdgcmp -t "$prefix"_treat_pileup.bdg -c "$prefix"_control_lambda.bdg \
 			--o-prefix "$prefix" -m FE
