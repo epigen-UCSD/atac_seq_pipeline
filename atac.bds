@@ -4,8 +4,8 @@
 
 help == atac pipeline settings
 
-type 		:= "atac-seq" 	help Type of the pipeline. atac-seq or dnase-seq (default: atac-seq).
-dnase_seq	:= false  	help DNase-Seq (no tn5 shifting).
+type 		:= "atac-seq" 	help Type of the pipeline. atac-seq or chip-seq (default: atac-seq).
+chip_seq	:= false  	help Chip-Seq (no tn5 shifting).
 trimmed_fastq 	:= false	help Skip fastq-trimming stage.
 align	 	:= false	help Align only (no MACS2 peak calling or IDR or ataqc analysis).
 subsample_xcor	:= "25M"	help # reads to subsample for cross corr. analysis (default: 25M).
@@ -132,7 +132,7 @@ void read_conf_atac() {
 	no_xcor 	= get_conf_val_bool( no_xcor, 		["no_xcor"] )
 	csem 		= get_conf_val_bool( csem, 		["csem"] )
 	smooth_win	= get_conf_val( smooth_win,		["smooth_win"] )
-	dnase_seq 	= get_conf_val_bool( dnase_seq, 	["dnase_seq"] )
+	chip_seq 	= get_conf_val_bool( chip_seq, 	["chip_seq"] )
 	idr_thresh 	= get_conf_val_real( idr_thresh, 	["idr_thresh"] )
 	subsample_xcor 	= get_conf_val( subsample_xcor,		["subsample_xcor"] )
 	subsample	= get_conf_val( subsample, 		["subsample"] )
@@ -167,7 +167,7 @@ void print_atac() {
 	print( "No Cross-corr. analysis\t\t\t: $no_xcor\n")
 	print( "Use CSEM for alignment\t\t\t: $csem\n")
 	print( "Smoothing window for MACS2\t\t: $smooth_win\n")
-	print( "DNase Seq\t\t\t\t: $dnase_seq\n")
+	print( "Chip Seq\t\t\t\t: $chip_seq\n")
 	print( "IDR threshold\t\t\t\t: $idr_thresh\n" )
 	print( "Use old trim adapters\t\t\t: $old_trimmer\n" )
 	print( "Force to use ENCODE3 parameter set\t: $ENCODE3\n" )
@@ -179,7 +179,7 @@ void print_atac() {
 	print( "MACS2 p-val thresh. for BIGWIGs\t\t: $macs2_pval_thresh_bw\n")
 	print( "Enable IDR on called peaks\t: $enable_idr\n")
 
-	if ( dnase_seq ) type = "dnase-seq"	
+	if ( chip_seq ) type = "chip-seq"	
 }
 
 
@@ -311,8 +311,8 @@ void chk_param() {
 	}
 
 	//ENCODE_assay_category = "DNA accessibility"
-	if ( dnase_seq ) {
-		ENCODE_assay_title = "DNase-seq"
+	if ( chip_seq ) {
+		ENCODE_assay_title = "Chip-seq"
 	}
 	else {
 		ENCODE_assay_title = "ATAC-seq"
@@ -613,7 +613,7 @@ void align_SE( int rep, int nth_rep ) {
 			subsampled_tag = tag
 		}
 
-		if ( is_dnase_seq() ) {
+		if ( is_chip_seq() ) {
 			final_tag_ = subsampled_tag
 		}
 		else {
@@ -918,7 +918,7 @@ void align_PE( int rep, int nth_rep ) {
 			wait
 		}
 
-		if ( is_dnase_seq() ) {
+		if ( is_chip_seq() ) {
 			final_tag_ = tag
 		}
 		else {
@@ -930,7 +930,7 @@ void align_PE( int rep, int nth_rep ) {
 
 		if ( !true_rep ) {
 
-			if ( is_dnase_seq() ) {
+			if ( is_chip_seq() ) {
 				final_tag_pr1_ = tag_pr1
 				final_tag_pr2_ = tag_pr2
 			}
@@ -1706,7 +1706,7 @@ void report() {
 	html += html_title()
 	html += html_cmd_line_args()
 	html += html_conf_file_info()
-	html += html_pipeline_version( "https://github.com/kundajelab/atac_dnase_pipelines/commit" ) // pipeline version info
+	html += html_pipeline_version( "https://github.com/epigen-ucsd/atac_dnase_pipelines/commit" ) // pipeline version info
 	html += html_filetable() 	// treeview for directory and file structure
 	html += html_atac_tracks() 	// epigenome browser tracks
 	html += html_graph()	// graphviz workflow diagram
@@ -1851,9 +1851,9 @@ bool is_atac_seq() {
 	return type.toLower().startsWith( "atac" )
 }
 
-bool is_dnase_seq() {
+bool is_chip_seq() {
 
-	return type.toLower().startsWith( "dnase" )
+	return type.toLower().startsWith( "chip" )
 }
 
 void tar_all_logs() {
