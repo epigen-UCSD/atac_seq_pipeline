@@ -686,7 +686,7 @@ def get_fract_reads_in_regions(reads_bed, regions_bed):
 
 
 def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
-                        prom_regions, enh_regions, peaks):
+                                                prom_regions, enh_regions, peaks):
     '''
     Given region sets, determine whether reads are
     falling in or outside these regions
