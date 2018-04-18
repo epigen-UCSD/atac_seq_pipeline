@@ -1,0 +1,36 @@
+#!/bin/bash
+#PBS -q condo
+#PBS -N JYH_20171121
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=08:00:00
+#PBS -o /home/zhc268/logs/JYH_20171121.out
+#PBS -e /home/zhc268/logs/JYH_20171121.err
+#PBS -V
+#PBS -M zhangc518@gmail.com
+#PBS -m abe
+#PBS -A epigen-group
+
+WORKDIR="/home/zhc268/scratch/outputs/"
+FASTQDIR="/home/zhc268/data/seqdata"
+
+
+# select libs
+samplenames=(`cat $samples`)
+INPREFIX=${samplenames[${PBS_ARRAYID}*2]} #index start from 0
+GENOME=${samplenames[${PBS_ARRAYID}*2+1]}
+OUTDIR="${WORKDIR}${INPREFIX}"
+mkdir -p $OUTDIR
+
+# chipseq or not
+[[ "$chipseq" = true ]] &&  c="-type chip-seq"
+
+
+# run pipeline
+bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
+-fastq1_1 "${FASTQDIR}/${INPREFIX}_R1.fastq.bz2" \
+-fastq1_2 "${FASTQDIR}/${INPREFIX}_R2.fastq.bz2" \
+-true_rep -no_idr  -no_par \
+-out_dir $OUTDIR -trimmed_fastq $c
+
+#eg: qsub  -t 0-16 -v samples="/home/zhc268/data/logs/run_20171130.txt"  runPipeline.pbs
+
