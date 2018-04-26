@@ -29,7 +29,7 @@ mkdir -p $OUTDIR
 bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
 -fastq1_1 "${FASTQDIR}/${INPREFIX}_R1.fastq.bz2" \
 -fastq1_2 "${FASTQDIR}/${INPREFIX}_R2.fastq.bz2" \
--true_rep -no_idr  -no_par \
+-true_rep -no_idr \
 -out_dir $OUTDIR -trimmed_fastq $c
 
 #eg: qsub  -t 0-16 -v samples="/home/zhc268/data/logs/run_20171130.txt"  runPipeline.pbs
