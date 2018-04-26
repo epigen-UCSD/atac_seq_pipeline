@@ -531,10 +531,10 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
     tmp_filtered_bam_prefix = tmp_filtered_bam.replace('.bam', '')
     if endedness == 'Paired-ended':
         filter_bam = ('samtools view -F 1804 -f 2 -u {0} | '
-                      'samtools sort - {1}'.format(sorted_bam, tmp_filtered_bam_prefix))
+                      'samtools sort - -T {1} -o {2}'.format(sorted_bam, tmp_filtered_bam_prefix,tmp_filtered_bam))
     else:
         filter_bam = ('samtools view -F 1804 -u {0} | '
-                      'samtools sort - {1}'.format(sorted_bam, tmp_filtered_bam_prefix))
+                      'samtools sort - -T {1} -o {2}'.format(sorted_bam, tmp_filtered_bam_prefix,tmp_filtered_bam))
     os.system(filter_bam)
 
     # Run Picard MarkDuplicates
