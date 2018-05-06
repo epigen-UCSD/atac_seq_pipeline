@@ -283,7 +283,7 @@ def run_preseq(bam_w_dups, prefix):
     Runs preseq. Look at preseq data output to get PBC/NRF.
     '''
     # First sort because this file no longer exists...
-    sort_bam = 'samtools sort -o {1}.sorted.bam -T {1} -@ 2 {0}'.format(
+    sort_bam = 'sambamba sort -o {1}.sorted.bam -t 8 {0}'.format(
         bam_w_dups, prefix)
     os.system(sort_bam)
 
@@ -528,13 +528,13 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
 
     # Filter bam on the flag 0x002
     tmp_filtered_bam = '{0}.filt.bam'.format(prefix)
-    tmp_filtered_bam_prefix = tmp_filtered_bam.replace('.bam', '')
+
     if endedness == 'Paired-ended':
         filter_bam = ('samtools view -F 1804 -f 2 -u {0} | '
-                      'samtools sort - -T {1} -o {2}'.format(sorted_bam, tmp_filtered_bam_prefix,tmp_filtered_bam))
+                      'sambamba sort /dev/stdin -t 8 -o {1}'.format(sorted_bam,tmp_filtered_bam))
     else:
         filter_bam = ('samtools view -F 1804 -u {0} | '
-                      'samtools sort - -T {1} -o {2}'.format(sorted_bam, tmp_filtered_bam_prefix,tmp_filtered_bam))
+                      'sambamba sort /dev/stdin -t 8 -o {1}'.format(sorted_bam, tmp_filtered_bam))
     os.system(filter_bam)
 
     # Run Picard MarkDuplicates

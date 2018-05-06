@@ -8,7 +8,7 @@ htslib ==1.7 # 1.5 in bioconda needed libbz2.so.1.0
 bedtools ==2.26.0 #2.27.1 has the bug can generating overlapping regions 
 picard ==2.18.2 #1.126 
 ucsc-fetchchromsizes
-ucsc-wigtobigwig
+bucsc-wigtobigwig
 ucsc-bedgraphtobigwig
 ucsc-bigwiginfo
 ucsc-bedclip
