@@ -696,7 +696,9 @@ def get_signal_to_noise(final_bed, dnase_regions, blacklist_regions,
                                                         prom_regions)
 
     # Enh regions
-    reads_enh, fract_enh = get_fract_reads_in_regions(final_bed, enh_regions)
+    #reads_enh, fract_enh = get_fract_reads_in_regions(final_bed, enh_regions)
+    reads_enh=0
+    fract_enh=0
 
     # Peak regions
     reads_peaks, fract_peaks = get_fract_reads_in_regions(final_bed, peaks)

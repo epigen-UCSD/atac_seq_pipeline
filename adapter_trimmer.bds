@@ -93,10 +93,6 @@ void trim_adapters( int rep ) {
 
 		string p1
 
-		if ( old_trimmer ) {
-			p1 = trim_adapters_old( fastqs[0], trim_o_dir, group )
-		}
-		else {			
 			adapters := get_adapters( rep )
 
 			if ( adapters.size()==0 ) {
@@ -112,17 +108,13 @@ void trim_adapters( int rep ) {
 			}
 
 			p1 = trim_adapters( fastqs[0], adapters[0], trim_o_dir, group )
-		}
+
 	}
 	else {
 		fastqs := get_fastqs( rep )
 
 		string p1, p2
 
-		if ( old_trimmer ) {
-			( p1, p2 ) = trim_adapters_PE_old( fastqs[0], fastqs[1], trim_o_dir, group )
-		}
-		else {
 			adapters := get_adapters( rep )
 
 			if ( adapters.size()==0 ) {
@@ -139,7 +131,6 @@ void trim_adapters( int rep ) {
 			}
 
 			( p1, p2 ) = trim_adapters_PE( fastqs[0], fastqs[1], adapters[0], adapters[1], trim_o_dir, group )
-		}
 	}
 }
 
