@@ -473,13 +473,13 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
 
             if mark == 2:
                 line_elems = line.strip().split('\t')
-                dup_stats['PERCENT_DUPLICATION'] = line_elems[7]
-                dup_stats['READ_PAIR_DUPLICATES'] = line_elems[5]
+                dup_stats['PERCENT_DUPLICATION'] = line_elems[8]
+                dup_stats['READ_PAIR_DUPLICATES'] = line_elems[6]
                 dup_stats['READ_PAIRS_EXAMINED'] = line_elems[2]
                 if paired_status == 'Paired-ended':
-                    return 2*int(line_elems[5]), float(line_elems[7])
+                    return 2*int(line_elems[5]), float(line_elems[8])
                 else:
-                    return int(line_elems[4]), float(line_elems[7])
+                    return int(line_elems[4]), float(line_elems[8])
 
             if mark > 0:
                 mark += 1
