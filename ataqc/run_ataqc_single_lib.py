@@ -1316,8 +1316,9 @@ def main():
                                          OUTPUT_PREFIX)
 
     # Library complexity: Preseq results, NRF, PBC1, PBC2
-    picard_est_library_size = get_picard_complexity_metrics(ALIGNED_BAM,
-                                                            OUTPUT_PREFIX)
+    #picard_est_library_size = get_picard_complexity_metrics(ALIGNED_BAM,
+    #                                                        OUTPUT_PREFIX)
+    picard_est_library_size = 0
     preseq_data, preseq_log = run_preseq(ALIGNED_BAM, OUTPUT_PREFIX) # SORTED BAM
 
     encode_lib_metrics = get_encode_complexity_measures(PBC_LOG)
