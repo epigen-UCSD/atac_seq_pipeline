@@ -325,6 +325,7 @@ def get_picard_complexity_metrics(aligned_bam, prefix):
                       'QUIET=TRUE').format(aligned_bam,
                                            out_file,
                                            os.environ['PICARDROOT'])
+    logging.info(get_gc_metrics)
     os.system(get_gc_metrics)
 
     # Extract the actual estimated library size
@@ -527,6 +528,8 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
     else:
         filter_bam = ('samtools view -F 1804 -u {0} | '
                       'sambamba sort /dev/stdin -t 8 -o {1}'.format(sorted_bam, tmp_filtered_bam))
+
+    logging.info(filter_bam)
     os.system(filter_bam)
 
     # Run Picard MarkDuplicates
@@ -552,10 +555,13 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
                            '2> {2}').format(tmp_filtered_bam,
                                             out_file,
                                             metrics_file)
+    logging.info(mark_duplicates)
     os.system(mark_duplicates)
 
     # Index the file
     index_file = 'samtools index {0}'.format(out_file)
+
+    logging.info(index_file)
     os.system(index_file)
 
     # Get the mitochondrial reads that are marked duplicates
@@ -569,10 +575,15 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
 
     # Clean up
     remove_bam = 'rm {0}'.format(out_file)
+    logging.info(remove_bam)    
     os.system(remove_bam)
+    
     remove_metrics_file = 'rm {0}'.format(metrics_file)
+    logging.info(remove_metrics_file))
     os.system(remove_metrics_file)
+    
     remove_tmp_filtered_bam = 'rm {0}'.format(tmp_filtered_bam)
+    logging.info(remove_tmp_filtered_bam)
     os.system(remove_tmp_filtered_bam)
 
     return mito_dups, float(mito_dups) / total_dups
