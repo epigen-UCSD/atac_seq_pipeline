@@ -579,7 +579,7 @@ def get_mito_dups(sorted_bam, prefix, endedness='Paired-ended', use_sambamba=Fal
     os.system(remove_bam)
     
     remove_metrics_file = 'rm {0}'.format(metrics_file)
-    logging.info(remove_metrics_file))
+    logging.info(remove_metrics_file)
     os.system(remove_metrics_file)
     
     remove_tmp_filtered_bam = 'rm {0}'.format(tmp_filtered_bam)
