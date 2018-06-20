@@ -1,4 +1,6 @@
 #!/usr/bin/env python2
+# modified by: frank cheng
+# Time-stamp: "2018-06-20 14:56:01"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -723,7 +725,7 @@ def get_region_size_metrics(peak_file):
     From the peak file, return a plot of the region size distribution and
     the quartile metrics (summary from R)
     '''
-
+    logging.info('get peak region_sizes...')
     peak_size_summ = OrderedDict([
         ('Min size', 0),
         ('25 percentile', 0),
@@ -786,6 +788,7 @@ def get_peak_counts(raw_peaks, naive_overlap_peaks=None, idr_peaks=None):
     overlap peaks
     '''
 
+    logging.info('get peak counts...')
     # Count peaks
     raw_count = sum(1 for line in getFileHandle(raw_peaks))
     if naive_overlap_peaks != None:
@@ -842,6 +845,8 @@ def read_picard_histogram(data_file):
 
 
 def fragment_length_qc(data):
+
+    logging.info('fragment length QC...')
     results = []
 
     NFR_UPPER_LIMIT = 150
@@ -1319,7 +1324,7 @@ def main():
     #picard_est_library_size = get_picard_complexity_metrics(ALIGNED_BAM,
     #                                                        OUTPUT_PREFIX)
     picard_est_library_size = 0
-    preseq_data, preseq_log = run_preseq(ALIGNED_BAM, OUTPUT_PREFIX) # SORTED BAM
+    #preseq_data, preseq_log = run_preseq(ALIGNED_BAM, OUTPUT_PREFIX) # SORTED BAM
 
     encode_lib_metrics = get_encode_complexity_measures(PBC_LOG)
 
@@ -1331,10 +1336,11 @@ def main():
     else:
         read_dups, percent_dup = get_picard_dup_stats(DUP_LOG, paired_status)
 
-    mito_dups, fract_dups_from_mito = get_mito_dups(ALIGNED_BAM,
-                                                    OUTPUT_PREFIX,
-                                                    paired_status,
-                                                    use_sambamba=USE_SAMBAMBA_MARKDUP)
+    #mito_dups, fract_dups_from_mito = get_mito_dups(ALIGNED_BAM,
+    #                                                OUTPUT_PREFIX,
+    #                                                paired_status,
+    #                                                use_sambamba=USE_SAMBAMBA_MARKDUP)
+    mito_dups, fract_dups_from_mito = '',''
     [flagstat, mapped_count] = get_samtools_flagstat(ALIGNED_BAM)
 
     # Final read statistics
@@ -1442,7 +1448,7 @@ def main():
         # Library complexity statistics
         ('encode_lib_complexity', encode_lib_metrics),
         ('picard_est_library_size', picard_est_library_size),
-        ('yield_prediction', preseq_plot(preseq_data)),
+        #('yield_prediction', preseq_plot(preseq_data)),
 
         # Fragment length statistics
         ('fraglen_dist', fragment_length_plot(insert_data)),
