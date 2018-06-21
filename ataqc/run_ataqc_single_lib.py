@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2018-06-20 14:56:01"
+# Time-stamp: "2018-06-20 23:46:43"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -1086,20 +1086,6 @@ one duplicate set are then removed from the Histogram as outliers before library
 size is estimated.
 
 
-  <h3>Yield prediction</h3>
-  {% if sample['yield_prediction'] == 'Tm9uZQ==' %}
-    {{ 'Preseq did not converge (or failed in some other way)'}}
-  {% else %}
-    {{ inline_img(sample['yield_prediction']) }}
-  {% endif %}
-<pre>
-Preseq performs a yield prediction by subsampling the reads, calculating the
-number of distinct reads, and then extrapolating out to see where the
-expected number of distinct reads no longer increases. The confidence interval
-gives a gauge as to the validity of the yield predictions.
-</pre>
-
-
   <h2>Fragment length statistics</h2>
   {{ inline_img(sample['fraglen_dist']) }}
   {{ qc_table(sample['nucleosomal']) }}
@@ -1340,7 +1326,7 @@ def main():
     #                                                OUTPUT_PREFIX,
     #                                                paired_status,
     #                                                use_sambamba=USE_SAMBAMBA_MARKDUP)
-    mito_dups, fract_dups_from_mito = '',''
+
     [flagstat, mapped_count] = get_samtools_flagstat(ALIGNED_BAM)
 
     # Final read statistics
@@ -1410,8 +1396,8 @@ def main():
         ('Mapping quality passed filters (out of total)', (num_mapq, fract_mapq)),
         ('Duplicates (after filtering)', (read_dups, percent_dup)),
         ('Mitochondrial reads (out of total)', (chr_m_reads, fraction_chr_m)),
-        ('Duplicates that are mitochondrial (out of all dups)',
-            (mito_dups, fract_dups_from_mito)),
+#        ('Duplicates that are mitochondrial (out of all dups)',
+#            (mito_dups, fract_dups_from_mito)),
         ('Final reads (after all filters)', (final_read_count,
                                              fract_reads_left)),
     ])
