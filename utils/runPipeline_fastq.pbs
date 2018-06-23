@@ -1,0 +1,45 @@
+#!/bin/bash
+#PBS -q condo
+#PBS -N atac
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=8:00:00
+#PBS -V
+#PBS -m abe
+#PBS -A epigen-group
+
+WORKDIR="/home/zhc268/scratch/outputs/"
+FASTQDIR="/projects/ps-epigen/seqdata/"
+
+# chipseq or not
+[[ "$chipseq" = true ]] &&  c="-type chip-seq"
+
+# select libs 
+samplenames=(`cat $samples`)
+INPREFIX=${samplenames[${PBS_ARRAYID}*2]} #index start from 0
+GENOME=${samplenames[${PBS_ARRAYID}*2+1]}
+OUTDIR="${WORKDIR}${INPREFIX}"
+mkdir -p $OUTDIR
+
+
+fastq1="${FASTQDIR}/${INPREFIX}_R1.fastq.gz"
+fastq2="${FASTQDIR}/${INPREFIX}_R2.fastq.gz"
+
+
+# runPipeline
+bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
+-fastq1_1 "$fastq1" \
+-fastq1_2 "$fastq2" \
+-true_rep -no_idr  -no_par -no_xcor \
+-out_dir $OUTDIR $c \
+#-trimmed_fastq    
+#-title $INPREFIX
+
+
+wait
+
+# runFastQC & fastq_screen
+#runFastQC_screen.sh  $INPREFIX
+#results_transfer.sh $INPREFIX
+
+# qsub -t 1-15%1 
+# use -v genome to tell which genome to run

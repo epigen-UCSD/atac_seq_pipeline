@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2018-06-20 23:46:43"
+# Time-stamp: "2018-06-23 13:45:31"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -1326,7 +1326,7 @@ def main():
     #                                                OUTPUT_PREFIX,
     #                                                paired_status,
     #                                                use_sambamba=USE_SAMBAMBA_MARKDUP)
-
+    mito_dups, fract_dups_from_mito = 0,0
     [flagstat, mapped_count] = get_samtools_flagstat(ALIGNED_BAM)
 
     # Final read statistics
@@ -1396,8 +1396,8 @@ def main():
         ('Mapping quality passed filters (out of total)', (num_mapq, fract_mapq)),
         ('Duplicates (after filtering)', (read_dups, percent_dup)),
         ('Mitochondrial reads (out of total)', (chr_m_reads, fraction_chr_m)),
-#        ('Duplicates that are mitochondrial (out of all dups)',
-#            (mito_dups, fract_dups_from_mito)),
+        ('Duplicates that are mitochondrial (out of all dups)',
+            (mito_dups, fract_dups_from_mito)),
         ('Final reads (after all filters)', (final_read_count,
                                              fract_reads_left)),
     ])
