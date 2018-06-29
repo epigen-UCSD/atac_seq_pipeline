@@ -2,8 +2,9 @@
 #module load fastqc
 
 sample_prefix=$1
-FASTQDIR="/home/zhc268/data/seqdata/"
-OUTPUT_DIR="/home/zhc268/data/outputs/libQCs/${sample_prefix}"
+FASTQDIR="/projects/ps-epigen/seqdata/"
+OUTPUT_DIR="/projects/ps-epigen/outputs/libQCs/${sample_prefix}"
+
 mkdir -p $OUTPUT_DIR
 
 for i in `seq 1 2`

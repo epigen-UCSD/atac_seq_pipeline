@@ -7,6 +7,8 @@
 #PBS -m abe
 #PBS -A epigen-group
 
+source activate bds_atac
+
 WORKDIR="/home/zhc268/scratch/outputs/"
 FASTQDIR="/projects/ps-epigen/seqdata/"
 
@@ -24,6 +26,8 @@ mkdir -p $OUTDIR
 fastq1="${FASTQDIR}/${INPREFIX}_R1.fastq.gz"
 fastq2="${FASTQDIR}/${INPREFIX}_R2.fastq.gz"
 
+[[ ! -f $fastq1 ]] && { echo "fastq1 not found"; exit 0; }
+[[ ! -f $fastq2 ]] && { echo "fastq2 not found"; exit 0; } 
 
 # runPipeline
 bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
@@ -38,8 +42,8 @@ bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME 
 wait
 
 # runFastQC & fastq_screen
-#runFastQC_screen.sh  $INPREFIX
-#results_transfer.sh $INPREFIX
+runFastQC_screen.sh  $INPREFIX
+results_transfer.sh $INPREFIX $(whoami)
 
 # qsub -t 1-15%1 
 # use -v genome to tell which genome to run
