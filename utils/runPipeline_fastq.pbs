@@ -9,7 +9,7 @@
 
 source activate bds_atac
 
-WORKDIR="/home/zhc268/scratch/outputs/"
+WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
 FASTQDIR="/projects/ps-epigen/seqdata/"
 
 # chipseq or not

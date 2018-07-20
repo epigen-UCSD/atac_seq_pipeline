@@ -9,22 +9,22 @@ mkdir -p $OUTPUT_DIR
 
 for i in `seq 1 2`
 do
-    pre="${sample_prefix}_R${i}.trim"
-    
-    [[ ! -f "${FASTQDIR}${pre}.fastq.gz" ]] &&  pre=${pre/.trim/} 
+    # do fastqc on raw fastq files
 
-    tagged_fastq="$OUTPUT_DIR/${pre}.tagged.fastq.gz"
+    pre="${sample_prefix}_R${i}"
+    [[ ! -f "${FASTQDIR}${pre}.fastq.gz" ]] &&  pre=${pre}.trim
     pf="${FASTQDIR}${pre}.fastq.gz"
-    
-    echo "running fastqc $pf ..."
-    fastqc  -t 8 -o $OUTPUT_DIR $pf
+    echo "running fastqc $pf ..."        
+    fastqc  -t 16 -o $OUTPUT_DIR $pf
 
-    echo "running fastscreen $p ..."    
-    fastq_screen --threads 8  --outdir $OUTPUT_DIR --force --tag --subset 100000 $pf 
+    # do fastq_screen on trimmed fastq files (perfer)
 
-
-    # grep #FQST tag to the end and find the tag
-    fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR
+    echo "running fastscreen $p ..."
+    pre="${sample_prefix}_R${i}.trim"
+    [[ ! -f "${FASTQDIR}${pre}.fastq.gz" ]] &&  pre=${pre/.trim/}
+    tagged_fastq="$OUTPUT_DIR/${pre}.tagged.fastq.gz"
+    fastq_screen --threads 16  --outdir $OUTPUT_DIR --force --tag --subset 100000 $pf 
+    fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR     # grep #FQST tag to the end and find the tag
 done 
 
 

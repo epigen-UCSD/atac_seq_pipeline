@@ -1,0 +1,679 @@
+
+
+== git info
+Latest git commit		: 73facd48e002683c0868ad7e8bc404aeaa18d022 (Fri Jun 29 13:17:05 2018)
+	Reading parameters from section (tscc*.sdsc.edu) in file(/projects/ps-epigen/software/atac_dnase_pipelines/default.env)...
+
+
+== configuration file info
+Hostname			: tscc-0-44.sdsc.edu
+Configuration file		: 
+Environment file		: /projects/ps-epigen/software/atac_dnase_pipelines/default.env
+
+
+== parallelization info
+No parallel jobs		: true
+Maximum # threads 		: 16
+
+
+== cluster/system info
+Walltime (general)		: 5h50m
+Max. memory (general)		: 7G
+Force to use a system		: local
+Process priority (niceness)	: 0
+Retiral for failed tasks	: 0
+Submit tasks to a cluster queue	: 
+Unlimited cluster mem./walltime	: false
+
+
+== shell environment info
+Conda env. 			: bds_atac
+Conda env. for python3		: bds_atac_py3
+Conda bin. directory		: /projects/ps-epigen/software/miniconda3/bin//
+
+Shell cmd. for init.		: if [[ -f $(which /projects/ps-epigen/software/miniconda3/bin//conda) && $(/projects/ps-epigen/software/miniconda3/bin//conda env list | grep bds_atac | wc -l) != "0" ]]; then source /projects/ps-epigen/software/miniconda3/bin//activate bds_atac; sleep 5; fi;  export PATH=/projects/ps-epigen/software/atac_dnase_pipelines/.:/projects/ps-epigen/software/atac_dnase_pipelines/modules:/projects/ps-epigen/software/atac_dnase_pipelines/utils:${PATH}:/bin:/usr/bin:/usr/local/bin:${HOME}/.bds; set -o pipefail; STARTTIME=$(date +%s)
+
+Shell cmd. for init.(py3)	: if [[ -f $(which /projects/ps-epigen/software/miniconda3/bin//conda) && $(/projects/ps-epigen/software/miniconda3/bin//conda env list | grep bds_atac_py3 | wc -l) != "0" ]]; then source /projects/ps-epigen/software/miniconda3/bin//activate bds_atac_py3; sleep 5; fi;  export PATH=/projects/ps-epigen/software/atac_dnase_pipelines/.:/projects/ps-epigen/software/atac_dnase_pipelines/modules:/projects/ps-epigen/software/atac_dnase_pipelines/utils:${PATH}:/bin:/usr/bin:/usr/local/bin:${HOME}/.bds; set -o pipefail; STARTTIME=$(date +%s)
+
+Shell cmd. for fin.		: TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sleep 0
+
+Cluster task min. len.		: 60
+
+Cluster task delay			: 0
+
+
+== output directory/title info
+Output dir.			: /oasis/tscc/scratch/zhc268/outputs/JYH_481
+Title (prefix)			: JYH_481
+	Reading parameters from section (default) in file(/projects/ps-epigen/software/atac_dnase_pipelines/default.env)...
+	Reading parameters from section (hg38) in file(/projects/ps-epigen/software/atac_dnase_pipelines/species/epigen.conf)...
+
+
+== species settings
+Species				: hg38
+Species file			: /projects/ps-epigen/software/atac_dnase_pipelines/species/epigen.conf
+
+Species name (WashU browser)	: hg38
+Ref. genome seq. fasta		: /projects/ps-epigen/GENOME/hg38/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta
+Chr. sizes file			: /projects/ps-epigen/GENOME/hg38/hg38.chrom.sizes
+Black list bed			: /projects/ps-epigen/GENOME/hg38/hg38.blacklist.bed.gz
+Ref. genome seq. dir.		: 
+
+
+== ENCODE accession settings
+ENCODE experiment accession	: 
+ENCODE award RFA			: 
+ENCODE assay category		: 
+ENCODE assay title		: 
+ENCODE award				: 
+ENCODE lab				: 
+ENCODE assembly genome		: 
+ENCODE alias prefix		: KLAB_PIPELINE
+ENCODE alias suffix		: 
+
+
+== report settings
+URL root for output directory	: 
+Genome coord. for browser tracks	: 
+
+
+== align multimapping settings
+# alignments reported for multimapping	: 0
+
+
+== align bowtie2 settings
+Bowtie2 index			: /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta
+Replacement --score-min for bowtie2	: 
+Walltime (bowtie2)		: 47h
+Max. memory (bowtie2)		: 12G
+Extra param. (bowtie2)		: 
+
+
+== adapter trimmer settings
+Maximum allowed error rate for cutadapt	: 0.10
+Minimum trim. length for cutadapt -m	: 5
+Walltime (adapter trimming)		: 23h
+Max. memory (adapter trimming)		: 12G
+
+
+== postalign bam settings
+MAPQ reads rm thresh.		: 30
+Rm. tag reads with str.		: 
+No dupe removal in filtering raw bam	: false
+Walltime (bam filter)		: 23h
+Max. memory (bam filter)	: 12G
+Dup marker				: picard
+Use sambamba markdup (instead of picard)	: false
+
+
+== postalign bed/tagalign settings
+Max. memory for UNIX shuf			: 12G
+
+
+== postalign cross-corr. analysis settings
+Max. memory for UNIX shuf			: 12G
+User-defined cross-corr. peak strandshift	: -1
+Extra parameters for cross-corr. analysis	: 
+
+
+== callpeak macs2 settings
+Genome size (hs,mm)		: hs
+Walltime (macs2)		: 23h
+Max. memory (macs2)		: 15G
+Extra parameters for macs2 callpeak		: 
+
+
+== callpeak naiver overlap settings
+Bedtools intersect -nonamecheck	: false
+
+
+== callpeak etc settings
+# of top peaks to pick up in peak files	: 500000
+
+
+== IDR settings
+Append IDR threshold to IDR out_dir	: false
+
+
+== ATAQC settings
+TSS enrichment bed		: /projects/ps-epigen/GENOME/hg38/ataqc/hg38_gencode_tss_unique.bed.gz
+DNase bed for ataqc		: /projects/ps-epigen/GENOME/hg38/ataqc/reg2map_honeybadger2_dnase_all_p10_ucsc.hg19_to_hg38.bed.gz
+Promoter bed for ataqc		: /projects/ps-epigen/GENOME/hg38/ataqc/reg2map_honeybadger2_dnase_prom_p2.hg19_to_hg38.bed.gz
+Enhancer bed for ataqc		: /projects/ps-epigen/GENOME/hg38/ataqc/reg2map_honeybadger2_dnase_enh_p2.hg19_to_hg38.bed.gz
+Reg2map for ataqc			: /projects/ps-epigen/GENOME/hg38/ataqc/hg38_dnase_avg_fseq_signal_formatted.txt.gz
+Reg2map_bed for ataqc		: /projects/ps-epigen/GENOME/hg38/ataqc/hg38_celltype_compare_subsample.bed.gz
+Roadmap metadata for ataqc	: /projects/ps-epigen/GENOME/hg38/ataqc/hg38_dnase_avg_fseq_signal_metadata.txt
+Max. memory for ATAQC			: 20G
+Walltime for ATAQC			: 47h
+
+
+== atac pipeline settings
+Type of pipeline			: atac-seq
+Fastqs are trimmed?			: false
+Align only				: false
+# reads to subsample replicates (0 if no subsampling)	: 0
+# reads to subsample for cross-corr. analysis 	: 25000000
+No pseudo replicates			: true
+No ATAQC (advanced QC report)		: false
+No Cross-corr. analysis			: true
+Use CSEM for alignment			: false
+Smoothing window for MACS2		: 150
+Chip Seq				: false
+IDR threshold				: 0.1
+Use old trim adapters			: false
+Force to use ENCODE3 parameter set	: false
+Force to use ENCODE parameter set	: false
+Disable genome browser tracks	: false
+p-val thresh. for overlapped peaks	: 0.01
+MACS2 p-val thresh. for peaks	: 0.01
+MACS2 p-val thresh. for BIGWIGs		: 0.01
+Enable IDR on called peaks	: false
+
+== checking atac parameters ...
+
+Checking parameters and data files for ATAQC. 
+
+
+== checking adapters to be trimmed ...
+Replicate 1 adapters : automatically detected
+
+
+== checking input files ...
+
+Rep1 fastq (PE) :
+	/projects/ps-epigen/seqdata/JYH_481_R1.fastq.gz
+	/projects/ps-epigen/seqdata/JYH_481_R2.fastq.gz
+Distributing 16 to ... 
+{1=16}
+Task has finished (3 seconds).
+Task has finished (3 seconds).
+
+Detected adapter for rep1 (PE) : CTGTCTCTTATA, CTGTCTCTTATA
+This is cutadapt 1.16 with Python 2.7.13
+Command line parameters: -m 5 -e 0.10 -a CTGTCTCTTATA -A CTGTCTCTTATA -o /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R1.trim.fastq -p /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R2.trim.fastq /projects/ps-epigen/seqdata/JYH_481_R1.fastq.gz /projects/ps-epigen/seqdata/JYH_481_R2.fastq.gz
+Running on 1 core
+Trimming 2 adapters with at most 10.0% errors in paired-end mode ...
+Finished in 90.53 s (26 us/read; 2.28 M reads/minute).
+
+=== Summary ===
+
+Total read pairs processed:          3,439,177
+  Read 1 with adapter:               1,228,878 (35.7%)
+  Read 2 with adapter:               1,217,529 (35.4%)
+Pairs that were too short:                 388 (0.0%)
+Pairs written (passing filters):     3,438,789 (100.0%)
+
+Total basepairs processed:   515,876,550 bp
+  Read 1:   257,938,275 bp
+  Read 2:   257,938,275 bp
+Total written (filtered):    464,659,740 bp (90.1%)
+  Read 1:   232,193,712 bp
+  Read 2:   232,466,028 bp
+
+=== First read: Adapter 1 ===
+
+Sequence: CTGTCTCTTATA; Type: regular 3'; Length: 12; Trimmed: 1228878 times.
+
+No. of allowed errors:
+0-9 bp: 0; 10-12 bp: 1
+
+Bases preceding removed adapters:
+  A: 10.5%
+  C: 43.6%
+  G: 28.7%
+  T: 17.2%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+3	70599	53737.1	0	70599
+4	34269	13434.3	0	34269
+5	25285	3358.6	0	25285
+6	24713	839.6	0	24713
+7	24861	209.9	0	24861
+8	26984	52.5	0	26984
+9	29052	13.1	0	28911 141
+10	30580	3.3	1	28997 1583
+11	31360	0.8	1	30152 1208
+12	30438	0.2	1	29280 1158
+13	29500	0.2	1	28432 1068
+14	28741	0.2	1	27783 958
+15	28327	0.2	1	27356 971
+16	29068	0.2	1	28048 1020
+17	29844	0.2	1	28822 1022
+18	31562	0.2	1	30508 1054
+19	34602	0.2	1	33535 1067
+20	36237	0.2	1	35110 1127
+21	37740	0.2	1	36547 1193
+22	38144	0.2	1	36978 1166
+23	36423	0.2	1	35355 1068
+24	35958	0.2	1	34843 1115
+25	34830	0.2	1	33730 1100
+26	34064	0.2	1	33051 1013
+27	35035	0.2	1	34024 1011
+28	36985	0.2	1	35892 1093
+29	40638	0.2	1	39422 1216
+30	42755	0.2	1	41505 1250
+31	43398	0.2	1	42120 1278
+32	40936	0.2	1	39816 1120
+33	36210	0.2	1	35127 1083
+34	32828	0.2	1	31886 942
+35	28754	0.2	1	27928 826
+36	24990	0.2	1	24246 744
+37	20431	0.2	1	19767 664
+38	16959	0.2	1	16420 539
+39	12851	0.2	1	12505 346
+40	6601	0.2	1	6400 201
+41	3235	0.2	1	3142 93
+42	2218	0.2	1	2107 111
+43	1615	0.2	1	1540 75
+44	1232	0.2	1	1163 69
+45	1458	0.2	1	1401 57
+46	1762	0.2	1	1692 70
+47	1728	0.2	1	1624 104
+48	1210	0.2	1	1143 67
+49	571	0.2	1	348 223
+50	59	0.2	1	37 22
+51	55	0.2	1	36 19
+52	121	0.2	1	38 83
+53	52	0.2	1	32 20
+54	85	0.2	1	20 65
+55	65	0.2	1	27 38
+56	53	0.2	1	36 17
+57	84	0.2	1	24 60
+58	18	0.2	1	10 8
+59	147	0.2	1	18 129
+60	26	0.2	1	11 15
+61	36	0.2	1	8 28
+62	68	0.2	1	5 63
+63	11	0.2	1	0 11
+64	22	0.2	1	0 22
+65	25	0.2	1	2 23
+66	23	0.2	1	3 20
+67	57	0.2	1	1 56
+68	8	0.2	1	0 8
+69	4	0.2	1	2 2
+70	4	0.2	1	1 3
+71	5	0.2	1	0 5
+72	83	0.2	1	5 78
+73	8	0.2	1	0 8
+74	28	0.2	1	3 25
+75	150	0.2	1	147 3
+
+=== Second read: Adapter 2 ===
+
+Sequence: CTGTCTCTTATA; Type: regular 3'; Length: 12; Trimmed: 1217529 times.
+
+No. of allowed errors:
+0-9 bp: 0; 10-12 bp: 1
+
+Bases preceding removed adapters:
+  A: 10.5%
+  C: 42.9%
+  G: 28.4%
+  T: 18.2%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+3	71893	53737.1	0	71893
+4	33827	13434.3	0	33827
+5	25051	3358.6	0	25051
+6	24295	839.6	0	24295
+7	24496	209.9	0	24496
+8	26624	52.5	0	26624
+9	28615	13.1	0	28482 133
+10	30199	3.3	1	28490 1709
+11	31012	0.8	1	29711 1301
+12	30145	0.2	1	28980 1165
+13	29220	0.2	1	28159 1061
+14	28495	0.2	1	27489 1006
+15	28070	0.2	1	27112 958
+16	28766	0.2	1	27717 1049
+17	29583	0.2	1	28490 1093
+18	31199	0.2	1	30125 1074
+19	34140	0.2	1	32938 1202
+20	35914	0.2	1	34741 1173
+21	37367	0.2	1	36146 1221
+22	37786	0.2	1	36493 1293
+23	36119	0.2	1	34927 1192
+24	35696	0.2	1	34562 1134
+25	34494	0.2	1	33363 1131
+26	33781	0.2	1	32677 1104
+27	34645	0.2	1	33522 1123
+28	36586	0.2	1	35400 1186
+29	40277	0.2	1	39034 1243
+30	42343	0.2	1	40965 1378
+31	42924	0.2	1	41620 1304
+32	40443	0.2	1	39139 1304
+33	35857	0.2	1	34741 1116
+34	32522	0.2	1	31501 1021
+35	28354	0.2	1	27437 917
+36	24725	0.2	1	23899 826
+37	20139	0.2	1	19487 652
+38	16683	0.2	1	16110 573
+39	12620	0.2	1	12191 429
+40	6482	0.2	1	6254 228
+41	3204	0.2	1	3075 129
+42	2210	0.2	1	2080 130
+43	1591	0.2	1	1525 66
+44	1221	0.2	1	1163 58
+45	1439	0.2	1	1383 56
+46	1741	0.2	1	1662 79
+47	1705	0.2	1	1585 120
+48	1194	0.2	1	1122 72
+49	535	0.2	1	344 191
+50	81	0.2	1	43 38
+51	63	0.2	1	37 26
+52	130	0.2	1	34 96
+53	49	0.2	1	33 16
+54	87	0.2	1	23 64
+55	50	0.2	1	21 29
+56	51	0.2	1	33 18
+57	89	0.2	1	25 64
+58	25	0.2	1	12 13
+59	140	0.2	1	16 124
+60	29	0.2	1	12 17
+61	34	0.2	1	8 26
+62	66	0.2	1	3 63
+63	14	0.2	1	1 13
+64	12	0.2	1	0 12
+65	27	0.2	1	2 25
+66	26	0.2	1	3 23
+67	48	0.2	1	1 47
+68	8	0.2	1	0 8
+69	7	0.2	1	2 5
+70	2	0.2	1	1 1
+71	7	0.2	1	0 7
+72	69	0.2	1	5 64
+73	9	0.2	1	0 9
+74	25	0.2	1	3 22
+75	154	0.2	1	148 6
+
+Task has finished (270 seconds).
+Task has finished (9 seconds).
+Task has finished (488 seconds).
+Task has finished (14 seconds).
+Task has finished (136 seconds).
+Task has finished (77 seconds).
+Task has finished (248 seconds).
+Task has finished (150 seconds).
+Task has finished (18 seconds).
+Task has finished (16 seconds).
+Task has finished (8 seconds).
+Task has finished (6 seconds).
+
+== Done do_align()
+Task has finished (345 seconds).
+
+== Done call_peaks()
+Task has finished (1 seconds).
+
+== Done naive_overlap()
+species_ataqc: hg38
+samtools view -c -F 1804 -f 2 -q 30 /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R1.trim.PE2SE.bam
+samtools idxstats /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R1.trim.PE2SE.bam 2> /dev/null | awk '{sum += $3+$4} END {print sum}'
+samtools idxstats /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R1.trim.PE2SE.nodup.bam 2> /dev/null | awk '{sum += $3+$4} END {print sum}'
+samtools idxstats /oasis/tscc/scratch/zhc268/outputs/JYH_481/align/rep1/JYH_481_R1.trim.PE2SE.bam 2> /dev/null | awk '{sum += $3+$4} END {print sum}'
+Run time: 0:07:49
+Task has finished (476 seconds).
+
+== Done ataqc()
+Task has finished (1 seconds).
+Task has finished (2 seconds).
+
+== Done filter_peak_and_convert_to_bigbed()
+
+== Done report()
+running fastqc /projects/ps-epigen/seqdata/JYH_481_R1.fastq.gz ...
+Analysis complete for JYH_481_R1.fastq.gz
+running fastscreen  ...
+running fastqc /projects/ps-epigen/seqdata/JYH_481_R2.fastq.gz ...
+Analysis complete for JYH_481_R2.fastq.gz
+running fastscreen  ...
+JYH_481_R2.trim.fastq.gz
+       32768   0%    0.00kB/s    0:00:00   157332110 100%  215.85MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 157351403 bytes  received 31 bytes  104900956.00 bytes/sec
+total size is 157332110  speedup is 1.00
+JYH_481_R1.trim.fastq.gz
+       32768   0%    0.00kB/s    0:00:00   155030269 100%  222.95MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 155049282 bytes  received 31 bytes  103366208.67 bytes/sec
+total size is 155030269  speedup is 1.00
+JYH_481_R1.trim.PE2SE.bam.bai
+       32768   0%    0.00kB/s    0:00:00     4793768 100%  126.12MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 4794445 bytes  received 31 bytes  9588952.00 bytes/sec
+total size is 4793768  speedup is 1.00
+JYH_481_R1.trim.PE2SE.bam
+       32768   0%    0.00kB/s    0:00:00   233078784  68%  222.25MB/s    0:00:00   340247949 100%  224.23MB/s    0:00:01 (xfer#1, to-check=0/1)
+
+sent 340289571 bytes  received 31 bytes  97225600.57 bytes/sec
+total size is 340247949  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.bam.bai
+       32768   0%    0.00kB/s    0:00:00     5516528 100%  193.69MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 5517299 bytes  received 31 bytes  11034660.00 bytes/sec
+total size is 5516528  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.bam.meta
+         199 100%    0.00kB/s    0:00:00         199 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 299 bytes  received 31 bytes  660.00 bytes/sec
+total size is 199  speedup is 0.60
+JYH_481_R1.trim.PE2SE.nodup.bam
+       32768   0%    0.00kB/s    0:00:00   234099735 100%  226.39MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 234128407 bytes  received 31 bytes  93651375.20 bytes/sec
+total size is 234099735  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.bedpe.gz
+       32768   0%    0.00kB/s    0:00:00    48346562 100%  219.41MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 48352563 bytes  received 31 bytes  32235062.67 bytes/sec
+total size is 48346562  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.tagAlign.gz
+       32768   0%    0.00kB/s    0:00:00    35140346 100%  179.04MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 35144742 bytes  received 31 bytes  70289546.00 bytes/sec
+total size is 35140346  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.25M.tagAlign.gz
+       32768   0%    0.00kB/s    0:00:00    19675819 100%  210.48MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 19678327 bytes  received 31 bytes  39356716.00 bytes/sec
+total size is 19675819  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tagAlign.gz
+       32768   0%    0.00kB/s    0:00:00    33404585 100%  213.60MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 33408765 bytes  received 31 bytes  22272530.67 bytes/sec
+total size is 33404585  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.narrowPeak.hammock.gz
+       32768   1%    0.00kB/s    0:00:00     2808813 100%  189.10MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 2809273 bytes  received 31 bytes  5618608.00 bytes/sec
+total size is 2808813  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.filt.narrowPeak.gz
+       32768   1%    0.00kB/s    0:00:00     1809226 100%  169.42MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 1809563 bytes  received 31 bytes  3619188.00 bytes/sec
+total size is 1809226  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.filt.narrowPeak.gz.meta
+         243 100%    0.00kB/s    0:00:00         243 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 365 bytes  received 31 bytes  792.00 bytes/sec
+total size is 243  speedup is 0.61
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.500K.pval0.01.narrowPeak.gz
+       32768   1%    0.00kB/s    0:00:00     1825942 100%  190.01MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 1826288 bytes  received 31 bytes  3652638.00 bytes/sec
+total size is 1825942  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.narrowPeak.gz
+       32768   1%    0.00kB/s    0:00:00     1819001 100%  189.28MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 1819333 bytes  received 31 bytes  3638728.00 bytes/sec
+total size is 1819001  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.narrowPeak.hammock.gz.tbi
+       32768   6%    0.00kB/s    0:00:00      536127 100%  120.01MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 536315 bytes  received 31 bytes  1072692.00 bytes/sec
+total size is 536127  speedup is 1.00
+JYH_481_number_of_peaks.txt
+          12 100%    0.00kB/s    0:00:00          12 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 103 bytes  received 31 bytes  268.00 bytes/sec
+total size is 12  speedup is 0.09
+JYH_481_R1.trim.PE2SE.flagstat.qc
+         425 100%    0.00kB/s    0:00:00         425 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 522 bytes  received 31 bytes  1106.00 bytes/sec
+total size is 425  speedup is 0.77
+JYH_481_R1.trim.PE2SE.align.log
+         620 100%    0.00kB/s    0:00:00         620 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 715 bytes  received 31 bytes  1492.00 bytes/sec
+total size is 620  speedup is 0.83
+JYH_481_R1.trim.PE2SE_tss-enrich.txt
+       10000 100%    0.00kB/s    0:00:00       10000 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 10100 bytes  received 31 bytes  20262.00 bytes/sec
+total size is 10000  speedup is 0.99
+JYH_481_R1.trim.PE2SE_gcPlot.pdf
+        9281 100%    0.00kB/s    0:00:00        9281 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 9377 bytes  received 31 bytes  18816.00 bytes/sec
+total size is 9281  speedup is 0.99
+JYH_481_R1.trim.PE2SE_qc.txt
+        1431 100%    0.00kB/s    0:00:00        1431 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 1523 bytes  received 31 bytes  3108.00 bytes/sec
+total size is 1431  speedup is 0.92
+JYH_481_R1.trim.PE2SE.nodup.flagstat.qc
+         417 100%    0.00kB/s    0:00:00         417 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 520 bytes  received 31 bytes  1102.00 bytes/sec
+total size is 417  speedup is 0.76
+JYH_481_R1.trim.PE2SE_gcSummary.txt
+        1377 100%    0.00kB/s    0:00:00        1377 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 1476 bytes  received 31 bytes  3014.00 bytes/sec
+total size is 1377  speedup is 0.91
+JYH_481_R2.adapter.txt
+         416 100%    0.00kB/s    0:00:00         416 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 502 bytes  received 31 bytes  1066.00 bytes/sec
+total size is 416  speedup is 0.78
+JYH_481_R1.trim.PE2SE.nodup.pbc.qc
+          58 100%    0.00kB/s    0:00:00          58 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 156 bytes  received 31 bytes  374.00 bytes/sec
+total size is 58  speedup is 0.31
+JYH_481_R1.trim.PE2SE.log
+        4109 100%    0.00kB/s    0:00:00        4109 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 4198 bytes  received 31 bytes  8458.00 bytes/sec
+total size is 4109  speedup is 0.97
+JYH_481_R1.trim.PE2SE.inserts.hist_data.log
+        6905 100%    0.00kB/s    0:00:00        6905 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 7012 bytes  received 31 bytes  14086.00 bytes/sec
+total size is 6905  speedup is 0.98
+JYH_481_R1.trim.PE2SE_tss-enrich.png
+       31350 100%    0.00kB/s    0:00:00       31350 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 31450 bytes  received 31 bytes  62962.00 bytes/sec
+total size is 31350  speedup is 1.00
+JYH_481_R1.trim.PE2SE.dup.qc
+        2981 100%    0.00kB/s    0:00:00        2981 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 3073 bytes  received 31 bytes  6208.00 bytes/sec
+total size is 2981  speedup is 0.96
+JYH_481_R1.adapter.txt
+         377 100%    0.00kB/s    0:00:00         377 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 463 bytes  received 31 bytes  988.00 bytes/sec
+total size is 377  speedup is 0.76
+JYH_481_R1.trim.PE2SE.inserts.hist_graph.pdf
+       16184 100%    0.00kB/s    0:00:00       16184 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 16292 bytes  received 31 bytes  32646.00 bytes/sec
+total size is 16184  speedup is 0.99
+JYH_481_R1.trim.read_length.txt
+           3 100%    0.00kB/s    0:00:00           3 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 98 bytes  received 31 bytes  258.00 bytes/sec
+total size is 3  speedup is 0.02
+JYH_481_R1.trim.PE2SE_gc.txt
+        6526 100%    0.00kB/s    0:00:00        6526 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 6618 bytes  received 31 bytes  13298.00 bytes/sec
+total size is 6526  speedup is 0.98
+JYH_481_R1.trim.PE2SE_large_tss-enrich.png
+       32768  42%    0.00kB/s    0:00:00       76925 100%   42.11MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 77039 bytes  received 31 bytes  154140.00 bytes/sec
+total size is 76925  speedup is 1.00
+JYH_481_R1.trim.PE2SE_qc.html
+       32768  14%    0.00kB/s    0:00:00      230022 100%   94.06MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 230143 bytes  received 31 bytes  460348.00 bytes/sec
+total size is 230022  speedup is 1.00
+
+sent 54 bytes  received 12 bytes  132.00 bytes/sec
+total size is 425  speedup is 6.44
+
+sent 60 bytes  received 12 bytes  144.00 bytes/sec
+total size is 417  speedup is 5.79
+
+sent 55 bytes  received 12 bytes  134.00 bytes/sec
+total size is 58  speedup is 0.87
+
+sent 49 bytes  received 12 bytes  122.00 bytes/sec
+total size is 2981  speedup is 48.87
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.pval.signal.bigwig
+       32768   0%    0.00kB/s    0:00:00    55169205 100%  221.87MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 55176055 bytes  received 31 bytes  110352172.00 bytes/sec
+total size is 55169205  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.pval.signal.bigwig.meta
+         243 100%    0.00kB/s    0:00:00         243 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 365 bytes  received 31 bytes  792.00 bytes/sec
+total size is 243  speedup is 0.61
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.pileup.signal.bigwig
+       32768   0%    0.00kB/s    0:00:00    29664520 100%  219.06MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 29668260 bytes  received 31 bytes  59336582.00 bytes/sec
+total size is 29664520  speedup is 1.00
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.fc.signal.bigwig.meta
+         239 100%    0.00kB/s    0:00:00         239 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 359 bytes  received 31 bytes  780.00 bytes/sec
+total size is 239  speedup is 0.61
+JYH_481_R1.trim.PE2SE.nodup.tn5.pf.fc.signal.bigwig
+       32768   0%    0.00kB/s    0:00:00    36937893 100%  221.36MB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 36942517 bytes  received 31 bytes  73885096.00 bytes/sec
+total size is 36937893  speedup is 1.00
+JYH_481_tracks.json
+         799 100%    0.00kB/s    0:00:00         799 100%    0.00kB/s    0:00:00 (xfer#1, to-check=0/1)
+
+sent 882 bytes  received 31 bytes  1826.00 bytes/sec
+total size is 799  speedup is 0.88
+ENCODE_summary.json
+
+sent 7907 bytes  received 31 bytes  15876.00 bytes/sec
+total size is 7824  speedup is 0.99
+sending incremental file list
+JYH_481_report.html
+
+sent 18583 bytes  received 31 bytes  37228.00 bytes/sec
+total size is 18498  speedup is 0.99
+sending incremental file list
+report/JYH_481_workflow.dot
+report/JYH_481_workflow.svg
+report/jquery.treetable.css
+report/jquery.treetable.js
+report/jquery.treetable.theme.default.css
+
+sent 70680 bytes  received 108 bytes  141576.00 bytes/sec
+total size is 70281  speedup is 0.99
+Nodes:        tscc-0-44
