@@ -1,0 +1,50 @@
+#!/bin/bash
+#PBS -q condo
+#PBS -N atac
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=08:00:00
+#PBS -V
+#PBS -m abe
+#PBS -A epigen-group
+
+source activate bds_atac
+WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
+FASTQDIR="/projects/ps-epigen/seqdata/"
+
+# chipseq or not
+[[ "$chipseq" = true ]] &&  c="-type chip-seq"
+
+
+# select libs 
+samplenames=(`cat $samples`)
+INPREFIX=${samplenames[${PBS_ARRAYID}*2]} #index start from 0
+GENOME=${samplenames[${PBS_ARRAYID}*2+1]}
+OUTDIR="${WORKDIR}${INPREFIX}"
+mkdir -p $OUTDIR
+
+
+fastq1="${FASTQDIR}/${INPREFIX}_R1.fastq.bz2"
+fastq2="${FASTQDIR}/${INPREFIX}_R2.fastq.bz2"
+
+[[ ! -f $fastq1 ]] && { echo "fastq1 not found"; exit 0; }
+[[ ! -f $fastq2 ]] && { echo "fastq2 not found"; exit 0; } 
+
+
+# run pipeline
+bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
+-fastq1_1 "$fastq1" \
+-fastq1_2 "$fastq2" |
+-true_rep -no_idr  -no_par \
+-out_dir $OUTDIR -trimmed_fastq $c
+
+wait 
+
+# run fastqc & fastq_screen & transfer results
+runFastQC_screen_bz2.sh $INPREFIX
+results_transfer.sh $INPREFIX $(whoami)
+
+
+#eg: qsub  -t 0-16 -v samples="/home/zhc268/data/logs/run_20171130.txt"  runPipeline.pbs
+
+
+
