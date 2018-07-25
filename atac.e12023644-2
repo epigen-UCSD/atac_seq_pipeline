@@ -1,0 +1,856 @@
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx728M -XX:ParallelGCThreads=1
+00:01:03.491	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:02:04.503	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:03:05.515	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:04:06.527	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:05:07.538	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:06:08.548	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:07:09.559	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:08:10.569	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:09:11.581	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:10:12.592	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:11:13.603	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:12:14.613	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:13:15.624	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:14:16.635	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:15:17.647	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:16:18.659	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:17:19.668	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:18:20.680	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:19:21.690	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:20:22.703	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+[bam_sort_core] merging from 11 files and 1 in-memory blocks...
+00:21:23.717	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:22:24.736	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:23:25.757	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:24:26.776	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:25:27.794	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:26:28.812	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:27:29.830	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:28:30.849	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:29:31.867	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:30:32.886	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:31:33.905	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:32:34.924	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:33:35.943	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:34:36.964	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:35:37.983	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:36:39.000	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:37:40.018	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:38:41.037	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:39:42.055	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:40:43.072	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:41:44.087	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:42:45.105	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:43:46.123	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 1	Failed: 0
+		| PID  | Task state        | Task name       | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 7723 | running (RUNNING) | bowtie2_PE rep1 |              | bowtie2    -X2000 --mm --local --threads 16 -x /projects/ps-epigen/GENOME/hg38/bowtie2_index/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta; -1 /projects/ps-epigen/seqdata/JYH_70_R1.fastq.bz2 -2 /projects/ps-epigen/seqdata/JYH_70_R2.fastq.bz2 2>/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JY | 
+
+00:44:47.152	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 2	Failed: 0
+		| PID  | Task state        | Task name         | Dependencies | Task definition                                                                                                                                                                                                                                                                                     | 
+		| ---- | ----------------- | ----------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | 
+		| 9266 | running (RUNNING) | flagstat_bam rep1 |              | sambamba flagstat -t 1 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam > /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JYH_70_R1.fastq.bz2.PE2SE.flagstat.qc; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sleep 0 | 
+
+00:45:48.179	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:46:49.192	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:47:50.204	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:48:51.214	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:49:52.224	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:50:53.234	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:51:54.248	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:52:55.260	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+00:53:56.271	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 3	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9305 | running (RUNNING) | dedup_bam_PE_1 rep1 |              | if [[ 0 > 0 ]]; then; samtools view -F 524 -f 2 -u /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.bam |; sambamba sort -t 16 -n /dev/stdin -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam;; samtools view -h /oasis/tscc/scra | 
+
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx12G -XX:ParallelGCThreads=1 -Djava.io.tmpdir=/state/partition1/zhc268/12023644[2].tscc-mgr.local
+23:55:40.422 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/projects/ps-epigen/software/miniconda3/envs/bds_atac/share/picard-2.18.2-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+[Fri Jul 20 23:55:40 PDT 2018] MarkDuplicates INPUT=[/oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.filt.bam] OUTPUT=/oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam METRICS_FILE=/oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1/JYH_70_R1.fastq.bz2.PE2SE.dup.qc REMOVE_DUPLICATES=false ASSUME_SORTED=true VALIDATION_STRINGENCY=LENIENT    MAX_SEQUENCES_FOR_DISK_READ_ENDS_MAP=50000 MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=8000 SORTING_COLLECTION_SIZE_RATIO=0.25 TAG_DUPLICATE_SET_MEMBERS=false REMOVE_SEQUENCING_DUPLICATES=false TAGGING_POLICY=DontTag CLEAR_DT=true ADD_PG_TAG_TO_READS=true DUPLICATE_SCORING_STRATEGY=SUM_OF_BASE_QUALITIES PROGRAM_RECORD_ID=MarkDuplicates PROGRAM_GROUP_NAME=MarkDuplicates READ_NAME_REGEX=<optimized capture of last three ':' separated fields as numeric values> OPTICAL_DUPLICATE_PIXEL_DISTANCE=100 MAX_OPTICAL_DUPLICATE_SET_SIZE=300000 VERBOSITY=INFO QUIET=false COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json USE_JDK_DEFLATER=false USE_JDK_INFLATER=false
+[Fri Jul 20 23:55:40 PDT 2018] Executing as zhc268@tscc-1-40.sdsc.edu on Linux 2.6.32-696.10.3.el6.x86_64 amd64; OpenJDK 64-Bit Server VM 1.8.0_121-b15; Deflater: Intel; Inflater: Intel; Provider GCS is not available; Picard version: 2.18.2-SNAPSHOT
+INFO	2018-07-20 23:55:40	MarkDuplicates	Start of doWork freeMemory: 246893176; totalMemory: 257425408; maxMemory: 11453595648
+INFO	2018-07-20 23:55:40	MarkDuplicates	Reading input file and constructing read end information.
+INFO	2018-07-20 23:55:40	MarkDuplicates	Will retain up to 41498534 data points before spilling to disk.
+INFO	2018-07-20 23:55:50	MarkDuplicates	Read     1,000,000 records.  Elapsed time: 00:00:09s.  Time for last 1,000,000:    9s.  Last read position: chr1:180,631,876
+INFO	2018-07-20 23:55:50	MarkDuplicates	Tracking 88 as yet unmatched pairs. 88 records in RAM.
+INFO	2018-07-20 23:55:56	MarkDuplicates	Read     2,000,000 records.  Elapsed time: 00:00:15s.  Time for last 1,000,000:    6s.  Last read position: chr2:123,930,725
+INFO	2018-07-20 23:55:56	MarkDuplicates	Tracking 0 as yet unmatched pairs. 0 records in RAM.
+INFO	2018-07-20 23:56:01	MarkDuplicates	Read     3,000,000 records.  Elapsed time: 00:00:20s.  Time for last 1,000,000:    4s.  Last read position: chr3:70,822,536
+INFO	2018-07-20 23:56:01	MarkDuplicates	Tracking 0 as yet unmatched pairs. 0 records in RAM.
+INFO	2018-07-20 23:56:07	MarkDuplicates	Read     4,000,000 records.  Elapsed time: 00:00:26s.  Time for last 1,000,000:    5s.  Last read position: chr4:100,097,416
+INFO	2018-07-20 23:56:07	MarkDuplicates	Tracking 2 as yet unmatched pairs. 2 records in RAM.
+INFO	2018-07-20 23:56:11	MarkDuplicates	Read     5,000,000 records.  Elapsed time: 00:00:30s.  Time for last 1,000,000:    4s.  Last read position: chr5:147,848,859
+INFO	2018-07-20 23:56:11	MarkDuplicates	Tracking 0 as yet unmatched pairs. 0 records in RAM.
+INFO	2018-07-20 23:56:17	MarkDuplicates	Read     6,000,000 records.  Elapsed time: 00:00:36s.  Time for last 1,000,000:    5s.  Last read position: chr6:151,679,524
+INFO	2018-07-20 23:56:17	MarkDuplicates	Tracking 4 as yet unmatched pairs. 4 records in RAM.
+INFO	2018-07-20 23:56:21	MarkDuplicates	Read     7,000,000 records.  Elapsed time: 00:00:40s.  Time for last 1,000,000:    4s.  Last read position: chr8:26,382,934
+INFO	2018-07-20 23:56:21	MarkDuplicates	Tracking 62 as yet unmatched pairs. 62 records in RAM.
+00:54:57.300	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+INFO	2018-07-20 23:56:26	MarkDuplicates	Read     8,000,000 records.  Elapsed time: 00:00:45s.  Time for last 1,000,000:    4s.  Last read position: chr9:113,409,955
+INFO	2018-07-20 23:56:26	MarkDuplicates	Tracking 6 as yet unmatched pairs. 6 records in RAM.
+INFO	2018-07-20 23:56:30	MarkDuplicates	Read     9,000,000 records.  Elapsed time: 00:00:49s.  Time for last 1,000,000:    3s.  Last read position: chr11:13,668,258
+INFO	2018-07-20 23:56:30	MarkDuplicates	Tracking 82 as yet unmatched pairs. 82 records in RAM.
+INFO	2018-07-20 23:56:36	MarkDuplicates	Read    10,000,000 records.  Elapsed time: 00:00:55s.  Time for last 1,000,000:    5s.  Last read position: chr12:57,752,463
+INFO	2018-07-20 23:56:36	MarkDuplicates	Tracking 186 as yet unmatched pairs. 186 records in RAM.
+INFO	2018-07-20 23:56:40	MarkDuplicates	Read    11,000,000 records.  Elapsed time: 00:00:59s.  Time for last 1,000,000:    3s.  Last read position: chr14:58,430,981
+INFO	2018-07-20 23:56:40	MarkDuplicates	Tracking 0 as yet unmatched pairs. 0 records in RAM.
+INFO	2018-07-20 23:56:44	MarkDuplicates	Read    12,000,000 records.  Elapsed time: 00:01:03s.  Time for last 1,000,000:    4s.  Last read position: chr16:34,717,912
+INFO	2018-07-20 23:56:44	MarkDuplicates	Tracking 2 as yet unmatched pairs. 2 records in RAM.
+INFO	2018-07-20 23:56:48	MarkDuplicates	Read    13,000,000 records.  Elapsed time: 00:01:08s.  Time for last 1,000,000:    4s.  Last read position: chr18:12,335,681
+INFO	2018-07-20 23:56:48	MarkDuplicates	Tracking 2 as yet unmatched pairs. 2 records in RAM.
+INFO	2018-07-20 23:56:55	MarkDuplicates	Read    14,000,000 records.  Elapsed time: 00:01:15s.  Time for last 1,000,000:    7s.  Last read position: chr20:5,587,323
+INFO	2018-07-20 23:56:55	MarkDuplicates	Tracking 2 as yet unmatched pairs. 2 records in RAM.
+INFO	2018-07-20 23:56:59	MarkDuplicates	Read    15,000,000 records.  Elapsed time: 00:01:18s.  Time for last 1,000,000:    3s.  Last read position: chrX:57,240,822
+INFO	2018-07-20 23:56:59	MarkDuplicates	Tracking 0 as yet unmatched pairs. 0 records in RAM.
+INFO	2018-07-20 23:57:03	MarkDuplicates	Read    16,000,000 records.  Elapsed time: 00:01:22s.  Time for last 1,000,000:    4s.  Last read position: chrM:725
+INFO	2018-07-20 23:57:03	MarkDuplicates	Tracking 39174 as yet unmatched pairs. 39174 records in RAM.
+INFO	2018-07-20 23:57:07	MarkDuplicates	Read    17,000,000 records.  Elapsed time: 00:01:27s.  Time for last 1,000,000:    4s.  Last read position: chrM:2,590
+INFO	2018-07-20 23:57:07	MarkDuplicates	Tracking 37922 as yet unmatched pairs. 37922 records in RAM.
+INFO	2018-07-20 23:57:12	MarkDuplicates	Read    18,000,000 records.  Elapsed time: 00:01:31s.  Time for last 1,000,000:    4s.  Last read position: chrM:3,688
+INFO	2018-07-20 23:57:12	MarkDuplicates	Tracking 74110 as yet unmatched pairs. 74110 records in RAM.
+INFO	2018-07-20 23:57:19	MarkDuplicates	Read    19,000,000 records.  Elapsed time: 00:01:38s.  Time for last 1,000,000:    7s.  Last read position: chrM:6,355
+INFO	2018-07-20 23:57:19	MarkDuplicates	Tracking 46688 as yet unmatched pairs. 46688 records in RAM.
+INFO	2018-07-20 23:57:23	MarkDuplicates	Read    20,000,000 records.  Elapsed time: 00:01:42s.  Time for last 1,000,000:    3s.  Last read position: chrM:9,235
+INFO	2018-07-20 23:57:23	MarkDuplicates	Tracking 28752 as yet unmatched pairs. 28752 records in RAM.
+00:55:58.316	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+INFO	2018-07-20 23:57:27	MarkDuplicates	Read    21,000,000 records.  Elapsed time: 00:01:46s.  Time for last 1,000,000:    3s.  Last read position: chrM:10,708
+INFO	2018-07-20 23:57:27	MarkDuplicates	Tracking 41898 as yet unmatched pairs. 41898 records in RAM.
+INFO	2018-07-20 23:57:31	MarkDuplicates	Read    22,000,000 records.  Elapsed time: 00:01:50s.  Time for last 1,000,000:    4s.  Last read position: chrM:12,042
+INFO	2018-07-20 23:57:31	MarkDuplicates	Tracking 48824 as yet unmatched pairs. 48824 records in RAM.
+INFO	2018-07-20 23:57:35	MarkDuplicates	Read    23,000,000 records.  Elapsed time: 00:01:54s.  Time for last 1,000,000:    4s.  Last read position: chrM:13,521
+INFO	2018-07-20 23:57:35	MarkDuplicates	Tracking 43156 as yet unmatched pairs. 43156 records in RAM.
+INFO	2018-07-20 23:57:38	MarkDuplicates	Read    24,000,000 records.  Elapsed time: 00:01:58s.  Time for last 1,000,000:    3s.  Last read position: chrM:14,847
+INFO	2018-07-20 23:57:38	MarkDuplicates	Tracking 53580 as yet unmatched pairs. 53580 records in RAM.
+INFO	2018-07-20 23:57:47	MarkDuplicates	Read    25,000,000 records.  Elapsed time: 00:02:06s.  Time for last 1,000,000:    8s.  Last read position: chrM:15,835
+INFO	2018-07-20 23:57:47	MarkDuplicates	Tracking 86054 as yet unmatched pairs. 86054 records in RAM.
+INFO	2018-07-20 23:57:51	MarkDuplicates	Read    26,000,000 records.  Elapsed time: 00:02:10s.  Time for last 1,000,000:    4s.  Last read position: chrEBV:5,213
+INFO	2018-07-20 23:57:51	MarkDuplicates	Tracking 1188 as yet unmatched pairs. 1188 records in RAM.
+INFO	2018-07-20 23:57:55	MarkDuplicates	Read    27,000,000 records.  Elapsed time: 00:02:14s.  Time for last 1,000,000:    4s.  Last read position: chrEBV:82,665
+INFO	2018-07-20 23:57:55	MarkDuplicates	Tracking 1152 as yet unmatched pairs. 1152 records in RAM.
+INFO	2018-07-20 23:57:58	MarkDuplicates	Read    28,000,000 records.  Elapsed time: 00:02:18s.  Time for last 1,000,000:    3s.  Last read position: chrEBV:157,528
+INFO	2018-07-20 23:57:58	MarkDuplicates	Tracking 1318 as yet unmatched pairs. 1318 records in RAM.
+INFO	2018-07-20 23:57:59	MarkDuplicates	Read 28252720 records. 0 pairs never matched.
+INFO	2018-07-20 23:58:05	MarkDuplicates	After buildSortedReadEndLists freeMemory: 4252640920; totalMemory: 7712276480; maxMemory: 11453595648
+INFO	2018-07-20 23:58:05	MarkDuplicates	Will retain up to 357924864 duplicate indices before spilling to disk.
+INFO	2018-07-20 23:58:05	MarkDuplicates	Traversing read pair information and detecting duplicates.
+INFO	2018-07-20 23:58:09	MarkDuplicates	Traversing fragment information and detecting duplicates.
+INFO	2018-07-20 23:58:11	MarkDuplicates	Sorting list of duplicate records.
+INFO	2018-07-20 23:58:14	MarkDuplicates	After generateDuplicateIndexes freeMemory: 7630843664; totalMemory: 10570170368; maxMemory: 11453595648
+INFO	2018-07-20 23:58:14	MarkDuplicates	Marking 11757130 records as duplicates.
+INFO	2018-07-20 23:58:14	MarkDuplicates	Found 244459 optical duplicate clusters.
+INFO	2018-07-20 23:58:14	MarkDuplicates	Reads are assumed to be ordered by: coordinate
+00:56:59.330	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+00:58:00.340	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+INFO	2018-07-20 23:59:37	MarkDuplicates	Written    10,000,000 records.  Elapsed time: 00:01:23s.  Time for last 10,000,000:   83s.  Last read position: chr12:57,752,463
+00:59:01.350	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+INFO	2018-07-21 00:00:55	MarkDuplicates	Written    20,000,000 records.  Elapsed time: 00:02:41s.  Time for last 10,000,000:   78s.  Last read position: chrM:9,235
+01:00:02.361	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 4	Failed: 0
+		| PID  | Task state        | Task name               | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9509 | running (RUNNING) | markdup_bam_picard rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; if [ -f "${PICARDROOT}/picard.jar" ]; then; MARKDUP="${PICARDROOT}/picard.jar MarkDuplicates";; elif [ -f "${PICARDROOT}/MarkDuplicates.jar" ]; then; MARKDUP="${PICARDROOT}/MarkDuplicates.jar";; elif [ $(which picard 2> /dev/null | wc -l || echo) == "1" ]; then; MARK | 
+
+INFO	2018-07-21 00:01:57	MarkDuplicates	Before output close freeMemory: 10354654216; totalMemory: 10434904064; maxMemory: 11453595648
+INFO	2018-07-21 00:01:57	MarkDuplicates	After output close freeMemory: 10520329224; totalMemory: 10600579072; maxMemory: 11453595648
+[Sat Jul 21 00:01:57 PDT 2018] picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 6.29 minutes.
+Runtime.totalMemory()=10600579072
+01:01:03.388	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:02:04.403	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:03:05.417	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:04:06.431	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:05:07.445	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:06:08.459	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:07:09.474	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:08:10.488	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:09:11.502	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:10:12.512	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:11:13.530	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:12:14.548	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 5	Failed: 0
+		| PID  | Task state        | Task name           | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ---- | ----------------- | ------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 9849 | running (RUNNING) | dedup_bam_PE_2 rep1 |              | samtools view -h -F 1804 -f 2 /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.dupmark.bam | awk  ($3 != "chrM")  | samtools view -@ 8 -Sb -  > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam; sambamba index -t 16 /oasis/tscc/scr | 
+
+01:13:15.577	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:14:16.588	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:15:17.599	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:16:18.611	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:17:19.621	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:18:20.632	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 6	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10392 | running (RUNNING) | nmsrt_bam rep1 |              | sambamba sort -t 1 -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bam -o /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished (${TASKTIME} seconds)."; sle | 
+
+01:19:21.660	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 7	Failed: 0
+		| PID   | Task state        | Task name         | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ----------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10649 | running (RUNNING) | bam_to_bedpe rep1 |              | bedtools bamtobed -bedpe -mate1 -i /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.nmsrt.bam | gzip -nc > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bedpe.gz; TASKTIME=$[$(date +%s)-${STARTTIME}]; echo "Task has finished  | 
+
+01:20:22.686	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 8	Failed: 0
+		| PID   | Task state        | Task name         | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ----------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10779 | running (RUNNING) | bedpe_to_tag rep1 |              | zcat /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.bedpe.gz | awk  BEGIN{OFS=" t"}{printf "%s t%s t%s tN t1000 t%s n%s t%s t%s tN t1000 t%s n",$1,$2,$3,$9,$4,$5,$6,$10}  |; gzip -nc > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2S | 
+
+01:21:23.712	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 9	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10824 | running (RUNNING) | shift_tag rep1 |              | zcat /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tagAlign.gz | awk -F $  t   BEGIN {OFS = FS}{ if ($6 == "+") {$2 = $2 + 4} else if ($6 == "-") {$3 = $3 - 5} print $0}  | gzip -nc > /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2S | 
+
+Loading required package: caTools
+01:22:24.753	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 11	Failed: 0
+		| PID   | Task state        | Task name | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | --------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10905 | running (RUNNING) | xcor rep1 |              | if [[ $(which run_spp_nodups.R 2> /dev/null | wc -l || echo) == "1" ]]; then RUN_SPP=$(which run_spp_nodups.R);; else RUN_SPP=$(which run_spp.R);; fi; Rscript ${RUN_SPP} -rf; -c=/oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.25M.tagAlign.gz -p=16; -filtchr=chrM  | 
+
+01:23:25.766	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 11	Failed: 0
+		| PID   | Task state        | Task name | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | --------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 10905 | running (RUNNING) | xcor rep1 |              | if [[ $(which run_spp_nodups.R 2> /dev/null | wc -l || echo) == "1" ]]; then RUN_SPP=$(which run_spp_nodups.R);; else RUN_SPP=$(which run_spp.R);; fi; Rscript ${RUN_SPP} -rf; -c=/oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.25M.tagAlign.gz -p=16; -filtchr=chrM  | 
+
+01:24:26.801	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:26:08: 
+# Command line: callpeak -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf -g hs -p 0.01 --nomodel --shift -75 --extsize 150 -B --SPMR --keep-dup all --call-summits
+# ARGUMENTS LIST:
+# name = /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf
+# format = BED
+# ChIP-seq file = ['/oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz']
+# control file = None
+# effective genome size = 2.70e+09
+# band width = 300
+# model fold = [5, 50]
+# pvalue cutoff = 1.00e-02
+# qvalue will not be calculated and reported as -1 in the final output.
+# Larger dataset will be scaled towards smaller dataset.
+# Range for calculating regional lambda is: 10000 bps
+# Broad region calling is off
+# Paired-End mode is off
+# Searching for subpeak summits is on
+# MACS will save fragment pileup signal per million reads
+ 
+INFO  @ Sat, 21 Jul 2018 00:26:08: #1 read tag files... 
+INFO  @ Sat, 21 Jul 2018 00:26:08: #1 read treatment tags... 
+INFO  @ Sat, 21 Jul 2018 00:26:10:  1000000 
+INFO  @ Sat, 21 Jul 2018 00:26:13:  2000000 
+INFO  @ Sat, 21 Jul 2018 00:26:15:  3000000 
+INFO  @ Sat, 21 Jul 2018 00:26:17:  4000000 
+INFO  @ Sat, 21 Jul 2018 00:26:19:  5000000 
+INFO  @ Sat, 21 Jul 2018 00:26:21:  6000000 
+INFO  @ Sat, 21 Jul 2018 00:26:24:  7000000 
+INFO  @ Sat, 21 Jul 2018 00:26:26:  8000000 
+INFO  @ Sat, 21 Jul 2018 00:26:28:  9000000 
+INFO  @ Sat, 21 Jul 2018 00:26:30:  10000000 
+INFO  @ Sat, 21 Jul 2018 00:26:32:  11000000 
+INFO  @ Sat, 21 Jul 2018 00:26:35:  12000000 
+INFO  @ Sat, 21 Jul 2018 00:26:37:  13000000 
+INFO  @ Sat, 21 Jul 2018 00:26:39:  14000000 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #1 tag size is determined as 45 bps 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #1 tag size = 45 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #1  total tags in treatment: 14407368 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #1 finished! 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #2 Build Peak Model... 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #2 Skipped... 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #2 Sequencing ends will be shifted towards 5' by 75 bp(s) 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #2 Use 150 as fragment length 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #3 Call peaks... 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #3 Going to call summits inside each peak ... 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #3 Call peaks with given -log10pvalue cutoff: 2.00000 ... 
+INFO  @ Sat, 21 Jul 2018 00:26:41: #3 Pre-compute pvalue-qvalue table... 
+01:25:27.812	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:27:25: #3 In the peak calling step, the following will be performed simultaneously: 
+INFO  @ Sat, 21 Jul 2018 00:27:25: #3   Write bedGraph files for treatment pileup (after scaling if necessary)... /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_treat_pileup.bdg 
+INFO  @ Sat, 21 Jul 2018 00:27:25: #3   Write bedGraph files for control lambda (after scaling if necessary)... /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_control_lambda.bdg 
+INFO  @ Sat, 21 Jul 2018 00:27:25: #3   --SPMR is requested, so pileup will be normalized by sequencing depth in million reads. 
+INFO  @ Sat, 21 Jul 2018 00:27:25: #3 Call peaks for each chromosome... 
+01:26:28.823	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:27:29.833	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:28:30.843	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:30:14: #4 Write output xls file... /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_peaks.xls 
+INFO  @ Sat, 21 Jul 2018 00:30:16: #4 Write peak in narrowPeak format file... /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_peaks.narrowPeak 
+INFO  @ Sat, 21 Jul 2018 00:30:17: #4 Write summits bed file... /oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_summits.bed 
+INFO  @ Sat, 21 Jul 2018 00:30:17: Done! 
+01:29:31.855	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:30:32.868	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:32:29: Read and build treatment bedGraph... 
+INFO  @ Sat, 21 Jul 2018 00:32:59: Read and build control bedGraph... 
+01:31:33.881	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:33:12: Build scoreTrackII... 
+INFO  @ Sat, 21 Jul 2018 00:33:22: Calculate scores comparing treatment and control by 'FE'... 
+01:32:34.893	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:33:35.903	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:35:16: Write bedGraph of scores... 
+01:34:36.914	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:36:16: Finished 'FE'! Please check '/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_FE.bdg'! 
+01:35:37.927	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:36:38.940	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:38:41: Read and build treatment bedGraph... 
+01:37:39.954	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:39:12: Read and build control bedGraph... 
+INFO  @ Sat, 21 Jul 2018 00:39:26: Build scoreTrackII... 
+INFO  @ Sat, 21 Jul 2018 00:39:35: Values in your input bedGraph files will be multiplied by 14.407368 ... 
+01:38:40.965	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:39:41.977	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:41:34: Calculate scores comparing treatment and control by 'ppois'... 
+INFO  @ Sat, 21 Jul 2018 00:42:10: Write bedGraph of scores... 
+01:40:42.988	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:41:43.999	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+INFO  @ Sat, 21 Jul 2018 00:43:20: Finished 'ppois'! Please check '/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf_ppois.bdg'! 
+01:42:45.012	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:43:46.024	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 12	Failed: 0
+		| PID   | Task state        | Task name      | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11118 | running (RUNNING) | macs2 n/s rep1 |              | macs2 callpeak; -t /oasis/tscc/scratch/zhc268/outputs/JYH_70/align/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.tagAlign.gz -f BED -n "/oasis/tscc/scratch/zhc268/outputs/JYH_70/peak/macs2/rep1/JYH_70_R1.fastq.bz2.PE2SE.nodup.tn5.pf" -g "hs" -p 0.01; --nomodel --shift -75 --extsize 150 -B --SPMR --keep-d | 
+
+01:44:48.570	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx20G -XX:ParallelGCThreads=1 -Djava.io.tmpdir=/state/partition1/zhc268/12023644[2].tscc-mgr.local
+00:46:53.183 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/projects/ps-epigen/software/miniconda3/envs/bds_atac/share/picard-2.18.2-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+01:45:49.587	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:46:50.604	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:47:51.621	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:48:52.634	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:49:53.647	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx20G -XX:ParallelGCThreads=1 -Djava.io.tmpdir=/state/partition1/zhc268/12023644[2].tscc-mgr.local
+00:51:49.781 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/projects/ps-epigen/software/miniconda3/envs/bds_atac/share/picard-2.18.2-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+01:50:54.661	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:51:55.672	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:52:56.686	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:53:57.699	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:54:58.713	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:55:59.724	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:57:00.737	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:58:01.747	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+01:59:02.758	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+02:00:03.770	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+02:01:04.779	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+02:02:05.788	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+02:03:06.798	ExecutionerLocal 'Local[38]': Tasks [Local[38]]		Pending: 0	Running: 1	Done: 14	Failed: 0
+		| PID   | Task state        | Task name  | Dependencies | Task definition                                                                                                                                                                                                                                                                                              | 
+		| ----- | ----------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | 
+		| 11954 | running (RUNNING) | ataqc rep1 |              | if [ -d "${TMPDIR}" ]; then; fi; cd /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; /projects/ps-epigen/software/atac_dnase_pipelines/ataqc/run_ataqc_single_lib.py; --workdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outdir /oasis/tscc/scratch/zhc268/outputs/JYH_70/qc/rep1; --outprefix | 
+
+pass1 - making usageList (24 chroms): 97 millis
+pass2 - checking and writing primary data (170084 records, 10 fields): 871 millis
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx728M -XX:ParallelGCThreads=1
+Started analysis of JYH_70_R1.fastq
+Approx 5% complete for JYH_70_R1.fastq
+Approx 10% complete for JYH_70_R1.fastq
+Approx 15% complete for JYH_70_R1.fastq
+Approx 20% complete for JYH_70_R1.fastq
+Approx 25% complete for JYH_70_R1.fastq
+Approx 30% complete for JYH_70_R1.fastq
+Approx 35% complete for JYH_70_R1.fastq
+Approx 40% complete for JYH_70_R1.fastq
+Approx 45% complete for JYH_70_R1.fastq
+Approx 50% complete for JYH_70_R1.fastq
+Approx 55% complete for JYH_70_R1.fastq
+Approx 60% complete for JYH_70_R1.fastq
+Approx 65% complete for JYH_70_R1.fastq
+Approx 70% complete for JYH_70_R1.fastq
+Approx 75% complete for JYH_70_R1.fastq
+Approx 80% complete for JYH_70_R1.fastq
+Approx 85% complete for JYH_70_R1.fastq
+Approx 90% complete for JYH_70_R1.fastq
+Approx 95% complete for JYH_70_R1.fastq
+Using fastq_screen v0.11.2
+Reading configuration from '/projects/ps-epigen/software/fastq_screen_v0.11.2/fastq_screen.conf'
+Aligner (--aligner) not specified, but Bowtie2 path and index files found: mapping with Bowtie2
+Using '/projects/ps-epigen/software/miniconda3/envs/bds_atac/bin/bowtie2' as Bowtie 2 path
+Adding database Human
+Adding database Mouse
+Adding database Rat
+Adding database Cattle
+Adding database Ecoli
+Adding database Mycoplasma
+Adding database PhiX
+Adding database Vectors
+Using 16 threads for searches
+Option --subset set to 100000 reads
+Processing JYH_70_R1.fastq
+Counting sequences in JYH_70_R1.fastq
+Making reduced sequence file with ratio 195:1
+Searching JYH_70_R1.fastq_temp_subset.fastq against Human
+Searching JYH_70_R1.fastq_temp_subset.fastq against Mouse
+Searching JYH_70_R1.fastq_temp_subset.fastq against Rat
+Searching JYH_70_R1.fastq_temp_subset.fastq against Cattle
+Searching JYH_70_R1.fastq_temp_subset.fastq against Ecoli
+Searching JYH_70_R1.fastq_temp_subset.fastq against Mycoplasma
+Searching JYH_70_R1.fastq_temp_subset.fastq against PhiX
+Searching JYH_70_R1.fastq_temp_subset.fastq against Vectors
+Processing complete
+Picked up _JAVA_OPTIONS: -Xms256M -Xmx728M -XX:ParallelGCThreads=1
+Started analysis of JYH_70_R2.fastq
+Approx 5% complete for JYH_70_R2.fastq
+Approx 10% complete for JYH_70_R2.fastq
+Approx 15% complete for JYH_70_R2.fastq
+Approx 20% complete for JYH_70_R2.fastq
+Approx 25% complete for JYH_70_R2.fastq
+Approx 30% complete for JYH_70_R2.fastq
+Approx 35% complete for JYH_70_R2.fastq
+Approx 40% complete for JYH_70_R2.fastq
+Approx 45% complete for JYH_70_R2.fastq
+Approx 50% complete for JYH_70_R2.fastq
+Approx 55% complete for JYH_70_R2.fastq
+Approx 60% complete for JYH_70_R2.fastq
+Approx 65% complete for JYH_70_R2.fastq
+Approx 70% complete for JYH_70_R2.fastq
+Approx 75% complete for JYH_70_R2.fastq
+Approx 80% complete for JYH_70_R2.fastq
+Approx 85% complete for JYH_70_R2.fastq
+Approx 90% complete for JYH_70_R2.fastq
+Approx 95% complete for JYH_70_R2.fastq
+Using fastq_screen v0.11.2
+Reading configuration from '/projects/ps-epigen/software/fastq_screen_v0.11.2/fastq_screen.conf'
+Aligner (--aligner) not specified, but Bowtie2 path and index files found: mapping with Bowtie2
+Using '/projects/ps-epigen/software/miniconda3/envs/bds_atac/bin/bowtie2' as Bowtie 2 path
+Adding database Human
+Adding database Mouse
+Adding database Rat
+Adding database Cattle
+Adding database Ecoli
+Adding database Mycoplasma
+Adding database PhiX
+Adding database Vectors
+Using 16 threads for searches
+Option --subset set to 100000 reads
+Processing JYH_70_R2.fastq
+Counting sequences in JYH_70_R2.fastq
+Making reduced sequence file with ratio 195:1
+Searching JYH_70_R2.fastq_temp_subset.fastq against Human
+Searching JYH_70_R2.fastq_temp_subset.fastq against Mouse
+Searching JYH_70_R2.fastq_temp_subset.fastq against Rat
+Searching JYH_70_R2.fastq_temp_subset.fastq against Cattle
+Searching JYH_70_R2.fastq_temp_subset.fastq against Ecoli
+Searching JYH_70_R2.fastq_temp_subset.fastq against Mycoplasma
+Searching JYH_70_R2.fastq_temp_subset.fastq against PhiX
+Searching JYH_70_R2.fastq_temp_subset.fastq against Vectors
+Processing complete

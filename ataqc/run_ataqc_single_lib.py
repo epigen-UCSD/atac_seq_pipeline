@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2018-07-20 12:11:18"
+# Time-stamp: "2018-07-25 11:36:30"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -476,11 +476,12 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
 
             if mark == 2:
                 line_elems = line.strip().split('\t')
-                dup_stats['PERCENT_DUPLICATION'] = line_elems[7]
-                dup_stats['READ_PAIR_DUPLICATES'] = line_elems[5]
+                ndup_idx,pdup_idx= (5,7) if line_elems[5]==0 else (6,8)
+                dup_stats['PERCENT_DUPLICATION'] = line_elems[pdup_idx]
+                dup_stats['READ_PAIR_DUPLICATES'] = line_elems[ndup_idx]
                 dup_stats['READ_PAIRS_EXAMINED'] = line_elems[2]
                 if paired_status == 'Paired-ended':
-                    return 2*int(line_elems[5]), float(line_elems[7])
+                    return 2*int(line_elems[ndup_idx]), float(line_elems[pdup_idx])
                 else:
                     return int(line_elems[4]), float(line_elems[7])
 
