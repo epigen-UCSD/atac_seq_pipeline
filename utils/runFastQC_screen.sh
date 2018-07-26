@@ -22,6 +22,7 @@ do
     echo "running fastscreen $p ..."
     pre="${sample_prefix}_R${i}.trim"
     [[ ! -f "${FASTQDIR}${pre}.fastq.gz" ]] &&  pre=${pre/.trim/}
+    pf="${FASTQDIR}${pre}.fastq.gz"Wed Jul 25 23:20:40 PDT 2018    
     tagged_fastq="$OUTPUT_DIR/${pre}.tagged.fastq.gz"
     fastq_screen --threads 16  --outdir $OUTPUT_DIR --force --tag --subset 100000 $pf 
     fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR     # grep #FQST tag to the end and find the tag
