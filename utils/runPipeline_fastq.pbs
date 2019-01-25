@@ -7,7 +7,7 @@
 #PBS -m abe
 #PBS -A epigen-group
 
-source activate bds_atac
+#source activate bds_atac
 
 WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
 FASTQDIR="/projects/ps-epigen/seqdata/"
@@ -25,7 +25,7 @@ mkdir -p $OUTDIR
 
 fastq1="${FASTQDIR}/${INPREFIX}_R1.fastq.gz"
 fastq2="${FASTQDIR}/${INPREFIX}_R2.fastq.gz"
-
+echo $fastq1
 [[ ! -f $fastq1 ]] && { echo "fastq1 not found"; exit 0; }
 [[ ! -f $fastq2 ]] && { echo "fastq2 not found"; exit 0; } 
 
@@ -37,13 +37,18 @@ bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME 
 -out_dir $OUTDIR $c \
 #-trimmed_fastq    
 #-title $INPREFIX
-
-
 wait
+
+## addtional check
+[[ -z $(find ${OUTDIR}/qc/rep1 -name "*_qc.txt") ]]  && { echo  "pipeline interrupted"; exit 0; }
+
 
 # runFastQC & fastq_screen
 runFastQC_screen.sh  $INPREFIX
 results_transfer.sh $INPREFIX $(whoami)
+
+# add .finished.txt tag
+touch /projects/ps-epigen/outputs/libQCs/${INPREFIX}/.finished.txt
 
 # qsub -t 1-15%1 
 # use -v genome to tell which genome to run

@@ -1,0 +1,42 @@
+#!/bin/bash
+#PBS -q conda
+#PBS -N atac_SE
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=08:00:00
+#PBS -V
+#PBS -m abe
+#PBS -A epigen-group
+
+source activate bds_atac
+
+WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
+FASTQDIR="/projects/ps-epigen/seqdata/"
+
+
+# chipseq or not
+[[ "$chipseq" = true ]] &&  c="-type chip-seq"
+
+
+# select libs 
+samplenames=(`cat $samples`)
+INPREFIX=${samplenames[${PBS_ARRAYID}*2]} #index start from 0
+GENOME=${samplenames[${PBS_ARRAYID}*2+1]}
+OUTDIR="${WORKDIR}${INPREFIX}"
+mkdir -p $OUTDIR
+
+fq="${FASTQDIR}/${INPREFIX}.fastq.gz"
+
+[[ ! -f $fq ]] && { echo "fastq not found"; exit 0; }
+
+# run pipeline
+bds /projects/ps-epigen/software/atac_dnase_pipelines/atac.bds -species $GENOME -nth $PBS_NP \
+-se -fastq1 $fq \
+-true_rep -no_idr  -no_par \
+-out_dir $OUTDIR $c 
+
+# transfer results 
+runFastQC_screen_se.sh $INPREFIX 
+results_transfer.sh $INPREFIX $(whoami)
+
+# add .finished.txt tag
+touch /projects/ps-epigen/outputs/libQCs/${INPREFIX}/.finished.txt
