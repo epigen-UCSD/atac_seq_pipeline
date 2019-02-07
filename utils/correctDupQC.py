@@ -2,6 +2,7 @@
 import argparse
 import subprocess
 
+
 def get_picard_dup_stats(picard_dup_file, paired_status):
     '''
     Parse Picard's MarkDuplicates metrics file
@@ -14,75 +15,96 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
                 if 'METRICS CLASS' in line:
                     mark = 1
                 continue
-
             if mark == 2:
-                line_elems = line.strip().split('\t')
-                ndup_idx,pdup_idx= (5,7) if line_elems[5]==0 else (6,8)
-                dup_stats['PERCENT_DUPLICATION'] = line_elems[pdup_idx]
-                dup_stats['READ_PAIR_DUPLICATES'] = line_elems[ndup_idx]
-                dup_stats['READ_PAIRS_EXAMINED'] = line_elems[2]
+                values = line.strip().split('\t')
+                dup_stats = {fields[i]: values[i]
+                             for i in range(len(values))}
                 if paired_status == 'Paired-ended':
-                    return 2*int(line_elems[ndup_idx]), float(line_elems[pdup_idx])
+                    return 2*int(dup_stats['READ_PAIR_DUPLICATES']), float(dup_stats['PERCENT_DUPLICATION'])
                 else:
-                    return int(line_elems[4]), float(line_elems[7])
-
+                    return int(dup_stats['UNPAIRED_READ_DUPLICATES']), float(dup_stats['PERCENT_DUPLICATION'])
             if mark > 0:
                 mark += 1
+                fields = line.strip().split('\t')
     return None
 
+
 def parse_args():
-    ## parse arg 
-    parser = argparse.ArgumentParser(description='correct dup number form dup.qc')
+    # parse arg
+    parser = argparse.ArgumentParser(
+        description='correct dup number form dup.qc')
     parser.add_argument('--lib', help='lib id')
-    
+    parser.add_argument('--set', help='setQC id')
+
     args = parser.parse_args()
-    return args.lib
+    return args
 
 
-def main():
-    
+def correct_lib(lib):
     '''
     correct "Read count after removing duplicate reads" in lib_qc file
     by re-parsing dup_qc file
     '''
-    
-    lib = parse_args()
-    libqc_dir='/home/zhc268/data/outputs/libQCs/'
-    cmd="find "+libqc_dir+lib+"/"+" -name '*_qc.txt'"
-    libqc_file=subprocess.check_output(cmd,shell=True).strip('\n')
-    
-    cmd="find "+libqc_dir+lib+"/"+" -name '*.dup.qc'"    
-    dupqc_file=subprocess.check_output(cmd,shell=True).strip('\n')
 
-    with open(libqc_file,'r') as f: 
-        libqc= f.readlines()
+    libqc_dir = '/home/zhc268/data/outputs/libQCs/'
+    cmd = "find "+libqc_dir+lib+"/"+" -name '*_qc.txt'"
+    libqc_file = subprocess.check_output(cmd, shell=True).strip('\n')
 
-    ## get the two lines
-    ss =['Read count after filtering for mapping quality\t',
-         'Read count after removing duplicate reads\t',
-         'Duplicates (after filtering)']
-    
-    qc_ss= [[[i,int(e.strip(s))] for i,e in enumerate(libqc) if s in e] for s in ss[0:2]]
-    
-    
-    ## correct & write file
+    cmd = "find "+libqc_dir+lib+"/"+" -name '*.dup.qc'"
+    dupqc_file = subprocess.check_output(cmd, shell=True).strip('\n')
+
+    with open(libqc_file, 'r') as f:
+        libqc = f.readlines()
+
+    # get the two lines
+    ss = ['Read count after filtering for mapping quality\t',
+          'Read count after removing duplicate reads\t',
+          'Duplicates (after filtering)']
+
+    qc_ss = [[[i, int(e.strip(s))]
+              for i, e in enumerate(libqc) if s in e] for s in ss[0:2]]
+
+    # correct & write file
     if qc_ss[0][0][1] == qc_ss[1][0][1]:
 
-        ## update ndup 
-        paired_status='Paired-ended' if "_R1" in libqc_file else 'Single-end'
-        ndup,pdup=get_picard_dup_stats(dupqc_file,paired_status)
-        nv=str(qc_ss[1][0][1] - ndup)
-        libqc[qc_ss[1][0][0]] = libqc[qc_ss[1][0][0]].replace(str(qc_ss[0][0][1]),nv)
+        # update ndup
+        paired_status = 'Paired-ended' if "_R1" in libqc_file else 'Single-end'
+        ndup, pdup = get_picard_dup_stats(dupqc_file, paired_status)
+        nv = str(qc_ss[1][0][1] - ndup)
+        libqc[qc_ss[1][0][0]] = libqc[qc_ss[1][0]
+                                      [0]].replace(str(qc_ss[0][0][1]), nv)
 
-        # update ndup fraction 
-        idx= [i  for i,e in enumerate(libqc) if ss[2] in e]
-        libqc[idx[0]]='Duplicates (after filtering)\t'+str(ndup)+'\t'+str(pdup)+'\n'
-        with open(libqc_file,'w') as f: f.writelines(libqc)    
+        # update ndup fraction
+        idx = [i for i, e in enumerate(libqc) if ss[2] in e]
+        libqc[idx[0]] = 'Duplicates (after filtering)\t' + \
+            str(ndup)+'\t'+str(pdup)+'\n'
+        with open(libqc_file, 'w') as f:
+            f.writelines(libqc)
     return None
-     
+
+
+def correct_set(setid):
+    '''
+    correct all the libraries in the set 
+    '''
+    set_file = '/home/zhc268/data/outputs/setQCs/'+setid+'.txt'
+    with open(set_file, 'r') as f:
+        for line in f:
+            lib = line.rstrip('\n').split()[0]
+            correct_lib(lib)
+    return None
+
+
+def main():
+    args = parse_args()
+    if(args.set):
+        print "correct set: "+args.set
+        correct_set(args.set)
+    elif(args.lib):
+        print "correct lib: "+args.lib
+        correct_lib(args.lib)
+    print('Done')
 
 
 if __name__ == '__main__':
     main()
-
-

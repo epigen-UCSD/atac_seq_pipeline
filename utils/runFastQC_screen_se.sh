@@ -8,18 +8,21 @@ WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
 
 mkdir -p $OUTPUT_DIR
 
-#find $OUTPUT_DIR -name "*screen*" -delete
-
-p="${sample_prefix}.trim.fastq.gz"
-[[ ! -f "${FASTQDIR}${p}" ]] &&  p=${p/.trim/}
-
+# do fastqc on raw fastq files
+pre="${sample_prefix}"
+[[ ! -f "${FASTQDIR}${pre}.fastq.gz" ]] &&  pre=${pre}.trim
+pf="${FASTQDIR}${pre}.fastq.gz"
 echo "running fastqc $p ..."
-fastqc -t 16 -o $OUTPUT_DIR "${FASTQDIR}$p"
-fastq_screen --threads 16  --outdir $OUTPUT_DIR --force --tag --subset 100000 "${FASTQDIR}$p"
-  
-tagged_fastq="$OUTPUT_DIR/${sample_prefix}.trim.tagged.fastq"
-[[ -f ${tagged_fastq}.gz ]] && rm ${tagged_fastq}.gz
-gzip -9 $tagged_fastq
-fastqSpliter.py --taggedFastq ${tagged_fastq}.gz --prefix ${sample_prefix} --outDir $OUTPUT_DIR
+fastqc -t 16 -o $OUTPUT_DIR $pf
+
+# do fastq_screen on trimmed fastq files (perfer)
+pre="${sample_prefix}.trim"
+pf=$(find ${WORKDIR}$sample_prefix -name "${pre}.fastq.gz")
+[[ -z $pf ]] &&  pre=${pre/.trim/} && pf="${FASTQDIR}${pre}.fastq.gz"
+tagged_fastq="$OUTPUT_DIR/${pre}.tagged.fastq.gz"
+echo "running fastscreen $pf ..."
+fastq_screen --threads 16  --outdir $OUTPUT_DIR --force --tag --subset 100000 $pf
+fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR     # grep #FQST tag to the end and find the tag
+
     
 
