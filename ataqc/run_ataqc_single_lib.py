@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2019-02-07 11:31:40"
+# Time-stamp: "2019-02-12 09:15:34"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -464,7 +464,7 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
     '''
     Parse Picard's MarkDuplicates metrics file
     '''
-   logging.info('Running Picard MarkDuplicates...')    
+    logging.info('Running Picard MarkDuplicates...')
     mark = 0
     dup_stats = {}
     with open(picard_dup_file) as fp:
