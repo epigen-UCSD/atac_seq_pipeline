@@ -1,38 +1,41 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2019-02-12 09:15:34"
+# Time-stamp: "2019-02-12 09:59:03"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
 # Script to run ataqc, all parts
 
-from matplotlib import mlab
-from matplotlib import pyplot as plt
-from jinja2 import Template
-from scipy.signal import find_peaks_cwt
-from io import BytesIO
-from collections import OrderedDict
-from collections import namedtuple
-from base64 import b64encode
-import re
-import logging
-import argparse
-import scipy.stats
-import pandas as pd
-import numpy as np
-import bz2
-import gzip
-import datetime
-import timeit
-import multiprocessing
-import subprocess
-import metaseq
-import pybedtools
-import pysam
-import sys
-import os
 import matplotlib
 matplotlib.use('Agg')
+
+
+from base64 import b64encode
+from collections import namedtuple
+from collections import OrderedDict
+from io import BytesIO
+from scipy.signal import find_peaks_cwt
+from jinja2 import Template
+from matplotlib import pyplot as plt
+from matplotlib import mlab
+
+import os
+import sys
+import pysam
+import pybedtools
+import metaseq
+import subprocess
+import multiprocessing
+import timeit
+import datetime
+import gzip
+import bz2
+import numpy as np
+import pandas as pd
+import scipy.stats
+import argparse
+import logging
+import re
 
 
 # utils
