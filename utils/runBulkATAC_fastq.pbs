@@ -32,7 +32,7 @@ n_subnames=${#subnames[@]} # number of subnames split at _
 OUTDIR="${WORKDIR}${INPREFIX}"
 mkdir -p $OUTDIR
 
-if [ $READ = 'PE' ] ;
+if [ $READ = 'PE' ] 
 then
     echo "Using PE pipepline"
 
@@ -42,8 +42,8 @@ then
     echo $fastq1
 
     # no fastqs and not merged libs 
-    [[ ! -f $fastq1 ]] && [[ $n_subnames -lt 5 ]] && { echo "$fastq1 fastq1 not found"; exit 0; }
-    [[ ! -f $fastq2 ]] && [[ $n_subnames -lt 5 ]] && { echo "$fastq1 fastq2 not found"; exit 0; }
+    [[ ! -f $fastq1 ]] && [[ $n_subnames -lt 4 ]] && { echo "$fastq1 fastq1 not found"; exit 0; }
+    [[ ! -f $fastq2 ]] && [[ $n_subnames -lt 4 ]] && { echo "$fastq1 fastq2 not found"; exit 0; }
     
     ##  merge submembers if submembers presents
     if [ ! -f $fastq1 ] || [ ! -f $fastq2 ] # break down to check components
@@ -71,14 +71,19 @@ then
     [[ -z $(find ${OUTDIR}/qc/rep1 -name "*_qc.txt") ]]  && { echo  "pipeline failed"; exit 0; }
 
     # runFastQC & fastq_screen
-    runFastQC_screen.sh  $INPREFIX
+    runFastQC_screen.sh  $INPREFIX &
+
+    # snap-chip 
+    export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
+    bash epicypher.sh -i $fastq1 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R1.fastq.gz.snap.cnt.tab &
+    bash epicypher.sh -i $fastq2 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R2.fastq.gz.snap.cnt.tab
 
 else
     echo "Using SE pipepline"
 
     # fastq check 
     fq="${FASTQDIR}/${INPREFIX}.fastq.gz"
-    [[ ! -f $fq ]] && [[ $n_subnames -lt 5 ]] &&  { echo "$fq fastq not found"; exit 0; }
+    [[ ! -f $fq ]] && [[ $n_subnames -lt 4 ]] &&  { echo "$fq fastq not found"; exit 0; }
 
     ##  merge submembers if submembers presents
     if [ ! -f $fq ] 
@@ -104,9 +109,15 @@ else
     [[ -z $(find ${OUTDIR}/qc/rep1 -name "*_qc.txt") ]]  && { echo  "pipeline failed"; exit 0; }
     
     # fastqc and screen
-    runFastQC_screen_se.sh $INPREFIX 
+    runFastQC_screen_se.sh $INPREFIX &
+
+    # snap-chip 
+    export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
+    bash epicypher.sh -i $fq -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}.fastq.gz.snap.cnt.tab &
+    
 fi
 
+wait
 
 # result transfer 
 results_transfer.sh $INPREFIX $(whoami)
