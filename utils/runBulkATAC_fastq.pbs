@@ -75,9 +75,9 @@ then
 
     # snap-chip 
     export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
-    bash epicypher.sh -i $fastq1 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R1.fastq.gz.snap.cnt.tab &
+    bash epicypher.sh -i $fastq1 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R1.fastq.gz.snap.cnt.tab 
     bash epicypher.sh -i $fastq2 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R2.fastq.gz.snap.cnt.tab
-
+    
 else
     echo "Using SE pipepline"
 
@@ -93,7 +93,17 @@ else
        sub_libs=($(echo ${tmp[@]:2}| sed 's/_1 / /g'))
        tmp=($(echo ${sub_libs[@]./#/${FASTQDIR}}))
        tmp_r1=(${tmp[@]/%/_R1.fastq.gz})
-       i=0;for fl in ${tmp_r1[@]};do [[ ! -f $fl ]] && tmp_r1[$i]=${fl/_R1./.};i=$[i+1];echo $i; done 
+       i=0;
+       for fl in ${tmp_r1[@]};do
+           if [ ! -f $fl ] && [ -f ${fl/_R1./.} ] 
+           then
+               tmp_r1[$i]=${fl/_R1./.};i=$[i+1];
+           elif [ ! -f $fl ]
+           then
+               echo "not able to find all sublibs of $fq"
+               exit 0
+           fi
+       done 
        echo "cat ${tmp_r1[@]} > $fq & sleep 1" | bash
     fi
     wait 
@@ -113,8 +123,8 @@ else
 
     # snap-chip 
     export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
-    bash epicypher.sh -i $fq -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}.fastq.gz.snap.cnt.tab &
-    
+    bash epicypher.sh -i $fq -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}.fastq.gz.snap.cnt.tab 
+
 fi
 
 wait

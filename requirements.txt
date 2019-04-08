@@ -3,12 +3,12 @@
 bowtie ==1.1.2
 bowtie2 == 2.2.8
 ncurses
-samtools ==1.7
-htslib ==1.7 # 1.5 in bioconda needed libbz2.so.1.0
+samtools ==1.9
+htslib ==1.9 # 1.5 in bioconda needed libbz2.so.1.0
 bedtools ==2.26.0 #2.27.1 has the bug can generating overlapping regions 
 picard ==2.18.2 #1.126 
 ucsc-fetchchromsizes
-bucsc-wigtobigwig
+ucsc-wigtobigwig
 ucsc-bedgraphtobigwig
 ucsc-bigwiginfo
 ucsc-bedclip
@@ -29,7 +29,7 @@ graphviz==2.38.0
 libtool
 ghostscript # pdf2png
 gsl # for preseq
-pysam==0.14.1 #0.8.2.1
+pysam#==0.14.1 #0.8.2.1
 pybedtools==0.7.10 #0.6.9 
 pigz
 zlib
@@ -41,7 +41,7 @@ r-bitops
 r-catools
 bioconductor-rsamtools
 r-spp ==1.13
-cutadapt ==1.9.1
+cutadapt ==1.16
 preseq ==2.0.3 #2.0.2
 trim-galore ==0.4.1 # for old trimmer
 python-levenshtein # for old trimmer (trimAdapter.py)
