@@ -71,13 +71,15 @@ then
     [[ -z $(find ${OUTDIR}/qc/rep1 -name "*_qc.txt") ]]  && { echo  "pipeline failed"; exit 0; }
 
     # runFastQC & fastq_screen
-    runFastQC_screen.sh  $INPREFIX &
-
-    # snap-chip 
-    export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
-    bash epicypher.sh -i $fastq1 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R1.fastq.gz.snap.cnt.tab 
-    bash epicypher.sh -i $fastq2 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R2.fastq.gz.snap.cnt.tab
-    
+    runFastQC_screen.sh  $INPREFIX     
+ 
+    # snap-chip
+    if [ ! -z $c ]
+    then
+        export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
+        bash epicypher.sh -i $fastq1 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R1.fastq.gz.snap.cnt.tab 
+        bash epicypher.sh -i $fastq2 -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}_R2.fastq.gz.snap.cnt.tab
+    fi
 else
     echo "Using SE pipepline"
 
@@ -119,11 +121,14 @@ else
     [[ -z $(find ${OUTDIR}/qc/rep1 -name "*_qc.txt") ]]  && { echo  "pipeline failed"; exit 0; }
     
     # fastqc and screen
-    runFastQC_screen_se.sh $INPREFIX &
+    runFastQC_screen_se.sh $INPREFIX 
 
-    # snap-chip 
-    export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
-    bash epicypher.sh -i $fq -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}.fastq.gz.snap.cnt.tab 
+    # snap-chip
+    if [ ! -z $c ]
+    then
+        export PATH=$PATH:/projects/ps-epigen/software/SNAP-CHIP_epicypher
+        bash epicypher.sh -i $fq -m 2 -k true -o /projects/ps-epigen/outputs/libQCs/${INPREFIX}/ 1 | tee /projects/ps-epigen//outputs/libQCs/${INPREFIX}/${INPREFIX}.fastq.gz.snap.cnt.tab
+    fi
 
 fi
 

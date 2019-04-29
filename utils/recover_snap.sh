@@ -21,3 +21,4 @@ done
 
 ## log all changes 
 # find . -name "*snap*.cnt.tab" -mmin -30  > ~/data/logs/app/2019-04-08_snap_recover.txt
+# cat  Set_245.txt |while read l;do  grep  ${l}/ ~/data/logs/app/2019-04-08_snap_recover.txt; done
