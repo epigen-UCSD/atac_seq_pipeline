@@ -99,12 +99,13 @@ else
        for fl in ${tmp_r1[@]};do
            if [ ! -f $fl ] && [ -f ${fl/_R1./.} ] 
            then
-               tmp_r1[$i]=${fl/_R1./.};i=$[i+1];
+               tmp_r1[$i]=${fl/_R1./.};
            elif [ ! -f $fl ]
            then
                echo "not able to find all sublibs of $fq"
                exit 0
            fi
+           i=$[i+1]
        done 
        echo "cat ${tmp_r1[@]} > $fq & sleep 1" | bash
     fi
