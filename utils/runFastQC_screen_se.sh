@@ -1,5 +1,5 @@
 # activate conda environ
-#source activate bds_atac_py3 
+source activate bds_atac
 
 sample_prefix=$1
 FASTQDIR="/projects/ps-epigen/seqdata/"
@@ -22,7 +22,16 @@ pf=$(find ${WORKDIR}$sample_prefix -name "${pre}.fastq.gz")
 tagged_fastq="$OUTPUT_DIR/${pre}.tagged.fastq.gz"
 echo "running fastscreen $pf ..."
 fastq_screen --threads 16  --outdir $OUTPUT_DIR --force --tag --subset 100000 $pf
-fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR     # grep #FQST tag to the end and find the tag
+fastqSpliter.py --taggedFastq $tagged_fastq --prefix $pre --outDir $OUTPUT_DIR     # grep
+                                                                                    # #FQST
+                                                                                    # tag
+                                                                                    # to
+                                                                                    # the
+                                                                                    # end
+                                                                                    # and
+                                                                                    # find
+                                                                                    # the
+                                                                                    # tag
 
     
 
