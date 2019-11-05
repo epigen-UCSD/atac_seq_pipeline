@@ -1,32 +1,33 @@
 #!/bin/bash
 
-GENOME=$1
-target_dir=$GENOME
+GENOME=$1 #rn6
+target_dir=$2 # ~/data/GENOME
+target_dir=${target_dir}/${GENOME} # ~/data/GENOME
 SPECIES_FILE="/home/zhc268/data/software/atac_dnase_pipelines/species/epigen.conf"
 
-ucsc_base_url="rsync://hgdownload.cse.ucsc.edu/goldenPath/rn6/bigZips/"
-genome_url=$ucsc_base_url${genome_url}.fa.gz
+ucsc_base_url="rsync://hgdownload.cse.ucsc.edu/goldenPath/${GENOME}/bigZips/"
+genome_url=$ucsc_base_url${GENOME}.fa.gz
 
 
-mkdir -p $targe_dir 
+mkdir -p $target_dir 
 
 # 1. download
 echo "downloading seqences from ucsc" 
-rsync -avzP $genome_url $targe_dir
+rsync -avzP $genome_url $target_dir
 
 
 
 # 2. seq folder/ extract fasta per chromosome
 # source activate bds_atac
+cd $target_dir
 echo "Extracting/processing data files..."
 
 REF_FA_PREFIX=$GENOME".fa"
-gzip -d -f -c ${REF_FA_PREFIX}.gz > $target_dir"/"${REF_FA_PREFIX}
+gzip -d -f -c ${REF_FA_PREFIX}.gz > ${REF_FA_PREFIX}
 
-cd $target_dir
 mkdir -p seq
 cd seq
-rm -f ${REF_FA_PREFIX}
+#rm -f ${REF_FA_PREFIX}
 ln -s ../${REF_FA_PREFIX} ${REF_FA_PREFIX}
 faidx -x ${REF_FA_PREFIX}
 cp --remove-destination *.fai ../
@@ -40,8 +41,12 @@ GENSZ=$(cat $CHRSZ | awk '{sum+=$2} END{print sum}')
 
 ## bowtie2_index
 mkdir bowtie2_index
-mv *.bt2 ./bowtie2_index/
-ln -s ./rn6.fa ./bowtie2_index/
+if [ ! -f ./bowtie2_index/ ${REF_FA_PREFIX}.rev.1.bt2 ]; then
+    bowtie2-build ${REF_FA_PREFIX} ${REF_FA_PREFIX}
+    mv *.bt2 ./bowtie2_index/
+    ln -s  ${REF_FA_PREFIX}.fa ./bowtie2_index/
+fi
+
 
 
 # 3. add to the species file
