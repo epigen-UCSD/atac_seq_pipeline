@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2019-03-12 10:01:03"
+# Time-stamp: "2019-12-11 09:27:54"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -183,7 +183,7 @@ def get_read_length(fastq_file):
             if total_reads_considered >= total_reads_to_consider:
                 break
             line_num += 1
-    logging.info('read length:'+str(max_length))
+    logging.info('read length:' + str(max_length))
     return int(max_length)
 
 
@@ -211,9 +211,16 @@ def get_chr_m(sorted_bam_file):
     tot_reads = 0
     for chrom in chrom_list:
         chrom_stats = chrom.split('\t')
-        if chrom_stats[0] == 'chrM':
+        if chrom_stats[0] == 'chrM' | chrom_stats[0] == 'chrMT':
             chr_m_reads = int(chrom_stats[2])
         tot_reads += int(chrom_stats[2])
+
+    # in case no chrM defined in the reference genome
+    try:
+        chr_m_reads
+    except NameError:
+        chr_m_reads = 0
+
     fract_chr_m = float(chr_m_reads) / tot_reads
 
     return chr_m_reads, fract_chr_m
@@ -268,7 +275,7 @@ def plot_gc(data_file):
     ax2.set_ylabel('Mean base quality at GC%')
 
     ax3 = ax.twinx()
-    lin3 = ax3.plot(data['GC'], data['WINDOWS']/np.sum(data['WINDOWS']),
+    lin3 = ax3.plot(data['GC'], data['WINDOWS'] / np.sum(data['WINDOWS']),
                     label='Windows at GC%', color='g')
     ax3.get_yaxis().set_visible(False)
 
@@ -397,7 +404,7 @@ def make_tss_plot(bam_file, tss, prefix, chromsizes, read_len, bins=400, bp_edge
     # Load the bam file
     # Need to shift reads and just get ends, just load bed file?
     bam = metaseq.genomic_signal(bam_file, 'bam')
-    bam_array = bam.array(tss_ext, bins=bins, shift_width=-read_len/2,  # Shift to center the read on the cut site
+    bam_array = bam.array(tss_ext, bins=bins, shift_width=-read_len / 2,  # Shift to center the read on the cut site
                           processes=processes, stranded=True)
 
     # Actually first build an "ends" file
@@ -413,10 +420,10 @@ def make_tss_plot(bam_file, tss, prefix, chromsizes, read_len, bins=400, bp_edge
     # at the end bins and take fold change over that
     if greenleaf_norm:
         # Use enough bins to cover 100 bp on either end
-        num_edge_bins = int(100/(2*bp_edge/bins))
+        num_edge_bins = int(100 / (2 * bp_edge / bins))
         bin_means = bam_array.mean(axis=0)
-        avg_noise = (sum(bin_means[:num_edge_bins]) +
-                     sum(bin_means[-num_edge_bins:]))/(2*num_edge_bins)
+        avg_noise = (sum(bin_means[:num_edge_bins])
+                     + sum(bin_means[-num_edge_bins:]))/(2*num_edge_bins)
         bam_array /= avg_noise
     else:
         bam_array /= bam.mapped_read_count() / 1e6
@@ -481,7 +488,7 @@ def get_picard_dup_stats(picard_dup_file, paired_status):
                 dup_stats = {fields[i]: values[i]
                              for i in range(len(values))}
                 if paired_status == 'Paired-ended':
-                    return 2*int(dup_stats['READ_PAIR_DUPLICATES']), float(dup_stats['PERCENT_DUPLICATION'])
+                    return 2 * int(dup_stats['READ_PAIR_DUPLICATES']), float(dup_stats['PERCENT_DUPLICATION'])
                 else:
                     return int(dup_stats['UNPAIRED_READ_DUPLICATES']), float(dup_stats['PERCENT_DUPLICATION'])
             if mark > 0:
@@ -624,7 +631,7 @@ def get_fract_mapq(bam_file, paired_status, q=30):
     num_qreads = int(run_shell_cmd(cmd))
     tot_reads = get_read_count(bam_file)
 
-    fract_good_mapq = float(num_qreads)/tot_reads
+    fract_good_mapq = float(num_qreads) / tot_reads
     return num_qreads, fract_good_mapq
 
 
@@ -645,7 +652,7 @@ def get_final_read_count(first_bam, last_bam):
 
     num_reads_last_bam = get_read_count(last_bam)
     num_reads_first_bam = get_read_count(first_bam)
-    fract_reads_left = float(num_reads_last_bam)/num_reads_first_bam
+    fract_reads_left = float(num_reads_last_bam) / num_reads_first_bam
 
     return num_reads_first_bam, num_reads_last_bam, fract_reads_left
 
@@ -689,7 +696,7 @@ def get_fract_reads_in_regions(reads_bed, regions_bed):
     read_count = 0
     for interval in reads:
         read_count += int(interval[-1])
-    fract_reads = float(read_count)/reads_bedtool.count()
+    fract_reads = float(read_count) / reads_bedtool.count()
 
     return read_count, fract_reads
 
@@ -828,7 +835,7 @@ def track_reads(reads_list, labels):
     ax.bar(ind, reads_list, width, color='b')
     ax.set_ylabel('Read count')
     ax.set_title('Reads at each processing step')
-    ax.set_xticks(ind+width)
+    ax.set_xticks(ind + width)
     ax.set_xticklabels(labels)
 
     plot_img = BytesIO()
@@ -863,8 +870,8 @@ def fragment_length_qc(data):
 
     # % of NFR vs mononucleosome
     percent_nfr_vs_mono_nuc = (
-        data[:NFR_UPPER_LIMIT].sum() /
-        data[MONO_NUC_LOWER_LIMIT:MONO_NUC_UPPER_LIMIT + 1].sum())
+        data[:NFR_UPPER_LIMIT].sum()
+        / data[MONO_NUC_LOWER_LIMIT:MONO_NUC_UPPER_LIMIT + 1].sum())
     results.append(
         QCGreaterThanEqualCheck('NFR / mono-nuc reads', 2.5)(
             percent_nfr_vs_mono_nuc))
@@ -1368,8 +1375,9 @@ def main():
     raw_peak_summ, raw_peak_dist = get_region_size_metrics(PEAKS)
 
     # Finally output the bar chart of reads
-    read_count_data = [first_read_count, first_read_count*fract_mapq,
-                       first_read_count*fract_mapq*(1-float(percent_dup)),
+    read_count_data = [first_read_count, first_read_count * fract_mapq,
+                       first_read_count * fract_mapq
+                       * (1 - float(percent_dup)),
                        final_read_count]
     read_count_labels = ['Start', 'q>30', 'dups removed',
                          'chrM removed (final)']

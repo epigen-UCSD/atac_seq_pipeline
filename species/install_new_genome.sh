@@ -87,9 +87,6 @@ if [[ ${ROADMAP_META_PATH} != "" ]]; then echo -e "roadmap_meta\t= ${ROADMAP_MET
 if [[ ${EXTRA_LINE} != "" ]]; then echo -e "${EXTRA_LINE}" >> ${SPECIES_FILE}; fi
 echo "" >> ${SPECIES_FILE}
 
-
-grep -Ev "(random)|(chrUn)" rn6_tss.bed.txt | awk '{print $1}' | sort | uniq
-grep -Ev "(random)|(chrUn)" rn6_tss.bed.txt | wc -l 
                                                      
 
 
