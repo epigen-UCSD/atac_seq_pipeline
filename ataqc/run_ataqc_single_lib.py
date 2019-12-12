@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # modified by: frank cheng
-# Time-stamp: "2019-12-11 09:27:54"
+# Time-stamp: "2019-12-11 18:59:50"
 
 # Daniel Kim, CS Foo
 # 2016-03-28
@@ -211,7 +211,7 @@ def get_chr_m(sorted_bam_file):
     tot_reads = 0
     for chrom in chrom_list:
         chrom_stats = chrom.split('\t')
-        if chrom_stats[0] == 'chrM' | chrom_stats[0] == 'chrMT':
+        if chrom_stats[0] == 'chrM' or chrom_stats[0] == 'chrMT':
             chr_m_reads = int(chrom_stats[2])
         tot_reads += int(chrom_stats[2])
 
