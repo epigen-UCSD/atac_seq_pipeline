@@ -44,7 +44,7 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 	pval_str 	:= (pval_thresh=="0.01") ? "" : ".pval$pval_thresh"	
 	prefix 		:= replace_dir( rm_ext( tag, ["bed","tagAlign"] ), peak_o_dir ) + ".pf$pval_str"
 	prefix_sig 	:= replace_dir( prefix, sig_o_dir )
-    RM_CHR_ := "zcat $tag | grep -Ei '(chr[0-9xy]+\s)|(chrm[t]*\s)' | gzip -nc > $prefix.rm_chr.tmp.gz; mv $prefix.rm_chr.tmp.gz $tag"
+    RM_CHR_ := "zcat $tag | grep -Ei '(chr[0-9xy]+[[:space:]])|(chrm[t]*[[:space:]])' | gzip -nc > $prefix.rm_chr.tmp.gz; mv $prefix.rm_chr.tmp.gz $tag"
 	
 	// peaks
 	peakfile 	:= "$prefix.narrowPeak.gz"
