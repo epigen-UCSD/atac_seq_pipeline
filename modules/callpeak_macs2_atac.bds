@@ -99,6 +99,8 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
                 
 		sys slopBed -i "$prefix"_treat_pileup.bdg -g "$chrsz" -b 0 | bedClip stdin "$chrsz" $pileup_bedgraph
 		sys sort -k1,1 -k2,2n $pileup_bedgraph > $pileup_bedgraph_srt
+		sys bedtools merge -i $pileup_bedgraph_srt -d -1 -c 4 -o max > $pileup_bedgraph
+		sys mv $pileup_bedgraph $pileup_bedgraph_srt
 		sys bedGraphToBigWig $pileup_bedgraph_srt "$chrsz" "$pileup_bigwig"
 		sys rm -f $pileup_bedgraph $pileup_bedgraph_srt
 
