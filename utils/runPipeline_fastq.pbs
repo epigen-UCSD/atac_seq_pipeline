@@ -45,7 +45,8 @@ wait
 
 # runFastQC & fastq_screen
 runFastQC_screen.sh  $INPREFIX
-results_transfer.sh $INPREFIX $(whoami)
+results_transfer.sh $INPREFIX
+wait
 
 # add .finished.txt tag
 touch /projects/ps-epigen/outputs/libQCs/${INPREFIX}/.finished.txt
