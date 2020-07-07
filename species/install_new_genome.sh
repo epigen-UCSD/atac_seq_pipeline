@@ -1,4 +1,4 @@
-#!/bin/bash
+o#!/bin/bash
 
 GENOME=$1 #rn6
 target_dir=$2 # ~/data/GENOME
@@ -42,7 +42,7 @@ GENSZ=$(cat $CHRSZ | awk '{sum+=$2} END{print sum}')
 ## bowtie2_index
 mkdir bowtie2_index
 if [ ! -f ./bowtie2_index/ ${REF_FA_PREFIX}.rev.1.bt2 ]; then
-    bowtie2-build ${REF_FA_PREFIX} ${REF_FA_PREFIX}
+    bowtie2-build ${REF_FA_PREFIX}.fa ${REF_FA_PREFIX}
     mv *.bt2 ./bowtie2_index/
     ln -s  ${REF_FA_PREFIX}.fa ./bowtie2_index/
 fi
