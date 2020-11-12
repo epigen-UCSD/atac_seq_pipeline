@@ -7,7 +7,7 @@
 #PBS -m abe
 #PBS -A epigen-group
 
-#source activate bds_atac
+source activate bds_atac
 
 WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
 FASTQDIR="/projects/ps-epigen/seqdata/"
