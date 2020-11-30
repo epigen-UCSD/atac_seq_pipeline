@@ -8,6 +8,7 @@
 #PBS -A epigen-group
 
 source activate bds_atac
+export PATH=/projects/ps-epigen/software/miniconda3/envs/bds_atac/bin/:$PATH
 
 WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
 FASTQDIR="/projects/ps-epigen/seqdata/"

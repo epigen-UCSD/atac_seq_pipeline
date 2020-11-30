@@ -1,7 +1,14 @@
 #!/bin/bash
 #module load fastqc
+source activate bds_atac
 
-sample_prefix=$1
+if [ -z $prefix ]
+then
+    sample_prefix=$1
+else
+    sample_prefix=$prefix
+fi
+   
 FASTQDIR="/projects/ps-epigen/seqdata/"
 OUTPUT_DIR="/projects/ps-epigen/outputs/libQCs/${sample_prefix}"
 WORKDIR="/oasis/tscc/scratch/$(whoami)/outputs/"
