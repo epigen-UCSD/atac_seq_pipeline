@@ -44,7 +44,7 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 	pval_str 	:= (pval_thresh=="0.01") ? "" : ".pval$pval_thresh"	
 	prefix 		:= replace_dir( rm_ext( tag, ["bed","tagAlign"] ), peak_o_dir ) + ".pf$pval_str"
 	prefix_sig 	:= replace_dir( prefix, sig_o_dir )
-    RM_CHR_ := "zcat $tag | grep -Ei '(chr[0-9xylr]+[[:space:]])|(chrm[t]*[[:space:]])' | gzip -nc > $prefix.rm_chr.tmp.gz; mv $prefix.rm_chr.tmp.gz $tag"
+    RM_CHR_ := "zcat $tag | grep -Ei '(chr[0-9xylr]+[[:space:]])|(chrm[t]*[[:space:]])' | gzip -nc > $prefix.rm_chr.tmp.gz; [[ $(zcat $prefix.rm_chr.tmp.gz|wc -l) -gt 0 ]] && mv $prefix.rm_chr.tmp.gz $tag"
 	
 	// peaks
 	peakfile 	:= "$prefix.narrowPeak.gz"
@@ -81,6 +81,7 @@ string[] macs2_atac_npeak_and_signal( string tag, string smooth_window, string p
 		sys $shcmd_init
 		sys export LC_COLLATE=C
 		sys $RM_CHR_
+		sys rm "$prefix.rm_chr.tmp.gz"
 		
 		sys macs2 callpeak \
 			-t $tag -f BED -n "$prefix" -g "$gensz" -p $pval_thresh \
